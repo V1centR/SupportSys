@@ -10,7 +10,7 @@
                         <tr>
                             <td colspan="2">                                
                                 <label>*Título</label>                                
-                                <input type="text" name="nome" id="nome" class="form-control" style="font-size: 14px; font-weight: bold; width: 500px;">                               
+                                <input type="text" name="helpLabel" id="nameLabel" class="form-control" style="font-size: 14px; font-weight: bold; width: 500px;">                               
                             </td>
                             <td></td>
                         </tr>
@@ -37,7 +37,7 @@
 							<td>
 								<div style="position: relative; float: left; margin-right: 12px;">                                    
                                     <label>*Setor</label>
-                                    <select name="nome_setor" class="form-control" style="max-width:250px; padding:10px;">
+                                    <select name="setor_name" class="form-control" style="max-width:250px; padding:10px;">
 	        							<option value="" selected="selected">...</option>
 	        							<option value="1">T.I</option>
 	        							<option value="2">Assist Social Assist</option>
