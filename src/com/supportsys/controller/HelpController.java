@@ -1,6 +1,7 @@
-package Controller;
+package com.supportsys.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -16,11 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/HelpController")
 public class HelpController extends HttpServlet{
-
-//	public static void main(String[] args) {
-//		
-//
-//	}
 	
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException 
 	{
@@ -46,6 +42,10 @@ public class HelpController extends HttpServlet{
 		String phone = request.getParameter("phone");
 		String desc = request.getParameter("desc");
 		Calendar dataHelp = null;
+		
+		PrintWriter out = response.getWriter();		
+		out.println("<b>Classe Java respondendo! AAA</b> " + labelHelp);
+		
 		
 		try {
 			//YYYY-MM-DD HH:MM:SS

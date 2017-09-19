@@ -2,7 +2,7 @@
 <body>
 <div style="position:relative; float:left; height:100%; width:250px; background-color:#000; margin-right:20px; color:#fff; padding:15px;">Inicio</div>
 <div style="position:relative; float:left;">
-<form name="addAtividade" class="addAtividade">
+<form name="addHelp" class="addAtividade" method="POST" action="/supportSys/HelpController">
                 <input type="hidden" id="formMode" name="form" value="true">
                 <input type="hidden" id="idAtividade" name="idAtividade" value="aaa">
                 <table class="table" border="0">
@@ -77,7 +77,7 @@
                         <tr>
                            <td colspan="2" style="text-align:right">
                                <button id="voltar" type="button" name="btn" class="btn btn-primary btn-lg btn-voltar"><span class="glyphicon glyphicon-chevron-left"></span> Voltar</button>
-                               <button id="enviar" type="button" name="btn" class="btn btn-primary btn-lg btn-enviar"><span class="glyphicon glyphicon-fire"></span> Enviar</button>                                
+                               <button id="enviar" type="submit" name="btn" class="btn btn-primary btn-lg btn-enviar"><span class="glyphicon glyphicon-fire"></span> Enviar</button>                                
                                <span class="loader"></span>
                            </td>
                         </tr>
