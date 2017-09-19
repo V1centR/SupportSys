@@ -1,0 +1,182 @@
+package com.supportsys.entity;
+
+import java.io.Serializable;
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
+
+
+/**
+ * The persistent class for the help database table.
+ * 
+ */
+@Entity
+@Table(name="help")
+@NamedQuery(name="Help.findAll", query="SELECT h FROM Help h")
+public class Help implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@Column(unique=true, nullable=false)
+	private int id;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable=false)
+	private Date dateHelp;
+
+	@Column(nullable=false, length=99)
+	private String helpLabel;
+
+	@Column(nullable=false, length=299)
+	private String helpTxt;
+
+	private int tags;
+
+	//bi-directional many-to-one association to ChatHelp
+	@OneToMany(mappedBy="help")
+	private List<ChatHelp> chatHelps;
+
+	//bi-directional many-to-one association to SupportUser
+	@ManyToOne
+	@JoinColumn(name="supportUserId")
+	private SupportUser supportUser;
+
+	//bi-directional many-to-one association to User
+	@ManyToOne
+	@JoinColumn(name="userId", nullable=false)
+	private User user;
+
+	//bi-directional many-to-one association to Status
+	@ManyToOne
+	@JoinColumn(name="status", nullable=false)
+	private Status statusBean;
+
+	//bi-directional many-to-one association to TypeHelp
+	@ManyToOne
+	@JoinColumn(name="typeHelp")
+	private TypeHelp typeHelpBean;
+
+	//bi-directional many-to-one association to HelpTag
+	@OneToMany(mappedBy="help")
+	private List<HelpTag> helpTags;
+
+	public Help() {
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public Date getDateHelp() {
+		return this.dateHelp;
+	}
+
+	public void setDateHelp(Date dateHelp) {
+		this.dateHelp = dateHelp;
+	}
+
+	public String getHelpLabel() {
+		return this.helpLabel;
+	}
+
+	public void setHelpLabel(String helpLabel) {
+		this.helpLabel = helpLabel;
+	}
+
+	public String getHelpTxt() {
+		return this.helpTxt;
+	}
+
+	public void setHelpTxt(String helpTxt) {
+		this.helpTxt = helpTxt;
+	}
+
+	public int getTags() {
+		return this.tags;
+	}
+
+	public void setTags(int tags) {
+		this.tags = tags;
+	}
+
+	public List<ChatHelp> getChatHelps() {
+		return this.chatHelps;
+	}
+
+	public void setChatHelps(List<ChatHelp> chatHelps) {
+		this.chatHelps = chatHelps;
+	}
+
+	public ChatHelp addChatHelp(ChatHelp chatHelp) {
+		getChatHelps().add(chatHelp);
+		chatHelp.setHelp(this);
+
+		return chatHelp;
+	}
+
+	public ChatHelp removeChatHelp(ChatHelp chatHelp) {
+		getChatHelps().remove(chatHelp);
+		chatHelp.setHelp(null);
+
+		return chatHelp;
+	}
+
+	public SupportUser getSupportUser() {
+		return this.supportUser;
+	}
+
+	public void setSupportUser(SupportUser supportUser) {
+		this.supportUser = supportUser;
+	}
+
+	public User getUser() {
+		return this.user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Status getStatusBean() {
+		return this.statusBean;
+	}
+
+	public void setStatusBean(Status statusBean) {
+		this.statusBean = statusBean;
+	}
+
+	public TypeHelp getTypeHelpBean() {
+		return this.typeHelpBean;
+	}
+
+	public void setTypeHelpBean(TypeHelp typeHelpBean) {
+		this.typeHelpBean = typeHelpBean;
+	}
+
+	public List<HelpTag> getHelpTags() {
+		return this.helpTags;
+	}
+
+	public void setHelpTags(List<HelpTag> helpTags) {
+		this.helpTags = helpTags;
+	}
+
+	public HelpTag addHelpTag(HelpTag helpTag) {
+		getHelpTags().add(helpTag);
+		helpTag.setHelp(this);
+
+		return helpTag;
+	}
+
+	public HelpTag removeHelpTag(HelpTag helpTag) {
+		getHelpTags().remove(helpTag);
+		helpTag.setHelp(null);
+
+		return helpTag;
+	}
+
+}
