@@ -219,5 +219,17 @@ public class User implements Serializable {
 	public void setLevelBean(Level levelBean) {
 		this.levelBean = levelBean;
 	}
+	
+	/*
+	 * 
+		@Override
+	    public String toString() {
+	        return "Todo [summary=" + summary + ", description=" + description
+	                + "]";
+	    }
+	 * 
+	 * 
+	 * 
+	 * */
 
 }

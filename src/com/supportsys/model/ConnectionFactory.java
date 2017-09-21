@@ -11,7 +11,6 @@ public class ConnectionFactory {
 		try{
 			
 			DriverManager.registerDriver( new org.mariadb.jdbc.Driver());
-//			DriverManager.registerDriver( new com.mysql.jdbc.Driver());
 			String url = "jdbc:mariadb://127.0.0.1/spsys";	
 			return DriverManager.getConnection(url,"root","info1999");
 			
