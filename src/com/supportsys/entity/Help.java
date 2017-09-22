@@ -17,24 +17,25 @@ public class Help implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(unique=true, nullable=false)
 	private int id;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable=false)
 	private Date dateHelp;
 
-	@Column(nullable=false, length=99)
 	private String helpLabel;
 
-	@Column(nullable=false, length=299)
 	private String helpTxt;
 
-	private int tags;
+	private String tags;
 
 	//bi-directional many-to-one association to ChatHelp
 	@OneToMany(mappedBy="help")
 	private List<ChatHelp> chatHelps;
+
+	//bi-directional many-to-one association to Department
+	@ManyToOne
+	@JoinColumn(name="dept")
+	private Department department;
 
 	//bi-directional many-to-one association to SupportUser
 	@ManyToOne
@@ -43,12 +44,12 @@ public class Help implements Serializable {
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
-	@JoinColumn(name="userId", nullable=false)
+	@JoinColumn(name="userId")
 	private User user;
 
 	//bi-directional many-to-one association to Status
 	@ManyToOne
-	@JoinColumn(name="status", nullable=false)
+	@JoinColumn(name="status")
 	private Status statusBean;
 
 	//bi-directional many-to-one association to TypeHelp
@@ -95,11 +96,11 @@ public class Help implements Serializable {
 		this.helpTxt = helpTxt;
 	}
 
-	public int getTags() {
+	public String getTags() {
 		return this.tags;
 	}
 
-	public void setTags(int tags) {
+	public void setTags(String tags) {
 		this.tags = tags;
 	}
 
@@ -123,6 +124,14 @@ public class Help implements Serializable {
 		chatHelp.setHelp(null);
 
 		return chatHelp;
+	}
+
+	public Department getDepartment() {
+		return this.department;
+	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
 	}
 
 	public SupportUser getSupportUser() {

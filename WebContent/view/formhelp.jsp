@@ -37,33 +37,32 @@
 							<td>
 								<div style="position: relative; float: left; margin-right: 12px;">                                    
                                     <label>*Setor</label>
-                                    <select name="setor_name" class="form-control" style="max-width:250px; padding:10px;">
+                                    <select name="department_id" class="form-control" style="max-width:250px; padding:10px;">
 	        							<option value="" selected="selected">...</option>
 	        							<option value="1">T.I</option>
-	        							<option value="2">Assist Social Assist</option>
-	        							<option value="3">Colônia</option>
-	        							<option value="4">Cons Deliberativo</option>
-	        							<option value="5">Cons Fiscal</option>
-	        							<option value="6">Despachante</option>
-	        							<option value="7">Ensino</option>
-	        							<option value="8">Jurídico</option>
-	        							<option value="9">Patrimônio</option>
-	        							<option value="10">Pensionistas</option>
-	        							<option value="11">Portaria</option>
-	        							<option value="12">Relações Públicas</option>
-	        							<option value="13">Salão de eventos</option>
-	        							<option value="14">Secretaria</option>
-	        							<option value="15">Tesouraria</option>
-	        							<option value="16">Presidência</option>
-	        							<option value="17">Vice Presidência</option>
+	        							<option value="1">Assist Social Assist</option>
+	        							<option value="1">Colônia</option>
+	        							<option value="1">Cons Deliberativo</option>
+	        							<option value="1">Cons Fiscal</option>
+	        							<option value="1">Despachante</option>
+	        							<option value="1">Ensino</option>
+	        							<option value="1">Jurídico</option>
+	        							<option value="1">Patrimônio</option>
+	        							<option value="1">Pensionistas</option>
+	        							<option value="1">Portaria</option>
+	        							<option value="1">Relações Públicas</option>
+	        							<option value="1">Salão de eventos</option>
+	        							<option value="1">Secretaria</option>
+	        							<option value="1">Tesouraria</option>
+	        							<option value="1">Presidência</option>
+	        							<option value="1">Vice Presidência</option>
         							</select>
                                 </div>
 							</td>
                         </tr>
                         <tr>
                         	<td>
-                        	<label>*Telefone</label><br>
-                        		<input type="text" class="form-control" name="phone">
+                        	...
                         	</td>
                         
                         </tr>

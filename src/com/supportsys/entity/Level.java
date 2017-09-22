@@ -16,13 +16,10 @@ public class Level implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(unique=true, nullable=false)
 	private int id;
 
-	@Column(nullable=false, length=45)
 	private String client;
 
-	@Column(nullable=false, length=99)
 	private String levelName;
 
 	private int levelWeight;

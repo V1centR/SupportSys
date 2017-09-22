@@ -17,38 +17,27 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(unique=true, nullable=false)
 	private int id;
 
-	@Column(nullable=false)
 	private int client;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable=false)
 	private Date dataRegister;
 
-	@Column(length=199)
 	private String description;
 
-	@Column(nullable=false, length=120)
 	private String email;
 
-	@Column(length=64)
 	private String idConfEmail;
 
-	@Column(length=12)
 	private String mobile;
 
-	@Column(nullable=false, length=49)
 	private String name;
 
-	@Column(nullable=false, length=12)
 	private String pass;
 
-	@Column(length=12)
 	private String phone;
 
-	@Column(nullable=false, length=99)
 	private String sname;
 
 	//bi-directional many-to-one association to Help
@@ -66,7 +55,7 @@ public class User implements Serializable {
 
 	//bi-directional many-to-one association to Level
 	@ManyToOne
-	@JoinColumn(name="level", nullable=false)
+	@JoinColumn(name="level")
 	private Level levelBean;
 
 	public User() {
@@ -219,17 +208,5 @@ public class User implements Serializable {
 	public void setLevelBean(Level levelBean) {
 		this.levelBean = levelBean;
 	}
-	
-	/*
-	 * 
-		@Override
-	    public String toString() {
-	        return "Todo [summary=" + summary + ", description=" + description
-	                + "]";
-	    }
-	 * 
-	 * 
-	 * 
-	 * */
 
 }

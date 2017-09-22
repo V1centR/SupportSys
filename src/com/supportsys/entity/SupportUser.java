@@ -16,31 +16,22 @@ public class SupportUser implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(unique=true, nullable=false)
 	private int id;
 
-	@Column(length=13)
 	private String corpMobile;
 
-	@Column(length=99)
 	private String desc;
 
-	@Column(nullable=false, length=99)
 	private String email;
 
-	@Column(length=64)
 	private String idConfEmail;
 
-	@Column(nullable=false, length=49)
 	private String name;
 
-	@Column(nullable=false, length=36)
 	private String pass;
 
-	@Column(length=13)
 	private String setorPhone;
 
-	@Column(nullable=false, length=49)
 	private String snome;
 
 	//bi-directional many-to-one association to Help
@@ -53,7 +44,7 @@ public class SupportUser implements Serializable {
 
 	//bi-directional many-to-one association to SupportLevel
 	@ManyToOne
-	@JoinColumn(name="level", nullable=false)
+	@JoinColumn(name="level")
 	private SupportLevel supportLevel;
 
 	//bi-directional many-to-one association to Image

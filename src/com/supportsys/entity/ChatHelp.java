@@ -16,21 +16,18 @@ public class ChatHelp implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(unique=true, nullable=false)
 	private int id;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
 
-	@Column(nullable=false)
 	private int idUserPost;
 
-	@Column(length=120)
 	private String txt;
 
 	//bi-directional many-to-one association to Help
 	@ManyToOne
-	@JoinColumn(name="idHelp", nullable=false)
+	@JoinColumn(name="idHelp")
 	private Help help;
 
 	public ChatHelp() {

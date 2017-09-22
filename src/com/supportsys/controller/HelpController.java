@@ -3,6 +3,9 @@ package com.supportsys.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -18,69 +21,98 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hibernate.annotations.GenerationTime;
+
+import com.supportsys.entity.Department;
 import com.supportsys.entity.Help;
+import com.supportsys.entity.Status;
+import com.supportsys.entity.SupportUser;
+import com.supportsys.entity.TypeHelp;
 import com.supportsys.entity.User;
 
 
 @WebServlet("/HelpController")
 public class HelpController extends HttpServlet{
 	
+	/**
+	 * Add help class
+	 */
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException 
 	{
 		Connection db = null;
-		PrintWriter out = response.getWriter();		
+		PrintWriter out = response.getWriter();
 		
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("supportSys");
-		EntityManager em = emf.createEntityManager();
-		
-		User usuario = em.find(User.class, 1);
-		out.println("<b>User:</b> " + usuario.getName());
-		
-		
-		
-		
+		//Params_ form received
 		String formMode = request.getParameter("formMode");
 		String idHelp = request.getParameter("idHelp");
 		String helpLabel = request.getParameter("helpLabel");
-		String cat = request.getParameter("cat");
-		String setor_name = request.getParameter("setor_name");
+		String categoryHelp = request.getParameter("cat");
+		String department_id = request.getParameter("department_id");
 		String phone = request.getParameter("phone");
 		String helpTxt = request.getParameter("desc");
 		Calendar dataHelp = null;
+		String tags = "Testes;Hibernate;JPA;MariaDb;Setembro2017";
 		
+		//convert to integer
+		Integer categoryHelpInt = Integer.parseInt(categoryHelp);
+		Integer departmentInt = Integer.parseInt(department_id);
+		
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
+		EntityManager em = emf.createEntityManager();
+		
+		//Session user
+		User usuario = em.find(User.class, 1);
+		
+		out.println("<b>User:</b> " + usuario + "<br>");
+		
+		//SupportUser is nullable_
+		SupportUser supportUser = em.find(SupportUser.class, 1);
+		
+		//Department
+		Department department = em.find(Department.class, departmentInt);
+		
+		//Status active default value is 1, set in database
+		Status status = em.find(Status.class, 1);
+		
+		//Status active default value is 1, set in database
+		TypeHelp typeHelp = em.find(TypeHelp.class, categoryHelpInt);
+		
+		
+		
+//		Date date = new Date();
+//		DateFormat dateHelpPattern = new SimpleDateFormat("YYYY-mm-dd hh:mm:ss");
+		
+		long now = Calendar.getInstance().getTimeInMillis();
+		Timestamp ts = new Timestamp(now);
+		
+		
+
+		
+		//Date dateHelp = dateHelpPattern.format(date);
+		
+		
+//		out.println("<b>User:</b> " + Calendar.getInstance().getTime());
+		out.println("<b>User:</b> " + ts);
 		
 		try {
-			//YYYY-MM-DD HH:MM:SS
-			
-			SimpleDateFormat date = new SimpleDateFormat("YYYY-MM-DD HH:MM:SS");
-			
-			dataHelp = Calendar.getInstance();
-			
-			User user = new User();
-			user.getName();
 			
 			Help help = new Help();
 			
-			/*
-			 * helpLabel
-				cat
-				setor_name
-				phone
-				desc
-			 * 
-			 * */
-			
 			help.setHelpLabel(helpLabel);
 			help.setHelpTxt(helpTxt);
-//			help.setUser(1);
-//			help.setSupportUser(supportUser);
-//			help.setStatusBean(1);
-//			help.setDateHelp(dateHelp);
-//			help.setTypeHelpBean(typeHelpBean);
-//			help.setTags(tags);
+			help.setUser(usuario);
+			help.setSupportUser(supportUser);
+			help.setStatusBean(status);
+			help.setDepartment(department);
+			help.setDateHelp(ts);
+			help.setTypeHelpBean(typeHelp);
+			help.setTags(tags);
 			
-			
-			
+			em.getTransaction().begin();
+			em.persist(help);
+			em.getTransaction().commit();
+//			
+			out.println("<b>Chamado gravado com sucesso:</b> " + help.getId());
 			
 			//dataHelp.setTime(date);
 					

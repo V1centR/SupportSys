@@ -6,13 +6,13 @@ import java.util.List;
 
 
 /**
- * The persistent class for the typeHelp database table.
+ * The persistent class for the department database table.
  * 
  */
 @Entity
-@Table(name="typeHelp")
-@NamedQuery(name="TypeHelp.findAll", query="SELECT t FROM TypeHelp t")
-public class TypeHelp implements Serializable {
+@Table(name="department")
+@NamedQuery(name="Department.findAll", query="SELECT d FROM Department d")
+public class Department implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -22,11 +22,18 @@ public class TypeHelp implements Serializable {
 
 	private String name;
 
+	private String phone;
+
+	//bi-directional many-to-one association to Client
+	@ManyToOne
+	@JoinColumn(name="client")
+	private Client clientBean;
+
 	//bi-directional many-to-one association to Help
-	@OneToMany(mappedBy="typeHelpBean")
+	@OneToMany(mappedBy="department")
 	private List<Help> helps;
 
-	public TypeHelp() {
+	public Department() {
 	}
 
 	public int getId() {
@@ -53,6 +60,22 @@ public class TypeHelp implements Serializable {
 		this.name = name;
 	}
 
+	public String getPhone() {
+		return this.phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public Client getClientBean() {
+		return this.clientBean;
+	}
+
+	public void setClientBean(Client clientBean) {
+		this.clientBean = clientBean;
+	}
+
 	public List<Help> getHelps() {
 		return this.helps;
 	}
@@ -63,14 +86,14 @@ public class TypeHelp implements Serializable {
 
 	public Help addHelp(Help help) {
 		getHelps().add(help);
-		help.setTypeHelpBean(this);
+		help.setDepartment(this);
 
 		return help;
 	}
 
 	public Help removeHelp(Help help) {
 		getHelps().remove(help);
-		help.setTypeHelpBean(null);
+		help.setDepartment(null);
 
 		return help;
 	}

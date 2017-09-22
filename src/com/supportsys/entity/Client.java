@@ -2,6 +2,7 @@ package com.supportsys.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.List;
 
 
 /**
@@ -15,33 +16,24 @@ public class Client implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(unique=true, nullable=false)
 	private int id;
 
-	@Column(nullable=false, length=120)
 	private String address;
 
-	@Column(length=99)
 	private String bairro;
 
-	@Column(length=49)
 	private String city;
 
-	@Column(length=120)
 	private String desc;
 
-	@Column(nullable=false, length=99)
 	private String email;
 
 	private int level;
 
-	@Column(nullable=false, length=99)
 	private String name;
 
-	@Column(nullable=false, length=13)
 	private String phone;
 
-	@Column(length=13)
 	private String phoneB;
 
 	//bi-directional many-to-one association to Image
@@ -53,6 +45,10 @@ public class Client implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="uf")
 	private Uf ufBean;
+
+	//bi-directional many-to-one association to Department
+	@OneToMany(mappedBy="clientBean")
+	private List<Department> departments;
 
 	public Client() {
 	}
@@ -151,6 +147,28 @@ public class Client implements Serializable {
 
 	public void setUfBean(Uf ufBean) {
 		this.ufBean = ufBean;
+	}
+
+	public List<Department> getDepartments() {
+		return this.departments;
+	}
+
+	public void setDepartments(List<Department> departments) {
+		this.departments = departments;
+	}
+
+	public Department addDepartment(Department department) {
+		getDepartments().add(department);
+		department.setClientBean(this);
+
+		return department;
+	}
+
+	public Department removeDepartment(Department department) {
+		getDepartments().remove(department);
+		department.setClientBean(null);
+
+		return department;
 	}
 
 }

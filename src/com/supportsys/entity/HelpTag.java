@@ -15,17 +15,16 @@ public class HelpTag implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(unique=true, nullable=false)
 	private int id;
 
 	//bi-directional many-to-one association to Help
 	@ManyToOne
-	@JoinColumn(name="idHelp", nullable=false)
+	@JoinColumn(name="idHelp")
 	private Help help;
 
 	//bi-directional many-to-one association to Tag
 	@ManyToOne
-	@JoinColumn(name="idTag", nullable=false)
+	@JoinColumn(name="idTag")
 	private Tag tag;
 
 	public HelpTag() {

@@ -16,13 +16,10 @@ public class Image implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(unique=true, nullable=false)
 	private int id;
 
-	@Column(nullable=false, length=4)
 	private String ext;
 
-	@Column(nullable=false, length=32)
 	private String imgName;
 
 	//bi-directional many-to-one association to Client

@@ -16,19 +16,16 @@ public class SupportScore implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(unique=true, nullable=false)
 	private int id;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable=false)
 	private Date date;
 
-	@Column(nullable=false)
 	private int value;
 
 	//bi-directional many-to-one association to SupportUser
 	@ManyToOne
-	@JoinColumn(name="idUser", nullable=false)
+	@JoinColumn(name="idUser")
 	private SupportUser supportUser;
 
 	public SupportScore() {
