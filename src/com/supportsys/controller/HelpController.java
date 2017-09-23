@@ -14,7 +14,11 @@ public class HelpController {
 	{
 		String execOk = "Vamos ganhar 6000 com Java e Spring";
 		
-		return new ModelAndView("index","message", execOk);
+		return new ModelAndView(
+				
+				"formhelp","message", execOk
+				
+				);
 		
 	}
 

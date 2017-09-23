@@ -1,0 +1,13 @@
+/* 
+    Created on : Sep 17, 2017, 11:10:57 AM
+    Author     : Vicent
+*/
+
+body{margin:0; padding:0;}
+
+footer, .texture{ background-image: url(../images/noisytexture.png); overflow: hidden; color: #fff;}
+.text-shadow-white{text-shadow: 1px 1px 0px rgba(255, 255, 255, 1);}
+.text-shadow-black{text-shadow: 1px 1px 0px rgba(0, 0, 0, 1);}
+.hover-row:hover{ background-color: #d9d9d9;}
+.status-running-desenvolvimento{width: 70px; height:10px; -moz-transform: scaleX(-1); -o-transform: scaleX(-1); -webkit-transform: scaleX(-1); transform: scaleX(-1);}
+.select-status option{ padding: 10px;}
