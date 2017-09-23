@@ -60,12 +60,6 @@
                                 </div>
 							</td>
                         </tr>
-                        <tr>
-                        	<td>
-                        	...
-                        	</td>
-                        
-                        </tr>
                         
                         <tr>
                             <td colspan="3">
