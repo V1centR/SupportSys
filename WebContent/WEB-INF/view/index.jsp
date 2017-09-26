@@ -19,10 +19,8 @@
                     <tbody></tbody>
                 </table>              
                 <div class="clearfix"></div>
-                <button type="button" class="btn btn-primary" id="btn_new"><span class="glyphicon glyphicon-plus"></span> Nova Atividade</button>
-                
+                <button type="button" class="btn btn-primary" id="btn_new"><span class="glyphicon glyphicon-plus"></span> Nova Atividade</button>                
             </div>
-
         </div><!--/content-->
     </div>
     <div style="height: 300px;"></div>

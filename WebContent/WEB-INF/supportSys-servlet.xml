@@ -16,6 +16,16 @@
 		<property name="prefix" value="/WEB-INF/view/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
+	
+	<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+		<property name="mediaTypes">
+        <map>
+            <entry key="json" value="application/json" />
+            <entry key="xml" value="application/xml" />
+       	</map>
+    	</property>
+	</bean>
+	
 	<mvc:resources location="/view/" mapping="/resources/**" />
 	<mvc:annotation-driven />
  

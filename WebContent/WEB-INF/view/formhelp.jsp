@@ -1,8 +1,9 @@
 <jsp:include page="header.jsp" />
 <body>
-<div style="position:relative; float:left; height:100%; width:250px; background-color:#000; margin-right:20px; color:#fff; padding:15px;">Inicio</div>
+<div style="position:relative; float:left; height:100%; width:250px; background-color:#ccc; margin-right:20px; color:#fff; padding:15px;">
+<span class="glyphicon glyphicon-home"></span> Inicio</div>
 <div style="position:relative; float:left;">
-<form name="addHelp" class="addAtividade" method="POST" action="/supportSys/HelpController">
+<form name="addHelp" class="addAtividade" method="POST" action="/supportSys/addhelp">
                 <input type="hidden" id="formMode" name="form" value="true">
                 <input type="hidden" id="idAtividade" name="idAtividade" value="aaa">
                 <table class="table" border="0">
