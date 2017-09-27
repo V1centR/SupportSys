@@ -23,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
@@ -43,7 +44,7 @@ public class HelpController {
 	
 	@RequestMapping(value="/teste", method = RequestMethod.GET, produces = "application/json")
 	//@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody String getClient() throws JSONException{
+	public @ResponseBody String getClient(@RequestParam(value="jsonStr") String jsonStr, HttpServletRequest request ) throws JSONException{
 		
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
 		EntityManager em = emf.createEntityManager();
@@ -51,7 +52,6 @@ public class HelpController {
 		Client cliente = em.find(Client.class, 1);
 		cliente.getName();
 		cliente.getEmail();
-		//JSONObject.quote(cliente.getName());
 		
 		JSONObject dataItem = new JSONObject();
 		
@@ -59,9 +59,9 @@ public class HelpController {
 		dataItem.put("email", cliente.getEmail());
 		
 		String jsonString = dataItem.toString();
+		System.out.println(jsonStr);
 		
-		
-//		return JSONObject.quote("[{" + "cliente:" + cliente.getName() + "}]");
+
 		return jsonString;
 	}
 	
@@ -87,9 +87,6 @@ public class HelpController {
 		
 		out.println("[{',label' : 'jsonOK'}]");
 		
-		//String helpLabel = request.getParameter("helpLabel");
-		
-	//	System.out.println(helpLabel);
 		
 		//show json result in generic.jsp
 		return "generic";
