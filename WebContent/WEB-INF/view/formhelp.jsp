@@ -3,15 +3,20 @@
 <div style="position:relative; float:left; height:100%; width:250px; background-color:#ccc; margin-right:20px; color:#fff; padding:15px;">
 <span class="glyphicon glyphicon-home"></span> Inicio</div>
 <div style="position:relative; float:left;">
-<form name="addHelp" class="addAtividade" method="POST" action="/supportSys/addhelp">
-                <input type="hidden" id="formMode" name="form" value="true">
+
+<span class="message-danger"></span>
+<span class="message"></span>
+
+<form name="addHelp" class="addhelpForm">
+                <input type="hidden" id="formMode" name="formMode" value="add">
+                <input type="hidden" id="client" name="client" value="1">
                 <input type="hidden" id="idAtividade" name="idAtividade" value="aaa">
                 <table class="table" border="0">
                     <tbody>
                         <tr>
                             <td colspan="2">                                
                                 <label>*Título</label>                                
-                                <input type="text" name="helpLabel" id="nameLabel" class="form-control" style="font-size: 14px; font-weight: bold; width: 500px;">                               
+                                <input type="text" name="helpLabel" id="helpLabel" class="form-control" style="font-size: 14px; font-weight: bold; width: 500px;">                               
                             </td>
                             <td></td>
                         </tr>
@@ -19,7 +24,7 @@
                         	<td>
 								<div style="position: relative; float: left; margin-right: 12px;">                                    
                                     <label>*Categoria</label>
-                                    <select name="cat" class="form-control" style="width:250px;">
+                                    <select name="cat" id="cat" class="form-control" style="width:250px;">
 	                                    <option value="0">...</option>
 	                                    <option value="1">Backup</option>
 	                                    <option value="2">E-mail</option>
@@ -38,8 +43,8 @@
 							<td>
 								<div style="position: relative; float: left; margin-right: 12px;">                                    
                                     <label>*Setor</label>
-                                    <select name="department_id" class="form-control" style="max-width:250px; padding:10px;">
-	        							<option value="" selected="selected">...</option>
+                                    <select name="department_id" id="department_id" class="form-control" style="max-width:250px; padding:10px;">
+	        							<option value="0" selected="selected">...</option>
 	        							<option value="1">T.I</option>
 	        							<option value="1">Assist Social Assist</option>
 	        							<option value="1">Colônia</option>
@@ -70,8 +75,8 @@
                         </tr>
                         <tr>
                            <td colspan="2" style="text-align:right">
-                               <button id="voltar" type="button" name="btn" class="btn btn-primary btn-lg btn-voltar"><span class="glyphicon glyphicon-chevron-left"></span> Voltar</button>
-                               <button id="enviar" type="submit" name="btn" class="btn btn-primary btn-lg btn-enviar"><span class="glyphicon glyphicon-fire"></span> Enviar</button>                                
+                               <button id="back" type="button" name="btn" class="btn btn-primary btn-lg btn-voltar"><span class="glyphicon glyphicon-chevron-left"></span> Voltar</button>
+                               <button id="send" type="button" name="btn" class="btn btn-primary btn-lg btn-send"><span class="glyphicon glyphicon-fire"></span> Enviar</button>                                
                                <span class="loader"></span>
                            </td>
                         </tr>

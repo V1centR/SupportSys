@@ -30,6 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.supportsys.entity.Client;
 import com.supportsys.entity.Department;
+import com.supportsys.model.HelpModel;
 
 
 @Controller
@@ -39,35 +40,33 @@ public class HelpController {
 	public ModelAndView execHelp()
 	{		
 		return new ModelAndView("formhelp","", "");
-		
 	}
 	
-	@RequestMapping(value="/teste", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value="/addhelp", method = RequestMethod.POST, produces = "application/json")
 	//@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody String getClient(@RequestParam(value="jsonStr") String jsonStr, HttpServletRequest request ) throws JSONException{
+	public @ResponseBody String addHelp(@RequestParam(value="jsonStr") String jsonStr) throws JSONException{
 		
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
-		EntityManager em = emf.createEntityManager();
+		//String jsonStringTest = "{\"nome\":\"ASSPM\",\"email\":\"imprensa@asspm.org.br\"}";
 		
-		Client cliente = em.find(Client.class, 1);
-		cliente.getName();
-		cliente.getEmail();
+		JSONObject dataItem = new JSONObject(jsonStr);
+//		dataItem.put("nome", cliente.getName());
+//		dataItem.put("email", cliente.getEmail());		
+		String jsonString = dataItem.toString();		
+		String labelHelp = dataItem.getString("helpLabel");
+		System.out.println(labelHelp);
 		
-		JSONObject dataItem = new JSONObject();
 		
-		dataItem.put("nome", cliente.getName());
-		dataItem.put("email", cliente.getEmail());
+		//boolean addHelp = new HelpModel().addHelp(dataItem);
 		
-		String jsonString = dataItem.toString();
-		System.out.println(jsonStr);
+		//System.out.println(jsonStr);
 		
 
 		return jsonString;
 	}
 	
 	
-	@RequestMapping(value="/addhelp", method = RequestMethod.POST, produces="application/json")
-	public String addHelp(@ModelAttribute("addHelp") Department departamento, BindingResult result, ModelMap model, HttpServletResponse response) throws IOException 
+	@RequestMapping(value="/addhelpOLD", method = RequestMethod.POST, produces="application/json")
+	public String addHelpOLD(@ModelAttribute("addHelp") Department departamento, BindingResult result, ModelMap model, HttpServletResponse response) throws IOException 
 	{		
 		//String addConfirm = "{'status':true}";
 		Connection db = null;

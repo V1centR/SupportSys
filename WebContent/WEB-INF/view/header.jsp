@@ -9,5 +9,6 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/style.css"/>">
 <script src="<c:url value="/resources/js/jquery-3.2.1.min.js"/>"></script>
 <script src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
+<script src="<c:url value="/resources/js/addhelpAction.js"/>"></script>
 <title>Support System :: SpringMvc, Hibernate, JPA</title>
 </head>
