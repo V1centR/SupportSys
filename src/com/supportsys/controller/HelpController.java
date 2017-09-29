@@ -1,7 +1,9 @@
 package com.supportsys.controller;
 
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.util.List;
@@ -13,14 +15,19 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jackson.JsonParser;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +37,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.supportsys.entity.Client;
 import com.supportsys.entity.Department;
+import com.supportsys.entity.Help;
 import com.supportsys.model.HelpModel;
 
 
@@ -42,26 +50,38 @@ public class HelpController {
 		return new ModelAndView("formhelp","", "");
 	}
 	
-	@RequestMapping(value="/addhelp", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value="addhelp", method=RequestMethod.POST)
 	//@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody String addHelp(@RequestParam(value="jsonStr") String jsonStr) throws JSONException{
+	public @ResponseBody void addHelp(@RequestBody Help help) throws Exception{
+		
+		Object helpLabel = help.getHelpLabel().toString();
+		
+		boolean addHelp = new HelpModel().addHelp(help);
+		
+		//System.out.println(helpLabel);
+		
+		
+		
 		
 		//String jsonStringTest = "{\"nome\":\"ASSPM\",\"email\":\"imprensa@asspm.org.br\"}";
 		
-		JSONObject dataItem = new JSONObject(jsonStr);
+		//String dataItem = new JSONObject(request.getInputStream()).toString();
+//		
+		//System.out.println(jsonTest.toString());
+		
 //		dataItem.put("nome", cliente.getName());
 //		dataItem.put("email", cliente.getEmail());		
-		String jsonString = dataItem.toString();		
-		String labelHelp = dataItem.getString("helpLabel");
-		System.out.println(labelHelp);
+//		String jsonString = dataItem.toString();		
+//		String labelHelp = dataItem.getString("helpLabel");
+//		System.out.println(labelHelp);
 		
 		
-		//boolean addHelp = new HelpModel().addHelp(dataItem);
+		
 		
 		//System.out.println(jsonStr);
 		
 
-		return jsonString;
+		//return dataItem;
 	}
 	
 	

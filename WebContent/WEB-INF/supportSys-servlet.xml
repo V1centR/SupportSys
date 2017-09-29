@@ -10,7 +10,6 @@
         http://www.springframework.org/schema/context/spring-context.xsd">
  
 	<context:component-scan base-package="com.supportsys.controller" />
- 
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/view/" />
@@ -24,6 +23,7 @@
             <entry key="xml" value="application/xml" />
        	</map>
     	</property>
+    	
 	</bean>
 	
 	<mvc:resources location="/WEB-INF/view/" mapping="/resources/**" />

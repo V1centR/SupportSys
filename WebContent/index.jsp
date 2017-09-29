@@ -1,4 +1,3 @@
-<jsp:include page="view/header.jsp" />
 <body>
     <div class="container-fluid" style="margin-top: 50px; border: 1px dotted #ccc;">
         <div class="main">
