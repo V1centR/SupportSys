@@ -38,7 +38,7 @@ $(document).ready(function () {
         var client = 		$("input#client").val();
         var idAtividade = 	$("input#idAtividade").val();
         var helpLabel = 	$("input#helpLabel").val();
-        var category = 		$("input#cat").val();
+        var category = 		$("select#cat").val();
         var dept = 			$("select#dept").val();
         var description = 	$("textarea#desc").val();
         var email = "imprensa@asspm.org.br";
@@ -96,7 +96,7 @@ $(document).ready(function () {
 <form name="addHelp" class="addhelpForm" method="post">
                 <input type="hidden" id="formMode" name="formMode" value="add">
                 <input type="hidden" id="client" name="client" value="1">
-                <input type="hidden" id="idAtividade" name="idAtividade" value="aaa">
+                <input type="hidden" id="idAtividade" name="idAtividade" value="0">
                 <table class="table" border="0">
                     <tbody>
                         <tr>

@@ -57,42 +57,17 @@ public class HelpController {
 		//edresxe
 	
 		
-		//Funcionando Recebe  este formato "{\"nome\":\"ASSPM\",\"email\":\"imprensa@asspm.org.br\"}";
+		//Funcionando! formato recebido "{\"nome\":\"ASSPM\",\"email\":\"imprensa@asspm.org.br\"}";
 		String jsonFormData = jsonStr.toString();
 		JSONObject jsonItems = new JSONObject(jsonFormData);
+		//aqui virá uma sessão
+		Integer userHelp = 1;
 		
-		boolean addHelp = new HelpModel().addHelp(jsonItems);
+		//Send to Model
+		boolean createHelp = new HelpModel().createHelp(jsonItems, userHelp);
 		
+		System.out.println(createHelp);
 		
-		
-//		System.out.println(jsonItems.get("helpLabel"));
-		//#################################################
-		
-		
-		//boolean addHelp = new HelpModel().addHelp(help);
-		
-		
-		
-		
-		//String jsonStringTest = "{\"nome\":\"ASSPM\",\"email\":\"imprensa@asspm.org.br\"}";
-		
-		//String dataItem = new JSONObject(request.getInputStream()).toString();
-//		
-		//System.out.println(jsonTest.toString());
-		
-//		dataItem.put("nome", cliente.getName());
-//		dataItem.put("email", cliente.getEmail());		
-//		String jsonString = dataItem.toString();		
-//		String labelHelp = dataItem.getString("helpLabel");
-//		System.out.println(labelHelp);
-		
-		
-		
-		
-		//System.out.println(jsonStr);
-		
-
-		//return dataItem;
 	}
 	
 	
