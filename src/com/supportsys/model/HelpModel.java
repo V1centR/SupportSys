@@ -9,8 +9,8 @@ import javax.persistence.Persistence;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.supportsys.entity.Client;
 import com.supportsys.entity.Department;
 import com.supportsys.entity.Help;
 import com.supportsys.entity.Status;
@@ -24,9 +24,6 @@ public class HelpModel {
 		
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
 		EntityManager em = emf.createEntityManager();
-		
-		
-		System.out.println(jsonItems.toString());
 		
 		//Strings ###
 		Object formMode = jsonItems.get("formMode").toString();
@@ -44,8 +41,6 @@ public class HelpModel {
 		//TimeStamp
 		long now = Calendar.getInstance().getTimeInMillis();
 		Timestamp tsNow = new Timestamp(now);
-		
-		//System.out.println("Integer na Model:: " + client);
 		
 		
 		//Client cliente = em.find(Client.class, 1);
@@ -70,8 +65,7 @@ public class HelpModel {
 			help.setUser(userCall);			
 			help.setStatusBean(status);
 			help.setDepartment(deptCall);
-			help.setDateHelp(tsNow);
-			
+			help.setDateHelp(tsNow);			
 			help.setTypeHelpBean(typeHelp);
 			help.setTags(tags);
 			

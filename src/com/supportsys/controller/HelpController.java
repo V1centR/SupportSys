@@ -14,12 +14,15 @@ import javax.persistence.Persistence;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.ws.http.*;
 
+import org.apache.catalina.connector.Response;
 import org.codehaus.jackson.JsonParser;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
@@ -51,11 +54,14 @@ public class HelpController {
 		return new ModelAndView("formhelp","", "");
 	}
 	
+	/**
+	 * Method addHelp
+	 * Add new data from help user 
+	 */
 	@RequestMapping(value="addhelp", method=RequestMethod.POST)
 	//@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody void addHelp(@RequestBody Object jsonStr) throws JSONException{
+	public @ResponseBody int addHelp(@RequestBody Object jsonStr) throws JSONException{
 		//edresxe
-	
 		
 		//Funcionando! formato recebido "{\"nome\":\"ASSPM\",\"email\":\"imprensa@asspm.org.br\"}";
 		String jsonFormData = jsonStr.toString();
@@ -66,36 +72,10 @@ public class HelpController {
 		//Send to Model
 		boolean createHelp = new HelpModel().createHelp(jsonItems, userHelp);
 		
-		System.out.println(createHelp);
-		
+		if(createHelp == true) {
+			return Response.SC_CREATED;			
+		}else {
+			return Response.SC_INTERNAL_SERVER_ERROR;
+		}
 	}
-	
-	
-	@RequestMapping(value="/addhelpOLD", method = RequestMethod.POST, produces="application/json")
-	public String addHelpOLD(@ModelAttribute("addHelp") Department departamento, BindingResult result, ModelMap model, HttpServletResponse response) throws IOException 
-	{		
-		//String addConfirm = "{'status':true}";
-		Connection db = null;
-		
-		//string support especificado no persistence.xml
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
-		EntityManager em = emf.createEntityManager();
-		
-		Client cliente = em.find(Client.class, 1);
-		
-		System.out.println(cliente);
-		//System.out.println(cliente);
-		
-		PrintWriter out = response.getWriter();
-		
-		//model.addAttribute("helpLabel", departamento.getName());
-		
-		out.println("[{',label' : 'jsonOK'}]");
-		
-		
-		//show json result in generic.jsp
-		return "generic";
-		
-	}
-
 }

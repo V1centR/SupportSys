@@ -8,30 +8,11 @@
 <span class="message"></span>
 <script>
 $(document).ready(function () {
-    
-	//action="/supportSys/addhelp"
-	
 	
     $('form.addhelpForm')[0].reset();
     $('button#back').click(function(){        
         window.location.href = '/supportSys';
     });
-    
-    /*
-     * 
-		formMode
-		client
-		idAtividade
-		helpLabel
-		cat
-		department_id
-		desc
-		botão: id: send
-     * 
-     * 
-     * 
-     * */
-    
     
     $('#send').click(function () {       
         var formMode = 		$("input#formMode").val();
@@ -49,20 +30,13 @@ $(document).ready(function () {
 //            return false;
 //        }
         
-        $("button.btn-send").attr("disabled","disabled");
-        $('span.loader').append('<img src="resources/images/loader.gif">');
-        
-    //  var jsonStringTest = "{\"email\":\" " + email + "\",\"emailOLD\":\"imprensa@asspm.org.br\"}";
-     
+	    $("button.btn-send").attr("disabled","disabled");
+	    $('span.loader').append('<img src="resources/images/loader.gif">');
       
       var strFormJson = "{\"formMode\":\"" + formMode + "\",\"client\":\""+ client + "\",\"idAtividade\":\""+ idAtividade + "\",\"helpLabel\":\""+ helpLabel + "\",\"category\":\""+ category + "\",\"dept\":\""+ dept + "\",\"description\":\""+ description + "\"}";  
       
       var setJson = JSON.stringify(strFormJson);
-     //   var setJson = JSON.stringify();
-
-        console.log(setJson);
-        
-        
+      $("form.addhelpForm :input").attr("disabled", true);
         $.ajax({        	
             type: 'POST',
             dataType: 'json',
@@ -74,12 +48,21 @@ $(document).ready(function () {
                 'Content-Type': 'application/json' 
             },
             success: function (data) {
-               console.log(data)
+               console.log(data);
+               
                $('span.loader').remove();
                $('span.message-danger').remove();
                $("form.addhelpForm").fadeOut('fast');
-              // $('span.message').append('<div class="alert alert-success" role="alert">Atividade registrada com sucesso! <a href="/">(Clique para voltar)</a></div>');
-                return true;
+               
+               if(data == 201){
+            	   $('span.message').append('<div class="alert alert-success" role="alert">Atividade registrada com sucesso! <a href="/">(Clique para voltar)</a></div>');
+               }
+               
+               if(data == 500){
+            	   $('span.message').append('<div class="alert alert-danger" role="alert">Houve um erro de procesamento, seu chamado não foi registrado! <a href="/">(Clique para voltar)</a></div>');
+               }
+              
+               return true;
             },
             error: function (data) {
                 console.log(data);
@@ -92,7 +75,6 @@ $(document).ready(function () {
 
 
 </script>
-
 <form name="addHelp" class="addhelpForm" method="post">
                 <input type="hidden" id="formMode" name="formMode" value="add">
                 <input type="hidden" id="client" name="client" value="1">
