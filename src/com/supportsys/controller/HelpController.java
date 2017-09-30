@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.method.annotation.JsonViewRequestBodyAdvice;
 
 import com.supportsys.entity.Client;
 import com.supportsys.entity.Department;
@@ -52,13 +53,23 @@ public class HelpController {
 	
 	@RequestMapping(value="addhelp", method=RequestMethod.POST)
 	//@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody void addHelp(@RequestBody Help help) throws Exception{
+	public @ResponseBody void addHelp(@RequestBody Object jsonStr) throws JSONException{
+		//edresxe
+	
 		
-		Object helpLabel = help.getHelpLabel().toString();
+		//Funcionando Recebe  este formato "{\"nome\":\"ASSPM\",\"email\":\"imprensa@asspm.org.br\"}";
+		String jsonFormData = jsonStr.toString();
+		JSONObject jsonItems = new JSONObject(jsonFormData);
 		
-		boolean addHelp = new HelpModel().addHelp(help);
+		boolean addHelp = new HelpModel().addHelp(jsonItems);
 		
-		//System.out.println(helpLabel);
+		
+		
+//		System.out.println(jsonItems.get("helpLabel"));
+		//#################################################
+		
+		
+		//boolean addHelp = new HelpModel().addHelp(help);
 		
 		
 		

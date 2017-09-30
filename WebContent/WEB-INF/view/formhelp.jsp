@@ -35,12 +35,13 @@ $(document).ready(function () {
     
     $('#send').click(function () {       
         var formMode = 		$("input#formMode").val();
-        var client = 		$("input#desc").val();
+        var client = 		$("input#client").val();
         var idAtividade = 	$("input#idAtividade").val();
         var helpLabel = 	$("input#helpLabel").val();
         var category = 		$("input#cat").val();
-        var department_id = $("select#department_id").val();
+        var dept = 			$("select#dept").val();
         var description = 	$("textarea#desc").val();
+        var email = "imprensa@asspm.org.br";
 //        var helpLabel = $('input[name="situacao"]:checked').val();
         
 //        if(helpLabel == '' || description == '' || category == 0 || department_id == 0){                
@@ -51,7 +52,13 @@ $(document).ready(function () {
         $("button.btn-send").attr("disabled","disabled");
         $('span.loader').append('<img src="resources/images/loader.gif">');
         
-        var setJson = JSON.stringify({"formMode": formMode, "client": client, "idAtividade": idAtividade, "helpLabel" : helpLabel, "category": category, "department_id": department_id, "description": description});
+    //  var jsonStringTest = "{\"email\":\" " + email + "\",\"emailOLD\":\"imprensa@asspm.org.br\"}";
+     
+      
+      var strFormJson = "{\"formMode\":\"" + formMode + "\",\"client\":\""+ client + "\",\"idAtividade\":\""+ idAtividade + "\",\"helpLabel\":\""+ helpLabel + "\",\"category\":\""+ category + "\",\"dept\":\""+ dept + "\",\"description\":\""+ description + "\"}";  
+      
+      var setJson = JSON.stringify(strFormJson);
+     //   var setJson = JSON.stringify();
 
         console.log(setJson);
         
@@ -122,7 +129,7 @@ $(document).ready(function () {
 							<td>
 								<div style="position: relative; float: left; margin-right: 12px;">                                    
                                     <label>*Setor</label>
-                                    <select name="department_id" id="department_id" class="form-control" style="max-width:250px; padding:10px;">
+                                    <select name="dept" id="dept" class="form-control" style="max-width:250px; padding:10px;">
 	        							<option value="0" selected="selected">...</option>
 	        							<option value="1">T.I</option>
 	        							<option value="1" selected="selected">Assist Social Assist</option>
