@@ -48,10 +48,16 @@ import com.supportsys.model.HelpModel;
 @Controller
 public class HelpController {
 	
-	@RequestMapping("/new-help")
+	@RequestMapping("/chamados/novo-chamado")
 	public ModelAndView execHelp()
 	{		
 		return new ModelAndView("formhelp","", "");
+	}
+	
+	@RequestMapping("/home")
+	public ModelAndView homeAction()
+	{		
+		return new ModelAndView("index","", "");
 	}
 	
 	/**

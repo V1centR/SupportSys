@@ -1,2 +1,8 @@
 /build
 /target/
+/WebContent/WEB-INF/view/bower_components/
+/WebContent/WEB-INF/view/build/
+/WebContent/WEB-INF/view/dist/
+/WebContent/WEB-INF/view/pages/
+/WebContent/WEB-INF/view/plugins/
+/WebContent/WEB-INF/view1/
