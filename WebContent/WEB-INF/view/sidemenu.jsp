@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar" style="height: auto;">
@@ -33,7 +34,13 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class="active"><a href="./chamados/novo-chamado"><i class="fa fa-circle-o"></i> Novo Chamado</a></li>
+            <li class="active">
+            <a href="<c:url value="/chamados/novo-chamado"/>"><i class="fa fa-circle-o"></i> Novo Chamado</a>
+            </li>
+            
+            <li class="active">
+            <a href="<c:url value="/chamados/novo-chamado"/>"><i class="fa fa-circle-o"></i> Meus chamados</a>
+            </li>
           </ul>
         </li>
         <li class="treeview">
