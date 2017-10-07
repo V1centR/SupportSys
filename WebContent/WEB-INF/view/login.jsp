@@ -25,6 +25,7 @@
 	href="<c:url value="/resources/plugins/iCheck/square/blue.css"/>">
 <link rel="stylesheet"
 	href="<c:url value="/resources/dist/css/AdminLTE.min.css"/>">
+	<script src="<c:url value="/resources/bower_components/jquery/dist/jquery.min.js"/>"></script>
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -36,6 +37,77 @@
 <!-- Google Font -->
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+<script>
+$(document).ready(function () {
+	
+    $('form.login')[0].reset();
+    /*
+    $('button#back').click(function(){        
+        window.location.href = '/supportSys';
+    }); */
+    
+    $('#send').click(function () {       
+        var formMode = 		$("input#formMode").val();
+        var client = 		$("input#client").val();
+        
+        var email = $("input#email").val();
+        var pass = 		$("input#pass").val();
+        var token = 		$("input#token").val();
+        var setLoggedIn = 	$('input[name="setLoggedIn"]:checked').val();
+        
+        
+//        var helpLabel = $('input[name="situacao"]:checked').val();
+        
+//        if(helpLabel == '' || description == '' || category == 0 || department_id == 0){                
+//            $('span.message-danger').append('<div class="alert alert-danger" role="alert"><strong>ATENÇÃO!</strong> Todos os campos são obrigatórios!</div>');
+//            return false;
+//        }
+        
+	    $("button.btn-send").attr("disabled","disabled");
+	    $('span.loader').append('<img src="../resources/images/loader.gif">');
+      
+      var strFormJson = "{\"email\":\"" + email + "\",\"pass\":\""+ pass + "\",\"setLoggedIn\":\""+ setLoggedIn + "\",\"token\":\""+ token + "\"}";  
+      
+      console.log(strFormJson);
+      
+      var setJson = JSON.stringify(strFormJson);
+      $("form.login :input").attr("disabled", true);
+        $.ajax({        	
+            type: 'POST',
+            dataType: 'json',
+            url: './authuser',
+            data: setJson,
+            contentType : 'application/json; charset=utf-8',
+            headers: { 
+                'Accept': 'application/json',
+                'Content-Type': 'application/json' 
+            },
+            success: function (data) {
+               console.log(data);
+               
+               $('span.loader').remove();
+               $('span.message-danger').remove();
+               $("form.addhelpForm").fadeOut('fast');
+               
+               if(data == 201){
+            	   $('span.message').append('<div class="alert alert-success" role="alert">Login efetuado com sucesso!</div>');
+               }
+               if(data == 500){
+            	   $('span.message').append('<div class="alert alert-danger" role="alert">Login ou senha inválidos</div>');
+               }
+               return true;
+            },
+            error: function (data) {
+                console.log(data);
+                return false;
+            }
+        });
+    });
+    // --final documentReady --
+});
+</script>
+
 </head>
 <body class="hold-transition login-page">
 	<div class="login-box">
@@ -44,27 +116,28 @@
 		</div>
 		<!-- /.login-logo -->
 		<div class="login-box-body">
-			<p class="login-box-msg">Sign in to start your session</p>
-
-			<form action="../../index2.html" method="post">
+			<p class="login-box-msg">Acesso ao sistema</p>
+			<span class="message"></span>
+			<form class="login" method="POST">
 				<div class="form-group has-feedback">
-					<input type="email" class="form-control" placeholder="Email">
+					<input type="hidden" name="token" id="token" value="000888">
+					<input type="email" name="email" id="email" class="form-control" placeholder="Email" value="laurabct@asspm.org.br">
 					<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
 				</div>
 				<div class="form-group has-feedback">
-					<input type="password" class="form-control" placeholder="Password">
+					<input type="password" name="pass" id="pass" class="form-control" placeholder="Password" value="123123">
 					<span class="glyphicon glyphicon-lock form-control-feedback"></span>
 				</div>
 				<div class="row">
 					<div class="col-xs-8">
 						<div class="checkbox icheck">
-							<label> <input type="checkbox"> Remember Me
+							<label> <input type="checkbox" name="setLoggedIn" checked="checked"> Manter logado
 							</label>
 						</div>
 					</div>
 					<!-- /.col -->
 					<div class="col-xs-4">
-						<button type="submit" class="btn btn-primary btn-block btn-flat">Sign
+						<button type="button" id="send" class="btn btn-primary btn-block btn-flat">Sign
 							In</button>
 					</div>
 					<!-- /.col -->
@@ -72,30 +145,24 @@
 			</form>
 
 			<div class="social-auth-links text-center">
-				<p>- OR -</p>
+				<p>- Ou -</p>
 				<a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i
-					class="fa fa-facebook"></i> Sign in using Facebook</a> <a href="#"
+					class="fa fa-facebook"></i> Logar com Facebook</a> <a href="#"
 					class="btn btn-block btn-social btn-google btn-flat"><i
-					class="fa fa-google-plus"></i> Sign in using Google+</a>
+					class="fa fa-google-plus"></i> Logar com Google+</a>
 			</div>
 			<!-- /.social-auth-links -->
-
-			<a href="#">I forgot my password</a><br> <a href="register.html"
-				class="text-center">Register a new membership</a>
+			<a href="#">Esqueci a senha</a><br>
+			
 
 		</div>
 		<!-- /.login-box-body -->
 	</div>
 	<!-- /.login-box -->
-
-	<!-- jQuery 3 -->
-	<script
-		src="<c:url value="/resources/bower_components/jquery/dist/jquery.min.js"/>"></script>
 	<!-- Bootstrap 3.3.7 -->
 	<script
 		src="<c:url value="/resources/bower_components/bootstrap/dist/js/bootstrap.min.js"/>"></script>
 	<!-- iCheck -->
-	<script src="../../plugins/iCheck/icheck.min.js"></script>
 	<script src="<c:url value="/resources/plugins/iCheck/icheck.min.js"/>"></script>
 	<script>
   $(function () {

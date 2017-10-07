@@ -1,10 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>supportSys</groupId>
-  <artifactId>supportSys</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <groupId>org.hibernate.javax.persistence</groupId>
+    <artifactId>hibernate-jpa-2.0-api</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0.1.Final</version>
+    <url>http://hibernate.org</url>  
   <dependencies>
+  <dependency>
+	    <groupId>org.hibernate</groupId>
+	    <artifactId>hibernate-core</artifactId>
+	    <version>5.2.11.Final</version>
+	</dependency>
      <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-context</artifactId>
@@ -30,11 +36,6 @@
 		<artifactId>jstl</artifactId>
 		<version>1.2</version>
 	</dependency>
-	<dependency>
-  		<groupId>javax.persistence</groupId>
-  		<artifactId>persistence-api</artifactId>  
-  		<version>1.0</version>
-	</dependency>
 	<!-- https://mvnrepository.com/artifact/org.json/json -->
 	<dependency>
 	    <groupId>org.json</groupId>
@@ -51,7 +52,6 @@
 		<artifactId>jackson-databind</artifactId>
 		<version>2.5.3</version>
 	</dependency>
-	
   </dependencies>
   <build>
     <sourceDirectory>src</sourceDirectory>
@@ -62,14 +62,14 @@
           <exclude>**/*.java</exclude>
         </excludes>
       </resource>
-    </resources>
+    </resources>    
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.6.1</version>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
       <plugin>
@@ -85,9 +85,6 @@
         <artifactId>frontend-maven-plugin</artifactId>
         <version>0.0.21</version>
     </plugin>
-      
-      
-      
       
     </plugins>
   </build>
