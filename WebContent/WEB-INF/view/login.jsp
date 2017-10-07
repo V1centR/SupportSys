@@ -90,10 +90,11 @@ $(document).ready(function () {
                $('span.message-danger').remove();
                $("form.addhelpForm").fadeOut('fast');
                
-               if(data == 201){
-            	   $('span.message').append('<div class="alert alert-success" role="alert">Login efetuado com sucesso!</div>');
+               if(data == 200){
+            	   $('span.message').append('<div class="alert alert-success" role="alert">Login ok! Redirecionando...</div>');
+            	   window.location.href = './home';
                }
-               if(data == 500){
+               if(data == 401){
             	   $('span.message').append('<div class="alert alert-danger" role="alert">Login ou senha inválidos</div>');
                }
                return true;

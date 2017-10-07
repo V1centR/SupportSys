@@ -1,6 +1,11 @@
 package com.supportsys.controller;
 
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.catalina.connector.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,7 +40,7 @@ public class HelpController {
 	 */
 	@RequestMapping(value="addhelp", method=RequestMethod.POST)
 	//@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody int addHelp(@RequestBody Object jsonStr) throws JSONException{
+	public @ResponseBody int addHelp(@RequestBody Object jsonStr, HttpServletRequest request) throws JSONException, IOException{
 		//edresxe
 		
 		//Funcionando! formato recebido "{\"nome\":\"ASSPM\",\"email\":\"imprensa@asspm.org.br\"}";
@@ -43,6 +48,7 @@ public class HelpController {
 		JSONObject jsonItems = new JSONObject(jsonFormData);
 		//aqui virá uma sessão
 		Integer userHelp = 1;
+		
 		
 		//Send to Model
 		boolean createHelp = new HelpModel().createHelp(jsonItems, userHelp);

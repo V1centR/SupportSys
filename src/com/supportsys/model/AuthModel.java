@@ -1,11 +1,15 @@
 package com.supportsys.model;
 
+import java.io.IOException;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +30,7 @@ public class AuthModel {
 	 * @return
 	 * @throws JSONException
 	 */
-	public boolean authUser(JSONObject userData) throws JSONException
+	public List<User> authUser(JSONObject userData) throws JSONException, IOException
 	{
 		//Data received json 
 		Object userEmail = userData.get("email").toString();
@@ -49,17 +53,25 @@ public class AuthModel {
 					criteriaSet.equal(user.get("email"), userEmail),
 					criteriaSet.equal(user.get("pass"), password)
 					);
-			int execLoginResult = em.createQuery(UserData).getResultList().size();
+			
+			List<User> dataUser = em.createQuery(UserData).getResultList();
+			int execLoginResult = dataUser.size();
+			
+//			for(User itemData: dataUser) {
+//				System.out.println("Nome do banco:: " + itemData.getName());
+//			}
 			
 			if(execLoginResult == 1)
 			{
-				return true;
+				return dataUser;
 			}else {
-				return false;
+				dataUser = null;
+				return dataUser;
 			}
 			
 		} catch (Exception e) {
-			return false;
+			List<User> dataUser = null;
+			return dataUser;
 		}
 	}
 }
