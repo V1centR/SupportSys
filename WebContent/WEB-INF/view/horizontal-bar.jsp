@@ -1,4 +1,48 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<script>
+$(document).ready(function () {
+	
+    $('a#logout').click(function () {
+
+    	console.log("logOut press");
+      var infoLogout = $("input#hashSess").val();
+      var strFormJson = "{\"infoLogout\":\"" + infoLogout + "\"}";
+      
+      console.log(strFormJson);
+      
+      var setJson = JSON.stringify(strFormJson);
+      
+      $("form.login :input").attr("disabled", true);
+        $.ajax({        	
+            type: 'POST',
+            dataType: 'json',
+            url: '../logout',
+            data: setJson,
+            contentType : 'application/json; charset=utf-8',
+            headers: { 
+                'Accept': 'application/json',
+                'Content-Type': 'application/json' 
+            },
+            success: function (data) {
+               console.log(data);
+               
+               if(data == 200){
+            	   window.location.href = '../login';
+               }
+               if(data == 401){
+            	   
+               }
+               return true;
+            },
+            error: function (data) {
+                console.log(data);
+                return false;
+            }
+        });
+    });
+    // --final documentReady --
+});
+</script>
 <header class="main-header">
     <!-- Logo -->
     <a href="<c:url value="/home"/>" class="logo">
@@ -7,7 +51,6 @@
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg"><b>Support:</b>:Sys</span>
     </a>
-
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
       <!-- Sidebar toggle button-->
@@ -235,7 +278,7 @@
                   <a href="#" class="btn btn-default btn-flat">Perfil</a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Sair</a>
+                  <a href="#" class="btn btn-default btn-flat" id="logout">Sair</a>
                 </div>
               </li>
             </ul>
@@ -246,6 +289,7 @@
           </li>
         </ul>
       </div>
-
     </nav>
+    <input type="hidden" value="HASH98710G1F201H54" id="hashSess">
+    
   </header>

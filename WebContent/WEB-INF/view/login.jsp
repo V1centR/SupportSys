@@ -47,10 +47,8 @@ $(document).ready(function () {
         window.location.href = '/supportSys';
     }); */
     
-    $('#send').click(function () {       
-        var formMode = 		$("input#formMode").val();
-        var client = 		$("input#client").val();
-        
+    $('#send').click(function () {
+    	
         var email = $("input#email").val();
         var pass = 		$("input#pass").val();
         var token = 		$("input#token").val();
@@ -91,10 +89,12 @@ $(document).ready(function () {
                $("form.addhelpForm").fadeOut('fast');
                
                if(data == 200){
+            	   $('span.message').html("");
             	   $('span.message').append('<div class="alert alert-success" role="alert">Login ok! Redirecionando...</div>');
             	   window.location.href = './home';
                }
                if(data == 401){
+            	   $("form.login :input").attr("disabled", false);
             	   $('span.message').append('<div class="alert alert-danger" role="alert">Login ou senha inválidos</div>');
                }
                return true;

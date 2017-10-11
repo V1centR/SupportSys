@@ -28,5 +28,9 @@
 	
 	<mvc:resources location="/WEB-INF/view/" mapping="/resources/**" />
 	<mvc:annotation-driven />
+	
+	<mvc:interceptors>
+		<bean class="com.supportsys.controller.AuthValidate"/>
+	</mvc:interceptors>
  
 </beans>

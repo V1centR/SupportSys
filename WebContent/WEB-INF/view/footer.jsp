@@ -211,9 +211,6 @@
 <script>
   $.widget.bridge('uibutton', $.ui.button);
 </script>
-
-
-
 <!-- Bootstrap 3.3.7 -->
 <script src="<c:url value="/resources/bower_components/bootstrap/dist/js/bootstrap.min.js"/>"></script>
 
@@ -222,18 +219,14 @@
 
 <!-- Sparkline -->
 <script src="<c:url value="/resources/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"/>"></script>
-<!-- jvectormap -->
-<script src="<c:url value="/resources/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"/>"></script>
+
+
 
 <!-- jQuery Knob Chart -->
 <script src="<c:url value="/resources/bower_components/jquery-knob/dist/jquery.knob.min.js"/>"></script>
 
 <!-- daterangepicker -->
 <script src="<c:url value="/resources/bower_components/moment/min/moment.min.js"/>"></script>
-
-<script src="<c:url value="/resources/bower_components/bootstrap-daterangepicker/daterangepicker.js"/>"></script>
-<!-- datepicker -->
-<script src="<c:url value="/resources/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"/>"></script>
 <!-- Bootstrap WYSIHTML5 -->
 <script src="<c:url value="/resources/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"/>"></script>
 <!-- Slimscroll -->
@@ -243,9 +236,6 @@
 
 <!-- AdminLTE App -->
 <script src="<c:url value="/resources/dist/js/adminlte.min.js"/>"></script>
-
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="<c:url value="/resources/dist/js/pages/dashboard2.js"/>"></script>
 
 <!-- AdminLTE for demo purposes -->
 <script src="<c:url value="/resources/dist/js/demo.js"/>"></script>

@@ -4,7 +4,6 @@ package com.supportsys.controller;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.catalina.connector.Response;
 import org.json.JSONException;
@@ -30,7 +29,9 @@ public class HelpController {
 	
 	@RequestMapping("/home")
 	public ModelAndView homeAction()
-	{		
+	{	
+		
+		
 		return new ModelAndView("index","", "");
 	}
 	
@@ -40,7 +41,7 @@ public class HelpController {
 	 */
 	@RequestMapping(value="addhelp", method=RequestMethod.POST)
 	//@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody int addHelp(@RequestBody Object jsonStr, HttpServletRequest request) throws JSONException, IOException{
+	public @ResponseBody int addHelp(@RequestBody Object jsonStr, HttpServletRequest request) throws JSONException, IOException	{
 		//edresxe
 		
 		//Funcionando! formato recebido "{\"nome\":\"ASSPM\",\"email\":\"imprensa@asspm.org.br\"}";

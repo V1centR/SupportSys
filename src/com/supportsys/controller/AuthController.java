@@ -28,7 +28,6 @@ public class AuthController {
 		return new ModelAndView("login","","");
 	}
 	
-	@SuppressWarnings("null")
 	@RequestMapping(value="authuser", method=RequestMethod.POST)
 	public @ResponseBody int authenticate(@RequestBody Object jsonAuth, HttpServletRequest request) throws JSONException, IOException 
 	{
@@ -52,6 +51,7 @@ public class AuthController {
 				userSession.setAttribute("userAvatar", avatar);
 				userSession.setAttribute("userEmail", itemData.getEmail());
 				userSession.setAttribute("userClient", itemData.getClient());
+				userSession.setAttribute("userHash", userSession.getId());
 				
 				//System.out.println(userSession.getAttribute("userAvatar"));
 			}
@@ -61,5 +61,40 @@ public class AuthController {
 		}else {
 			return Response.SC_UNAUTHORIZED; //401
 		}
+	}
+	
+	@RequestMapping(value="logout", method=RequestMethod.POST)
+	public @ResponseBody int logOut(@RequestBody Object jsonLogOut, HttpServletRequest request) throws JSONException
+	{
+		String jsonData = jsonLogOut.toString();
+		JSONObject logOut = new JSONObject(jsonData);
+		//Object userEmail = userData.get("email").toString();
+		Object hashUser = logOut.get("infoLogout").toString();
+		
+		HttpSession sessionCheck = request.getSession();
+		
+		System.out.println("Hash eviado via json:: " + hashUser);
+		System.out.println("Session aberta:: " + sessionCheck.getId());
+		
+		try {
+			HttpSession userSession = request.getSession();
+			userSession.invalidate();
+			
+			return Response.SC_OK; //200
+		} catch (Exception e) {
+			// TODO: handle exception
+			return Response.SC_BAD_GATEWAY; //502
+		}	
+	}
+	
+	public boolean checkSession(HttpServletRequest request)
+	{
+		HttpSession session = request.getSession();
+		
+		if(session.getId() != null) {			
+			return true;
+		} else {			
+			return false;
+		}		
 	}
 }
