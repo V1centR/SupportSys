@@ -30,9 +30,9 @@
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
+<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
 
 <!-- Google Font -->
 <link rel="stylesheet"
@@ -49,6 +49,7 @@ $(document).ready(function () {
     
     $('#send').click(function () {
     	
+    	var base_url = '<c:url value="/"/>';
         var email = $("input#email").val();
         var pass = 		$("input#pass").val();
         var token = 		$("input#token").val();
@@ -63,7 +64,7 @@ $(document).ready(function () {
 //        }
         
 	    $("button.btn-send").attr("disabled","disabled");
-	    $('span.loader').append('<img src="../resources/images/loader.gif">');
+	    $('span.loader').append('<img src="'+base_url+'resources/images/loader.gif">');
       
       var strFormJson = "{\"email\":\"" + email + "\",\"pass\":\""+ pass + "\",\"setLoggedIn\":\""+ setLoggedIn + "\",\"token\":\""+ token + "\"}";  
       
@@ -71,10 +72,11 @@ $(document).ready(function () {
       
       var setJson = JSON.stringify(strFormJson);
       $("form.login :input").attr("disabled", true);
+      $('span.message').html("");
         $.ajax({        	
             type: 'POST',
             dataType: 'json',
-            url: './authuser',
+            url: base_url + 'authuser',
             data: setJson,
             contentType : 'application/json; charset=utf-8',
             headers: { 
@@ -84,8 +86,8 @@ $(document).ready(function () {
             success: function (data) {
                console.log(data);
                
-               $('span.loader').remove();
-               $('span.message-danger').remove();
+               $('span.loader').html("");
+               $('span.message-danger').html("");
                $("form.addhelpForm").fadeOut('fast');
                
                if(data == 200){
@@ -122,7 +124,7 @@ $(document).ready(function () {
 			<form class="login" method="POST">
 				<div class="form-group has-feedback">
 					<input type="hidden" name="token" id="token" value="000888">
-					<input type="email" name="email" id="email" class="form-control" placeholder="Email" value="laurabct@asspm.org.br">
+					<input type="email" name="email" id="email" class="form-control" placeholder="Email" value="vicentcdb@gmail.com">
 					<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
 				</div>
 				<div class="form-group has-feedback">
@@ -138,8 +140,9 @@ $(document).ready(function () {
 					</div>
 					<!-- /.col -->
 					<div class="col-xs-4">
-						<button type="button" id="send" class="btn btn-primary btn-block btn-flat">Sign
-							In</button>
+						<button type="button" id="send" class="btn btn-primary btn-block btn-flat">Ok</button>
+						<span class="loader" style="position:relative; float:left; right:20px; top:-23px;"></span>
+						
 					</div>
 					<!-- /.col -->
 				</div>

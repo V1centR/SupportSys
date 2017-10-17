@@ -2,6 +2,7 @@ package com.supportsys.controller;
 
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,12 +10,14 @@ import org.apache.catalina.connector.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.supportsys.entity.Help;
 import com.supportsys.model.HelpModel;
 
 
@@ -29,9 +32,7 @@ public class HelpController {
 	
 	@RequestMapping("/home")
 	public ModelAndView homeAction()
-	{	
-		
-		
+	{
 		return new ModelAndView("index","", "");
 	}
 	
@@ -48,7 +49,7 @@ public class HelpController {
 		String jsonFormData = jsonStr.toString();
 		JSONObject jsonItems = new JSONObject(jsonFormData);
 		//aqui virá uma sessão
-		Integer userHelp = 1;
+		Integer userHelp = 8;
 		
 		
 		//Send to Model
@@ -59,5 +60,20 @@ public class HelpController {
 		}else {
 			return Response.SC_INTERNAL_SERVER_ERROR;
 		}
+	}
+	
+	@RequestMapping("/chamados/list")
+	public ModelAndView listHelp(Model model)
+	{
+		//attribute - value
+		//model.addAttribute("attribute", value);
+		List<Help> helpList = new HelpModel().list();
+		
+		
+		String value = "Atribute from controller";
+		model.addAttribute("dataHelp", helpList);
+		
+		
+		return new ModelAndView("list");
 	}
 }

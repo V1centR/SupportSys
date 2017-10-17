@@ -53,6 +53,11 @@ public class User implements Serializable {
 	@JoinColumn(name="avatar")
 	private Image image;
 
+	//bi-directional many-to-one association to Department
+	@ManyToOne
+	@JoinColumn(name="dept")
+	private Department department;
+
 	//bi-directional many-to-one association to Level
 	@ManyToOne
 	@JoinColumn(name="level")
@@ -199,6 +204,14 @@ public class User implements Serializable {
 
 	public void setImage(Image image) {
 		this.image = image;
+	}
+
+	public Department getDepartment() {
+		return this.department;
+	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
 	}
 
 	public Level getLevelBean() {

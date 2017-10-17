@@ -9,6 +9,10 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 public class AuthValidate extends HandlerInterceptorAdapter {
 
+	/**
+	 * Session validation
+	 * 
+	 */
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object controller) throws Exception, IOException 
 	{
 		

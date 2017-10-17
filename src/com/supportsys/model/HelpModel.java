@@ -2,11 +2,19 @@ package com.supportsys.model;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import org.apache.catalina.Manager;
+import org.apache.commons.collections.Factory;
+import org.hibernate.Hibernate;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.jpa.HibernateEntityManager;
+import org.hibernate.jpa.HibernateQuery;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -77,6 +85,7 @@ public class HelpModel {
 			
 			if(idTransAction == (int)idTransAction) {
 				execOk = true;
+				em.close();
 			}
 
 		} catch (Exception e) {
@@ -86,6 +95,24 @@ public class HelpModel {
 		
 		return execOk;
 		
+	}
+	
+	public List<Help> list()
+	{
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
+		EntityManager em = emf.createEntityManager();
+		
+		
+		//Department deptCall = em.find(Department.class, dept);
+		
+		List<Help> helpList = em.createNamedQuery("Help.findAll").getResultList();
+		
+//		for(Object[] dataItem: helpList) {
+//			
+//			System.out.println(dataItem[1]);
+//		}
+
+		return helpList;
 	}
 
 }

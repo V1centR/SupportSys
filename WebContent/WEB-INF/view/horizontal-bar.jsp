@@ -5,6 +5,7 @@ $(document).ready(function () {
     $('a#logout').click(function () {
 
     	console.log("logOut press");
+      var base_url = '<c:url value="/"/>';
       var infoLogout = $("input#hashSess").val();
       var strFormJson = "{\"infoLogout\":\"" + infoLogout + "\"}";
       
@@ -16,7 +17,7 @@ $(document).ready(function () {
         $.ajax({        	
             type: 'POST',
             dataType: 'json',
-            url: '../logout',
+            url: base_url + '/logout',
             data: setJson,
             contentType : 'application/json; charset=utf-8',
             headers: { 
@@ -27,7 +28,7 @@ $(document).ready(function () {
                console.log(data);
                
                if(data == 200){
-            	   window.location.href = '../login';
+            	   window.location.href = base_url + 'login';
                }
                if(data == 401){
             	   
@@ -87,7 +88,7 @@ $(document).ready(function () {
                   <li>
                     <a href="#">
                       <div class="pull-left">
-                        <img src="dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
+                        
                       </div>
                       <h4>
                         AdminLTE Design Team
@@ -99,7 +100,7 @@ $(document).ready(function () {
                   <li>
                     <a href="#">
                       <div class="pull-left">
-                        <img src="dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
+                        
                       </div>
                       <h4>
                         Developers
@@ -111,7 +112,7 @@ $(document).ready(function () {
                   <li>
                     <a href="#">
                       <div class="pull-left">
-                        <img src="dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
+                        
                       </div>
                       <h4>
                         Sales Department
@@ -123,7 +124,7 @@ $(document).ready(function () {
                   <li>
                     <a href="#">
                       <div class="pull-left">
-                        <img src="dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
+                        
                       </div>
                       <h4>
                         Reviewers

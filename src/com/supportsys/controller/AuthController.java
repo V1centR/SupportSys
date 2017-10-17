@@ -86,15 +86,4 @@ public class AuthController {
 			return Response.SC_BAD_GATEWAY; //502
 		}	
 	}
-	
-	public boolean checkSession(HttpServletRequest request)
-	{
-		HttpSession session = request.getSession();
-		
-		if(session.getId() != null) {			
-			return true;
-		} else {			
-			return false;
-		}		
-	}
 }

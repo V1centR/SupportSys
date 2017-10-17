@@ -33,6 +33,10 @@ public class Department implements Serializable {
 	@OneToMany(mappedBy="department")
 	private List<Help> helps;
 
+	//bi-directional many-to-one association to User
+	@OneToMany(mappedBy="department")
+	private List<User> users;
+
 	public Department() {
 	}
 
@@ -96,6 +100,28 @@ public class Department implements Serializable {
 		help.setDepartment(null);
 
 		return help;
+	}
+
+	public List<User> getUsers() {
+		return this.users;
+	}
+
+	public void setUsers(List<User> users) {
+		this.users = users;
+	}
+
+	public User addUser(User user) {
+		getUsers().add(user);
+		user.setDepartment(this);
+
+		return user;
+	}
+
+	public User removeUser(User user) {
+		getUsers().remove(user);
+		user.setDepartment(null);
+
+		return user;
 	}
 
 }

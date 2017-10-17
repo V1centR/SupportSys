@@ -34,6 +34,19 @@
             </span>
           </a>
           <ul class="treeview-menu">
+          	<li class="active">
+            	<a href="<c:url value="/chamados/list"/>"><i class="fa fa-flag-o"></i> Abertos
+            	<span class="pull-right-container">
+              		<span class="label label-danger pull-right">18</span>
+            	</span>
+            	</a>
+            	<a href="<c:url value="/chamados/list"/>"><i class="fa fa-wrench"></i> Executando
+            	<span class="pull-right-container">
+              		<span class="label label-primary pull-right">4</span>
+            	</span>
+            	</a>
+            </li>
+            
             <li class="active">
             <a href="<c:url value="/chamados/novo-chamado"/>"><i class="fa fa-circle-o"></i> Novo Chamado</a>
             </li>
@@ -43,6 +56,90 @@
             </li>
           </ul>
         </li>
+        
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-users"></i> <span>Usuários</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="active">
+            <a href="<c:url value="/chamados/novo-chamado"/>"><i class="fa fa-circle-o"></i> Gerenciar</a>
+            </li>
+            
+            <li class="active">
+            <a href="<c:url value="/chamados/novo-chamado"/>"><i class="fa fa-circle-o"></i> Novo</a>
+            </li>
+          </ul>
+        </li>
+        
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-cube"></i> <span>Clientes</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="active">
+            <a href="<c:url value="/chamados/novo-chamado"/>"><i class="fa fa-circle-o"></i> Gerenciar clientes</a>
+            </li>
+            
+            <li class="active">
+            <a href="<c:url value="/chamados/novo-chamado"/>"><i class="fa fa-circle-o"></i>Cadastrar setores</a>
+            </li>
+          </ul>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-pie-chart"></i>
+            <span>Relatórios</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="pages/charts/chartjs.html"><i class="fa fa-circle-o"></i> ChartJS</a></li>
+            <li><a href="pages/charts/morris.html"><i class="fa fa-circle-o"></i> Morris</a></li>
+            <li><a href="pages/charts/flot.html"><i class="fa fa-circle-o"></i> Flot</a></li>
+            <li><a href="pages/charts/inline.html"><i class="fa fa-circle-o"></i> Inline charts</a></li>
+          </ul>
+        </li>
+        
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-gears"></i>
+            <span>Configurações</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="pages/charts/chartjs.html"><i class="fa fa-circle-o"></i> ChartJS</a></li>
+            <li><a href="pages/charts/morris.html"><i class="fa fa-circle-o"></i> Morris</a></li>
+            <li><a href="pages/charts/flot.html"><i class="fa fa-circle-o"></i> Flot</a></li>
+            <li><a href="pages/charts/inline.html"><i class="fa fa-circle-o"></i> Inline charts</a></li>
+          </ul>
+        </li>
+        
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-barcode"></i>
+            <span>Estoque</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="pages/charts/chartjs.html"><i class="fa fa-circle-o"></i> Centro de custos</a></li>
+            <li><a href="pages/charts/morris.html"><i class="fa fa-circle-o"></i> Equipamentos</a></li>
+            <li><a href="pages/charts/flot.html"><i class="fa fa-circle-o"></i> Baixas</a></li>
+            <li><a href="pages/charts/inline.html"><i class="fa fa-circle-o"></i> Compras</a></li>
+          </ul>
+        </li>
+        
         <li class="treeview">
           <a href="#">
             <i class="fa fa-files-o"></i>
@@ -66,21 +163,7 @@
             </span>
           </a>
         </li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-pie-chart"></i>
-            <span>Relatórios</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="pages/charts/chartjs.html"><i class="fa fa-circle-o"></i> ChartJS</a></li>
-            <li><a href="pages/charts/morris.html"><i class="fa fa-circle-o"></i> Morris</a></li>
-            <li><a href="pages/charts/flot.html"><i class="fa fa-circle-o"></i> Flot</a></li>
-            <li><a href="pages/charts/inline.html"><i class="fa fa-circle-o"></i> Inline charts</a></li>
-          </ul>
-        </li>
+        
          <li class="treeview">
           <a href="pages/calendar.html">
             <i class="fa fa-calendar"></i> <span>Calendar</span>

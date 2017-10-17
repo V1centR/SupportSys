@@ -2,7 +2,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
-
   <jsp:include page="horizontal-bar.jsp" />
   <!-- Left side column. contains the logo and sidebar -->
   <jsp:include page="sidemenu.jsp" />
@@ -100,10 +99,8 @@
         </div>
         <!-- right col -->
       </div>
-      <!-- /.row (main row) -->
-
+     
     </section>
     <!-- /.content -->
-  </div>
   <!-- /.content-wrapper -->
   <jsp:include page="footer.jsp" />
