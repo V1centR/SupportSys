@@ -3,15 +3,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <script>
-        
-     $(document).ready(function () {
-     	
-     	 $('tr.item').click(function () {
-              window.location = $(this).attr('href');
-              return false;
-          });
-     });
-
+  $(document).ready(function () {
+  	 $('tr.item').click(function () {
+           window.location = $(this).attr('href');
+           return false;
+       });
+  });
 </script>
 <style>
 tr.item{cursor: pointer;}
@@ -42,11 +39,10 @@ tr.item{cursor: pointer;}
       <div class="row">
         <div class="col-xs-12">
           <h2 class="page-header">
-            <i class="fa fa-globe"></i> Chamados
+            <i class="fa fa-fire"></i> Chamados
             <small class="pull-right">
             <jsp:useBean id="now" class="java.util.Date"/>
             	<fmt:formatDate value="${now}" pattern="d/M/yyyy H:mm"/>
-            	
             </small>
           </h2>
         </div>

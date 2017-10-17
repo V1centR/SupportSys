@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.supportsys.entity.Help;
+import com.supportsys.entity.TypeHelp;
 import com.supportsys.model.HelpModel;
 
 
@@ -25,8 +26,11 @@ import com.supportsys.model.HelpModel;
 public class HelpController {
 	
 	@RequestMapping("/chamados/novo-chamado")
-	public ModelAndView execHelp()
-	{		
+	public ModelAndView execHelp(Model model)
+	{	
+		List<TypeHelp> listTypes = new HelpModel().getTypes();
+		model.addAttribute("listTypes", listTypes);
+		
 		return new ModelAndView("formhelp","", "");
 	}
 	
@@ -69,10 +73,7 @@ public class HelpController {
 		//model.addAttribute("attribute", value);
 		List<Help> helpList = new HelpModel().list();
 		
-		
-		String value = "Atribute from controller";
 		model.addAttribute("dataHelp", helpList);
-		
 		
 		return new ModelAndView("list");
 	}

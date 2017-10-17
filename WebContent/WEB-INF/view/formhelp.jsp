@@ -113,7 +113,7 @@ $(document).ready(function () {
                     <tbody>
                         <tr>
                             <td colspan="2">                                
-                                <label>*Título</label>                                
+                                <label>*Assunto</label>                                
                                 <input type="text" name="helpLabel" id="helpLabel" value="Miguel AAA" class="form-control" style="font-size: 14px; font-weight: bold; width: 500px;">                               
                             </td>
                             <td></td>
@@ -122,19 +122,11 @@ $(document).ready(function () {
                         	<td>
 								<div style="position: relative; float: left; margin-right: 12px;">                                    
                                     <label>*Categoria</label>
-                                    <select name="cat" id="cat" class="form-control" style="width:250px;">
-	                                    <option value="0">...</option>
-	                                    <option value="1" selected="selected">Backup</option>
-	                                    <option value="2">E-mail</option>
-	                                    <option value="3">Hardware</option>
-	                                    <option value="4">Impressora/Scanner</option>
-	                                    <option value="5">Internet*</option>
-	                                    <option value="6">Rede</option>
-	                                    <option value="7">S.O</option>
-	                                    <option value="8">Sistema</option>
-	                                    <option value="9">Site</option>
-	                                    <option value="10">Software</option>
-	                                    <option value="11">Particular</option>
+                                    <select name="cat" id="cat" class="form-control" style="width:250px;">                                    
+                                    	<option value="0">...</option>
+	                                    <c:forEach items="${listTypes}" var="itemsType">
+	                                    	<option value="2">${itemsType.name}</option>
+	                                    </c:forEach>
                                     </select>
                                 </div>
 							</td>

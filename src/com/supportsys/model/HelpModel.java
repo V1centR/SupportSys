@@ -114,5 +114,20 @@ public class HelpModel {
 
 		return helpList;
 	}
+	
+	public List<TypeHelp> getTypes()
+	{
+		List<TypeHelp> types = getEm().createNamedQuery("TypeHelp.findAll").getResultList();
+		
+		return types;
+	}
+	
+	private EntityManager getEm()
+	{
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
+		EntityManager em = emf.createEntityManager();
+		
+		return em;
+	}
 
 }
