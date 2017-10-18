@@ -99,7 +99,7 @@ $(document).ready(function () {
       
         <!--CONTENT ##################### Left col -->
         <section class="col-lg-7 connectedSortable">
-      		<div style="margin-top: 20px;"></div>
+        	<div style="margin-top: 20px;"></div>
 			<span class="message-danger"></span>
 			<span class="message"></span>
 			

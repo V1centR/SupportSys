@@ -5,7 +5,8 @@
 <script>
   $(document).ready(function () {
   	 $('tr.item').click(function () {
-           window.location = $(this).attr('href');
+         //  window.location = $(this).attr('href');
+         //  window.location = '<c:url value="/chamados/open"/>' + this.value;
            return false;
        });
   });
@@ -45,6 +46,17 @@ tr.item{cursor: pointer;}
             	<fmt:formatDate value="${now}" pattern="d/M/yyyy H:mm"/>
             </small>
           </h2>
+          
+          <form name="type_chamado" method="post" action="#">
+                <input type="hidden" id="editMode" name="edit" value="false">
+                <button type="button" class="btn typeAtividade" id="btn_todos" value="0"><span class="glyphicon glyphicon-alert"></span> Todos</button>        
+                <button type="button" class="btn btn-danger typeAtividade" id="btn_pendente" value="4">Pendente</button>
+                <button type="button" class="btn btn-primary typeAtividade" id="btn_exec" value="3">Em Desenvolvimento</button>
+                <button type="button" class="btn btn-warning typeAtividade" id="new_activ" value="2">Em Testes</button>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-success typeAtividade" id="btn_final" value="1">Concluído</button>
+            </form>
+            
         </div>
         <!-- /.col -->
       </div>
@@ -55,7 +67,7 @@ tr.item{cursor: pointer;}
 				<tbody style="font-size: 15px;">
 					
 		    <c:forEach items="${dataHelp}" var="itemsHelp">
-		    	<tr class="item">
+		    	<tr class="item" onclick="document.location='<c:url value="/chamados/open/"/>${itemsHelp.id}'" style="cursor:hand;">
 					<td>${itemsHelp.user.name} ${itemsHelp.user.sname}</td>
 					<td>${itemsHelp.department.name}</td>
 					<td>${itemsHelp.helpLabel}</td>

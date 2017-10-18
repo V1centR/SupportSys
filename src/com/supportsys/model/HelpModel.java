@@ -154,6 +154,14 @@ public class HelpModel {
 		return dataDepartment;
 	}
 	
+	public List<Help> openHelp()
+	{
+		
+		
+		
+		return null;
+	}
+	
 	
 	/**
 	 * Get EntityManager
