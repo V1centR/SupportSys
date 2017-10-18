@@ -103,8 +103,6 @@ $(document).ready(function () {
 			<span class="message-danger"></span>
 			<span class="message"></span>
 			
-			
-			
 			<form name="addHelp" class="addhelpForm" method="post">
                 <input type="hidden" id="formMode" name="formMode" value="add">
                 <input type="hidden" id="client" name="client" value="1">
@@ -120,40 +118,30 @@ $(document).ready(function () {
                         </tr>
                         <tr>
                         	<td>
-								<div style="position: relative; float: left; margin-right: 12px;">                                    
+								<div style="position: relative; float: left; margin-right: 8px;">                                    
                                     <label>*Categoria</label>
                                     <select name="cat" id="cat" class="form-control" style="width:250px;">                                    
-                                    	<option value="0">...</option>
+                                    	<option value="0">Selecione</option>
 	                                    <c:forEach items="${listTypes}" var="itemsType">
-	                                    	<option value="2">${itemsType.name}</option>
+	                                    	<option value="${itemsType.id}">${itemsType.name}</option>
 	                                    </c:forEach>
                                     </select>
                                 </div>
-							</td>
-							<td>
-								<div style="position: relative; float: left; margin-right: 12px;">                                    
+                                
+                                <div style="position: relative; float: left;">                                    
                                     <label>*Setor</label>
                                     <select name="dept" id="dept" class="form-control" style="max-width:250px;">
-	        							<option value="0" selected="selected">...</option>
-	        							<option value="1">T.I</option>
-	        							<option value="1" selected="selected">Assist Social Assist</option>
-	        							<option value="1">Colônia</option>
-	        							<option value="1">Cons Deliberativo</option>
-	        							<option value="1">Cons Fiscal</option>
-	        							<option value="1">Despachante</option>
-	        							<option value="1">Ensino</option>
-	        							<option value="1">Jurídico</option>
-	        							<option value="1">Patrimônio</option>
-	        							<option value="1">Pensionistas</option>
-	        							<option value="1">Portaria</option>
-	        							<option value="1">Relações Públicas</option>
-	        							<option value="1">Salão de eventos</option>
-	        							<option value="1">Secretaria</option>
-	        							<option value="1">Tesouraria</option>
-	        							<option value="1">Presidência</option>
-	        							<option value="1">Vice Presidência</option>
+                                    	<option value="0">Selecione</option>
+	        							<c:forEach items="${listDept}" var="itemsDepartment">
+	        								<option value="${itemsDepartment.id}">${itemsDepartment.name}</option>
+	        							</c:forEach>
         							</select>
                                 </div>
+                                
+                                
+							</td>
+							<td>
+								
 							</td>
                         </tr>
                         <tr>
@@ -172,10 +160,6 @@ $(document).ready(function () {
                     </tbody>
                 </table>
             </form>
-			
-
-
-          
 
         </section>
         <!-- /.Left col -->

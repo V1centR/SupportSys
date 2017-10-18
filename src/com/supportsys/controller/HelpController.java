@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.catalina.connector.Response;
 import org.json.JSONException;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.supportsys.entity.Department;
 import com.supportsys.entity.Help;
 import com.supportsys.entity.TypeHelp;
 import com.supportsys.model.HelpModel;
@@ -26,9 +28,16 @@ import com.supportsys.model.HelpModel;
 public class HelpController {
 	
 	@RequestMapping("/chamados/novo-chamado")
-	public ModelAndView execHelp(Model model)
+	public ModelAndView execHelp(Model model, HttpServletRequest request)
 	{	
+		HttpSession session = request.getSession();
+		String clientId_ =  session.getAttribute("userClient").toString();
+		int clientId = Integer.parseInt(clientId_);
+		
+		List<Department> deptList = new HelpModel().getDepartment(clientId);
 		List<TypeHelp> listTypes = new HelpModel().getTypes();
+		
+		model.addAttribute("listDept", deptList);
 		model.addAttribute("listTypes", listTypes);
 		
 		return new ModelAndView("formhelp","", "");
@@ -54,7 +63,6 @@ public class HelpController {
 		JSONObject jsonItems = new JSONObject(jsonFormData);
 		//aqui virá uma sessão
 		Integer userHelp = 8;
-		
 		
 		//Send to Model
 		boolean createHelp = new HelpModel().createHelp(jsonItems, userHelp);

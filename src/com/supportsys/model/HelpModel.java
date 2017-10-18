@@ -7,6 +7,9 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.apache.catalina.Manager;
 import org.apache.commons.collections.Factory;
@@ -97,13 +100,14 @@ public class HelpModel {
 		
 	}
 	
+	/**
+	 * Get Help list
+	 * @return
+	 */
 	public List<Help> list()
 	{
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
 		EntityManager em = emf.createEntityManager();
-		
-		
-		//Department deptCall = em.find(Department.class, dept);
 		
 		List<Help> helpList = em.createNamedQuery("Help.findAll").getResultList();
 		
@@ -115,13 +119,46 @@ public class HelpModel {
 		return helpList;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public List<TypeHelp> getTypes()
 	{
 		List<TypeHelp> types = getEm().createNamedQuery("TypeHelp.findAll").getResultList();
+		getEm().close();
 		
 		return types;
 	}
 	
+	/**
+	 * Get list of departments from client
+	 * @param clientId
+	 * @return
+	 */
+	public List<Department> getDepartment(Integer clientId)
+	{
+		CriteriaBuilder criteriaSet = getEm().getCriteriaBuilder();
+		CriteriaQuery<Department> departmentData;
+		Root<Department> department;
+		
+		departmentData = criteriaSet.createQuery(Department.class);
+		department = departmentData.from(Department.class);
+		departmentData.select(department).where(
+				criteriaSet.equal(department.get("clientBean"), clientId)
+				);
+		
+		List<Department> dataDepartment = getEm().createQuery(departmentData).getResultList();
+		getEm().close();
+		
+		return dataDepartment;
+	}
+	
+	
+	/**
+	 * Get EntityManager
+	 * @return
+	 */
 	private EntityManager getEm()
 	{
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
