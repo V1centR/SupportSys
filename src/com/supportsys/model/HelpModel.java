@@ -32,10 +32,6 @@ public class HelpModel {
 
 	public boolean createHelp(JSONObject jsonItems, Integer user) throws JSONException
 	{
-		
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
-		EntityManager em = emf.createEntityManager();
-		
 		//Strings ###
 		Object formMode = jsonItems.get("formMode").toString();
 		Object helpLabel = jsonItems.get("helpLabel").toString();
@@ -56,15 +52,15 @@ public class HelpModel {
 		
 		//Client cliente = em.find(Client.class, 1);
 		//cliente.getName();
-		User userCall = em.find(User.class, user);
+		User userCall = getEm().find(User.class, user);
 		
 		//Default value is 1 in database
 		// is required because entity config JPA
-		Status status = em.find(Status.class, 1);
+		Status status = getEm().find(Status.class, 1);
 		
-		Department deptCall = em.find(Department.class, dept);
+		Department deptCall = getEm().find(Department.class, dept);
 		
-		TypeHelp typeHelp = em.find(TypeHelp.class, category);
+		TypeHelp typeHelp = getEm().find(TypeHelp.class, category);
 				
 		Boolean execOk = false;
 		try {
@@ -80,15 +76,15 @@ public class HelpModel {
 			help.setTypeHelpBean(typeHelp);
 			help.setTags(tags);
 			
-			em.getTransaction().begin();
-			em.persist(help);
-			em.getTransaction().commit();
+			getEm().getTransaction().begin();
+			getEm().persist(help);
+			getEm().getTransaction().commit();
 
 			Integer idTransAction = help.getId();
 			
 			if(idTransAction == (int)idTransAction) {
 				execOk = true;
-				em.close();
+				getEm().close();
 			}
 
 		} catch (Exception e) {
@@ -106,15 +102,8 @@ public class HelpModel {
 	 */
 	public List<Help> list()
 	{
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
-		EntityManager em = emf.createEntityManager();
-		
-		List<Help> helpList = em.createNamedQuery("Help.findAll").getResultList();
-		
-//		for(Object[] dataItem: helpList) {
-//			
-//			System.out.println(dataItem[1]);
-//		}
+		List<Help> helpList = getEm().createNamedQuery("Help.findAll").getResultList();
+		getEm().close();
 
 		return helpList;
 	}
@@ -154,12 +143,26 @@ public class HelpModel {
 		return dataDepartment;
 	}
 	
-	public List<Help> openHelp()
+	public List<Help> openHelp(Integer idHelp)
 	{
 		
+		Integer status = 1;
 		
+		CriteriaBuilder criteriaSet = getEm().getCriteriaBuilder();
+		CriteriaQuery<Help> helpData;
+		Root<Help> help;
 		
-		return null;
+		helpData = criteriaSet.createQuery(Help.class);
+		help = helpData.from(Help.class);
+		helpData.select(help).where(
+				criteriaSet.equal(help.get("id"), idHelp),
+				criteriaSet.equal(help.get("statusBean"), status)
+				);
+		
+		List<Help> dataHelp = getEm().createQuery(helpData).getResultList();
+		getEm().close();
+		
+		return dataHelp;
 	}
 	
 	

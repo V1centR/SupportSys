@@ -91,8 +91,9 @@ public class HelpController {
 	@RequestMapping("/chamados/open/{idHelp}")
 	public ModelAndView openItem(Model model, @PathVariable Integer idHelp)
 	{
-		System.out.println("ID do chamado:: " + idHelp);
+		List<Help> dataItem = new HelpModel().openHelp(idHelp);
 		
+		model.addAttribute("dataItem", dataItem);
 		
 		return new ModelAndView("open");
 		

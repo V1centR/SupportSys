@@ -84,20 +84,8 @@ tr.item{cursor: pointer;}
 		    		
 				</tbody>
 			</table>
-    </section>        
-
-
-
-
-        <!-- /.col -->
-        
-        <!-- /.col -->
-        
-        <!-- /.col -->
+    </section>
       </div>
-
-      
-      <!-- /.row -->
 
       <!-- this row will not appear when printing -->
       <div class="row no-print">
@@ -111,11 +99,7 @@ tr.item{cursor: pointer;}
         </div>
       </div>
     </section>
-    
-    
-    
-
-    <!-- Main content -->
+   <!-- Main content -->
     
         <!-- /.Left col -->
         <!-- right col (We are only adding the ID to make the widgets sortable)-->
