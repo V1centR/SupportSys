@@ -22,6 +22,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.supportsys.entity.Department;
 import com.supportsys.entity.Help;
+import com.supportsys.entity.Status;
+import com.supportsys.entity.SupportUser;
 import com.supportsys.entity.TypeHelp;
 import com.supportsys.model.HelpModel;
 
@@ -92,7 +94,11 @@ public class HelpController {
 	public ModelAndView openItem(Model model, @PathVariable Integer idHelp)
 	{
 		List<Help> dataItem = new HelpModel().openHelp(idHelp);
+		List<Status> listStatus = new HelpModel().getStatus();
+		List<SupportUser> listSupportUsers = new HelpModel().getSupportUsers();
 		
+		model.addAttribute("listSupportUsers", listSupportUsers);
+		model.addAttribute("statusList", listStatus);
 		model.addAttribute("dataItem", dataItem);
 		
 		return new ModelAndView("open");

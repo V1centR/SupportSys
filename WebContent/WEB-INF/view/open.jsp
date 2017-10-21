@@ -2,6 +2,30 @@
 <jsp:include page="header.jsp" />
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<script>
+$(document).ready(function () {
+	
+	$("select#statusHelp").change(function(){
+		
+		if($(this).val() != 3){
+			$("span.textAreaSolution").html("");
+		}
+		
+		if($(this).val() == 3){
+			$("span.textAreaSolution").html("");
+			$("span.textAreaSolution").append('<label>Solução:</label><br><textarea style="width: 100%; height: 100px;"></textarea>');
+		}
+		
+		//4 default value cancel help
+		if($(this).val() == 4){
+			$("span.textAreaSolution").html("");
+			confirm("Atenção! Cancelar um chamado ocorre perca de score; deseja prosseguir?");
+			$("span#cancelButton").append('<button id="send" type="button" name="btn-cancel" id="btnCancel" class="btn btn-danger btn-lg btn-send"><i class="fa fa-times"></i> Cancelar</button>');
+		}
+	});
+	
+});
+</script>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
 		<jsp:include page="horizontal-bar.jsp" />
@@ -105,9 +129,6 @@
             <!-- /.box-footer -->
           </div>
 	</div>
-	
-	
-
 		<div class="col-md-6">
           <!-- Box Comment -->
           <div class="box box-widget">
@@ -118,27 +139,27 @@
             <div class="box-body">
 				<form name="alterHelp">
 					<label>Status</label>
-					<select name="alterHelp" id="alterHelp">
-						<option>Em execução</option>
-						<option>Em espera</option>
-						<option>Concluído</option>
-						<option>Cancelado !ATENÇÃO</option>
+					<select name="statusHelp" id="statusHelp">
+						<option value="0">Selecione</option>
+						<c:forEach items="${statusList}" var="statusItem">
+							<option value="${statusItem.id}">${statusItem.name}</option>
+						</c:forEach>
 					</select>
 					
 					<label>Analista</label>
-					<select name="alterHelp" id="alterHelp">
-						<option>Vicente .R</option>
-						<option>Eliezer Souza</option>
-						<option>Felipe .A</option>
-						<option>Gildo .PN</option>
+					<select name="supportUser" id="supportUser">
+						<option value="0">Selecione</option>
+						<c:forEach items="${listSupportUsers}" var="listSupport">
+							<option value="${listSupport.id}">${listSupport.name}</option>
+						</c:forEach>
 					</select><br>
 					
-					<label>Solução:</label><br>
-					<textarea style="width: 100%; height: 100px;"></textarea>
+					<span class="textAreaSolution"></span>
 					
 					<div style="margin-top: 8px; text-align: right;">
-					<button id="send" type="button" name="btn" class="btn btn-primary btn-lg btn-send"><i class="fa fa-arrow-left"></i>  Voltar</button>
-					<button id="send" type="button" name="btn" class="btn btn-primary btn-lg btn-send"><i class="fa fa-floppy-o"></i> Atualizar</button>
+					<button id="send" type="button" name="btn-back" class="btn btn-primary btn-lg btn-send"><i class="fa fa-arrow-left"></i>  Voltar</button>
+					<button id="send" type="button" name="btn-update" id="btnUpdate" class="btn btn-primary btn-lg btn-send"><i class="fa fa-floppy-o"></i> Atualizar</button>
+					<span class="cancelButton"></span>
 					</div>
 				</form>
 

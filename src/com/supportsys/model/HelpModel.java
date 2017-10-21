@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.supportsys.entity.Department;
 import com.supportsys.entity.Help;
 import com.supportsys.entity.Status;
+import com.supportsys.entity.SupportUser;
 import com.supportsys.entity.TypeHelp;
 import com.supportsys.entity.User;
 
@@ -119,6 +120,28 @@ public class HelpModel {
 		
 		return types;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public List<Status> getStatus()
+	{
+		List<Status> statusTypes = getEm().createNamedQuery("Status.findAll").getResultList();
+		getEm().close();
+		
+		return statusTypes;
+	}
+	
+	
+	public List<SupportUser> getSupportUsers()
+	{
+		List<SupportUser> supportUsersList = getEm().createNamedQuery("SupportUser.findAll").getResultList();
+		getEm().close();
+		
+		return supportUsersList;
+	}
+			
 	
 	/**
 	 * Get list of departments from client
