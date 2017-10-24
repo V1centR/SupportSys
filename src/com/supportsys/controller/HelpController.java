@@ -2,6 +2,8 @@ package com.supportsys.controller;
 
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +49,22 @@ public class HelpController {
 		return new ModelAndView("formhelp","", "");
 	}
 	
+	@RequestMapping("/chamados/update")
+	public @ResponseBody int updateItem(@RequestBody Object jsonStr) throws JSONException
+	{
+		String jsonFormData = jsonStr.toString();
+		JSONObject jsonItems = new JSONObject(jsonFormData);
+		
+		boolean updateItemOk = new HelpModel().updateItem(jsonItems);
+		
+		if(updateItemOk == true) {
+			return Response.SC_CREATED;			
+		}else {
+			return Response.SC_INTERNAL_SERVER_ERROR;
+		}
+	}
+	
+	
 	@RequestMapping("/home")
 	public ModelAndView homeAction()
 	{
@@ -67,9 +85,10 @@ public class HelpController {
 		JSONObject jsonItems = new JSONObject(jsonFormData);
 		//aqui virá uma sessão
 		Integer userHelp = 8;
+		HttpSession sessId = request.getSession();
 		
 		//Send to Model
-		boolean createHelp = new HelpModel().createHelp(jsonItems, userHelp);
+		boolean createHelp = new HelpModel().createHelp(jsonItems, userHelp,sessId.getId());
 		
 		if(createHelp == true) {
 			return Response.SC_CREATED;			
@@ -92,11 +111,16 @@ public class HelpController {
 	
 	@RequestMapping("/chamados/open/{idHelp}")
 	public ModelAndView openItem(Model model, @PathVariable Integer idHelp)
-	{
+	{		
 		List<Help> dataItem = new HelpModel().openHelp(idHelp);
 		List<Status> listStatus = new HelpModel().getStatus();
 		List<SupportUser> listSupportUsers = new HelpModel().getSupportUsers();
 		
+		//get single data in list
+		//System.out.println(dataItem.get(0).getHashSecure());
+		
+		model.addAttribute("idItem", dataItem.get(0).getId());
+		model.addAttribute("hashItem", dataItem.get(0).getHashSecure());
 		model.addAttribute("listSupportUsers", listSupportUsers);
 		model.addAttribute("statusList", listStatus);
 		model.addAttribute("dataItem", dataItem);
@@ -104,4 +128,5 @@ public class HelpController {
 		return new ModelAndView("open");
 		
 	}
+	
 }

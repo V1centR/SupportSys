@@ -1,5 +1,8 @@
 package com.supportsys.model;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
@@ -10,6 +13,8 @@ import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.catalina.Manager;
 import org.apache.commons.collections.Factory;
@@ -22,6 +27,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.google.common.hash.HashCode;
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
 import com.supportsys.entity.Department;
 import com.supportsys.entity.Help;
 import com.supportsys.entity.Status;
@@ -31,7 +39,45 @@ import com.supportsys.entity.User;
 
 public class HelpModel {
 
-	public boolean createHelp(JSONObject jsonItems, Integer user) throws JSONException
+	
+	public boolean updateItem(JSONObject jsonItems) throws JSONException
+	{
+		EntityManager em = getEm();
+		
+		Object itemHash = jsonItems.get("hashItem").toString();
+		Integer itemId = Integer.parseInt(jsonItems.get("idItem").toString());
+		
+		//idUserSupport integer
+		Object supportUserSet = jsonItems.get("supportUserSet").toString();
+		//integer
+		Object selectedStatus = jsonItems.get("status").toString();
+		String textSolution = jsonItems.get("txtSolution").toString();
+		
+		Status selectedStatusId = em.find(Status.class, selectedStatus);
+		SupportUser supportUserId = em.find(SupportUser.class, supportUserSet);
+		
+		
+		Help helpUpdate = new Help();
+		helpUpdate.setId(itemId);
+		helpUpdate.setSupportUser(supportUserId);
+		helpUpdate.setStatusBean(selectedStatusId);
+		helpUpdate.setSolutionTxt(textSolution);
+		
+		em.getTransaction().begin();
+		em.merge(helpUpdate);
+		em.getTransaction().commit();
+		
+		return false;
+	}
+	
+	/**
+	 * Creates help item
+	 * @param jsonItems
+	 * @param user
+	 * @return
+	 * @throws JSONException
+	 */
+	public boolean createHelp(JSONObject jsonItems, Integer user,String sessId) throws JSONException
 	{
 		//Strings ###
 		Object formMode = jsonItems.get("formMode").toString();
@@ -50,6 +96,9 @@ public class HelpModel {
 		long now = Calendar.getInstance().getTimeInMillis();
 		Timestamp tsNow = new Timestamp(now);
 		
+		//Get unique hash to this item sha1		
+		String convertNow = Long.toString(now);
+		String hashSecure = genHashItem(convertNow+sessId);
 		
 		//Client cliente = em.find(Client.class, 1);
 		//cliente.getName();
@@ -58,34 +107,35 @@ public class HelpModel {
 		//Default value is 1 in database
 		// is required because entity config JPA
 		Status status = getEm().find(Status.class, 1);
-		
 		Department deptCall = getEm().find(Department.class, dept);
-		
 		TypeHelp typeHelp = getEm().find(TypeHelp.class, category);
-				
 		Boolean execOk = false;
+		
+		EntityManager em = getEm();
+		
 		try {
 			
 			Help help = new Help();
 			
 			help.setHelpLabel((String)helpLabel);
 			help.setHelpTxt((String)helpTxt);
-			help.setUser(userCall);			
+			help.setHashSecure(hashSecure);
+			help.setUser(userCall);
 			help.setStatusBean(status);
 			help.setDepartment(deptCall);
-			help.setDateHelp(tsNow);			
+			help.setDateHelp(tsNow);
 			help.setTypeHelpBean(typeHelp);
 			help.setTags(tags);
 			
-			getEm().getTransaction().begin();
-			getEm().persist(help);
-			getEm().getTransaction().commit();
+			em.getTransaction().begin();
+			em.persist(help);
+			em.getTransaction().commit();
 
 			Integer idTransAction = help.getId();
 			
 			if(idTransAction == (int)idTransAction) {
 				execOk = true;
-				getEm().close();
+				em.close();
 			}
 
 		} catch (Exception e) {
@@ -94,7 +144,6 @@ public class HelpModel {
 		}
 		
 		return execOk;
-		
 	}
 	
 	/**
@@ -199,6 +248,19 @@ public class HelpModel {
 		EntityManager em = emf.createEntityManager();
 		
 		return em;
+	}
+	
+	/**
+	 * Generates unique hash to item
+	 * @param now
+	 * @return
+	 */
+	public String genHashItem(String now)
+	{
+		HashFunction hf = Hashing.sha1();
+		HashCode hc = hf.newHasher().putString(now).hash();
+		
+		return hc.toString();		
 	}
 
 }

@@ -22,9 +22,13 @@ public class Help implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateHelp;
 
+	private String hashSecure;
+
 	private String helpLabel;
 
 	private String helpTxt;
+
+	private String solutionTxt;
 
 	private String tags;
 
@@ -80,6 +84,14 @@ public class Help implements Serializable {
 		this.dateHelp = dateHelp;
 	}
 
+	public String getHashSecure() {
+		return this.hashSecure;
+	}
+
+	public void setHashSecure(String hashSecure) {
+		this.hashSecure = hashSecure;
+	}
+
 	public String getHelpLabel() {
 		return this.helpLabel;
 	}
@@ -94,6 +106,14 @@ public class Help implements Serializable {
 
 	public void setHelpTxt(String helpTxt) {
 		this.helpTxt = helpTxt;
+	}
+
+	public String getSolutionTxt() {
+		return this.solutionTxt;
+	}
+
+	public void setSolutionTxt(String solutionTxt) {
+		this.solutionTxt = solutionTxt;
 	}
 
 	public String getTags() {
