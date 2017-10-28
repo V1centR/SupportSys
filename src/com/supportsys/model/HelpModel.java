@@ -152,13 +152,55 @@ public class HelpModel {
 	 * Get Help list
 	 * @return
 	 */
-	public List<Help> list()
+	public List<Help> list(String status)
 	{
 		EntityManager em = getEm();
-		List<Help> helpList = em.createNamedQuery("Help.findAll").getResultList();
+		Integer typeStatus = 0;
+
+		switch (status) {
+		case "opened":
+			typeStatus = 1;
+			break;
+		case "exec":
+			typeStatus = 2;
+			break;
+		case "done":
+			typeStatus = 3;
+			break;
+		case "canceled":
+			typeStatus = 4;
+			break;
+		default:
+			typeStatus = 0;
+			break;
+		}
+
+		System.out.println("Tipo selecionado:: " + typeStatus);
+
+		if(typeStatus != 0) {
+			Status statusObj = em.find(Status.class, typeStatus);
+			List<Help> helpList = new HelpRepo().getListItemstatus(statusObj);
+			em.close();
+			return helpList;
+
+		} else {
+			List<Help> helpListFull = listItems();
+			em.close();
+			return helpListFull;
+		}
+	}
+
+	/**
+	 * get full items status types
+	 * @return
+	 */
+	public List<Help> listItems()
+	{
+		EntityManager em = getEm();
+		List<Help> fullItems = em.createNamedQuery("Help.findAll").getResultList();
 		em.close();
 
-		return helpList;
+		return fullItems;
 	}
 
 	/**

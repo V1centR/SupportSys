@@ -98,10 +98,12 @@ public class HelpController {
 		}
 	}
 
-	@RequestMapping("/chamados/list")
-	public ModelAndView listHelp(Model model)
+	@RequestMapping("/chamados/list/{status}")
+	public ModelAndView listHelp(Model model, @PathVariable String status)
 	{
-		List<Help> helpList = new HelpModel().list();
+		System.out.println("Selecionar apenas::" + status);
+
+		List<Help> helpList = new HelpModel().list(status);
 		model.addAttribute("dataHelp", helpList);
 
 		return new ModelAndView("list");
