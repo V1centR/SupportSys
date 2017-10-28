@@ -5,32 +5,40 @@
 <script>
 $(document).ready(function () {
 	
-	
-	$("span#updateButton").append('<button id="send" type="button" name="btn-update" id="btnUpdate" class="btn btn-primary btn-lg btn-send"><i class="fa fa-floppy-o"></i> Atualizar</button>');
-	
+	//$("span#updateButton").append('<button id="send" type="button" name="btn-update" id="btnUpdate" class="btn btn-primary btn-lg btn-send"><i class="fa fa-floppy-o"></i> Atualizar</button>');
+	$("span#textAreaSolutionHideShow").hide();
+	$("span#textAreaCancelReportHideShow").hide();
+	$("span#btnSendSw").show();
+	$("span#btnCancel").hide();
 	$("select#statusHelp").change(function(){
 		
 		if($(this).val() != 3){
 			$("span.textAreaSolution").html("");
-			$("span#cancelButton").html("");
+			$("span#btnCancel").hide();
 			$("span#updateButton").html("");
-			$("span#updateButton").append('<button id="send" type="button" name="btn-update" id="btnUpdate" class="btn btn-primary btn-lg btn-send"><i class="fa fa-floppy-o"></i> Atualizar</button>');
+			$("span#btnSendSw").show();
+			$("span#textAreaSolutionHideShow").hide();
+			$("span#textAreaCancelReportHideShow").hide();
 		}
 		
+		//if concluído
 		if($(this).val() == 3){
 			$("span#updateButton").html("");
 			$("span.textAreaSolution").html("");
-			$("span#cancelButton").html("");
-			$("span#updateButton").append('<button id="send" type="button" name="btn-update" id="btnUpdate" class="btn btn-primary btn-lg btn-send"><i class="fa fa-floppy-o"></i> Atualizar</button>');
-			$("span.textAreaSolution").append('<label>Solução:</label><br><textarea style="width: 100%; height: 100px;" id="textAreaSolution"></textarea>');
+			$("span#btnCancel").hide();
+			$("span#btnSendSw").show();
+			$("span#textAreaSolutionHideShow").show();
+			$("span#textAreaCancelReportHideShow").hide();
+			//$("span.textAreaSolution").append('<label>Solução:</label><br><textarea style="width: 100%; height: 100px;" id="textAreaSolution"></textarea>');
 		}
 		
 		//4 default value cancel help
 		if($(this).val() == 4){
 			$("span.textAreaSolution").html("");
 			alert("Atenção! Cancelar um chamado ocorre perca de score");
-			$("span#updateButton").html("");
-			$("span#cancelButton").append('<button id="send" type="button" name="btn-cancel" id="btnCancel" class="btn btn-danger btn-lg btn-send"><i class="fa fa-times"></i> Cancelar</button>');
+			$("span#btnSendSw").hide();
+			$("span#btnCancel").show();
+			$("span#textAreaCancelReportHideShow").show();
 		}
 	});
 	
@@ -45,26 +53,35 @@ $(document).ready(function () {
 	
 	$("button#send").click(function(){
 		
-		
-		
-		//var statusHelp = 		$("select#statusHelp option:selected").val();
-		//var supportUser = 		$("select#supportUser option:selected").val();
-	    //var solutionTxt = 		$("textarea#textAreaSolution").val();
-	   // var idItem = 	$("input[type=hidden]#idItem").val();
+		var statusHelp = 		$("select#statusHelp option:selected").val();
+		var supportUser = 		$("select#supportUser option:selected").val();
+	    var solutionTxt = 		$("textarea#textAreaSolution").val();
+	    var idItem = 	$("input[type=hidden]#idItem").val();
 	    var hashItem = 	$("input:hidden[id=hashItem]").val();
-	       
-	   // console.log(idItem);
-	    console.log(hashItem);
-      	
-      	console.log("values catched");
-      	
-      	/*
-      	
-      $("form.addhelpForm :input").attr("disabled", true);
+	    var cancelTxt = $("textarea#textAreaCancelReport").val();    
+	    var setTxt = "";
+	    
+	    if(statusHelp == 4){
+	    	var canceled = true;
+	    	setTxt = cancelTxt;
+	    }else{
+	    	var canceled = false;
+	    	setTxt = solutionTxt;
+	    }
+	    
+		$("form.addhelpForm :input").attr("disabled", true);
+		$("button.btn-send").attr("disabled","disabled");
+		$('span#loader').append('<img src="<c:url value="/resources/images/loader.gif"/>">');
+    
+		var strFormJson = "{\"statusHelp\":\"" + statusHelp + "\",\"supportUser\":\""+ supportUser + "\",\"setTxt\":\""+ setTxt + "\",\"idItem\":\""+ idItem + "\",\"hashItem\":\""+ hashItem + "\",\"canceled\":\""+ canceled + "\"}";  
+    
+    	var setJson = JSON.stringify(strFormJson);
+    	console.log(setJson);
+      
         $.ajax({        	
             type: 'POST',
             dataType: 'json',
-            url: '../addhelp',
+            url: '<c:url value="/help/update"/>',
             data: setJson,
             contentType : 'application/json; charset=utf-8',
             headers: { 
@@ -74,9 +91,8 @@ $(document).ready(function () {
             success: function (data) {
                console.log(data);
                
-               $('span.loader').remove();
-               $('span.message-danger').remove();
-               $("form.addhelpForm").fadeOut('fast');
+               $('span#loader').hide();
+               $('#modal-success').modal('show');
                
                if(data == 201){
             	   $('span.message').append('<div class="alert alert-success" role="alert">Atividade registrada com sucesso! <a href="/">(Clique para voltar)</a></div>');
@@ -92,7 +108,7 @@ $(document).ready(function () {
                 console.log(data);
                 return false;
             }
-        }); //final $.ajax */
+        }); //final $.ajax
 		
 	}); //final .click()
 	
@@ -123,6 +139,30 @@ $(document).ready(function () {
 	<section class="content">
 	
 		<div class="col-md-6">
+		<!-- modal success  -->
+		<div class="modal fade" id="modal-success" style="display: none;">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Chamado atualizado</h4>
+              </div>
+              <div class="modal-body">
+                <p>Chamado atualizado com sucesso</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- / modal success  -->
+		
+		
 		<div class="box box-widget">
             <div class="box-header with-border">
               <div class="user-block">
@@ -212,13 +252,6 @@ $(document).ready(function () {
 				<form name="alterHelp">
 				<input type="hidden" name="idItem" id="idItem" value="${idItem}" />
 				<input type="hidden" name="hashItem" id="hashItem" value="${hashItem}" />
-					<label>Status</label>
-					<select name="statusHelp" id="statusHelp" class="form-control">
-						<option value="0">Selecione</option>
-						<c:forEach items="${statusList}" var="statusItem">
-							<option value="${statusItem.id}">${statusItem.name}</option>
-						</c:forEach>
-					</select>
 					
 					<label>Analista</label>
 					<select name="supportUser" id="supportUser" class="form-control">
@@ -226,18 +259,37 @@ $(document).ready(function () {
 						<c:forEach items="${listSupportUsers}" var="listSupport">
 							<option value="${listSupport.id}">${listSupport.name}</option>
 						</c:forEach>
+					</select>
+					
+					<label>Status</label>
+					<select name="statusHelp" id="statusHelp" class="form-control">
+						<option value="0">Selecione</option>
+						<c:forEach items="${statusList}" var="statusItem">
+							<option value="${statusItem.id}">${statusItem.name}</option>
+						</c:forEach>
 					</select><br>
 					
 					
-					<textarea style="width: 100%; height: 100px;" id="textAreaSolution"></textarea>
+					<span id="textAreaSolutionHideShow" style="display:none;">
+						<label>Solução:</label>
+						<textarea style="width: 100%; height: 100px;" id="textAreaSolution"></textarea>
+					</span>
+					
+					<span id="textAreaCancelReportHideShow" style="display:none;">
+					<label>Motivo do cancelamento:</label>
+						<textarea style="width: 100%; height: 100px; color:#f00;" id="textAreaCancelReport"></textarea>
+					</span>
 					
 					<div style="margin-top: 8px; text-align: right;">
-					<button id="send" type="button" name="btn-back" class="btn btn-primary btn-lg btn-send"><i class="fa fa-arrow-left"></i>  Voltar</button>
-					<span id="loader"></span>
-					
-					<span id="updateButtonAAA"></span>
-					<button id="send" type="button" name="btn-update" id="btnUpdate" class="btn btn-primary btn-lg btn-send"><i class="fa fa-floppy-o"></i> Atualizar Fixo</button>
-					<span id="cancelButton"></span>
+						<button id="back" type="button" name="btn-back" class="btn btn-primary btn-lg btn-send"><i class="fa fa-arrow-left"></i>  Voltar</button>
+						<span id="loader"></span>
+						<span id="btnSendSw" style="display:none;">
+							<button id="send" type="button" name="btn-update" class="btn btn-primary btn-lg btn-send"><i class="fa fa-floppy-o"></i> Atualizar Fixo</button>
+						</span>
+						<span id="btnCancel" style="display:none;">
+							<button type="button" name="btn-cancel" id="send" class="btn btn-danger btn-lg btn-send"><i class="fa fa-times"></i> Cancelar</button>
+						</span>
+
 					</div>
 				</form>
 

@@ -36,8 +36,6 @@ public class AuthController {
 		
 		List<User> authUser = new AuthModel().authUser(loginData);
 		
-		System.out.println("Retorno dentro do controller:: " + authUser);
-		
 		if(authUser != null) {
 			
 			for(User itemData: authUser)

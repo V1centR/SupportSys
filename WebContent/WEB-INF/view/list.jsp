@@ -33,8 +33,6 @@ tr.item{cursor: pointer;}
         <li class="active">Intranet</li>
       </ol>
     </section>
-    
-
     <section class="invoice">
       <!-- title row -->
       <div class="row">
@@ -51,8 +49,7 @@ tr.item{cursor: pointer;}
                 <input type="hidden" id="editMode" name="edit" value="false">
                 <button type="button" class="btn typeAtividade" id="btn_todos" value="0"><span class="glyphicon glyphicon-alert"></span> Todos</button>        
                 <button type="button" class="btn btn-danger typeAtividade" id="btn_pendente" value="4">Pendente</button>
-                <button type="button" class="btn btn-primary typeAtividade" id="btn_exec" value="3">Em Desenvolvimento</button>
-                <button type="button" class="btn btn-warning typeAtividade" id="new_activ" value="2">Em Testes</button>
+                <button type="button" class="btn btn-primary typeAtividade" id="btn_exec" value="3">Executando</button>
                 &nbsp;&nbsp;
                 <button type="button" class="btn btn-success typeAtividade" id="btn_final" value="1">Concluído</button>
             </form>
@@ -65,26 +62,51 @@ tr.item{cursor: pointer;}
 		<section class="content">
 		    <table style="width: 80%;" border="0" cellpadding="10" class="table table-striped">
 				<tbody style="font-size: 15px;">
-					
-		    <c:forEach items="${dataHelp}" var="itemsHelp">
-		    	<tr class="item" onclick="document.location='<c:url value="/chamados/open/"/>${itemsHelp.id}'" style="cursor:hand;">
-					<td>${itemsHelp.user.name} ${itemsHelp.user.sname}</td>
-					<td>${itemsHelp.department.name}</td>
-					<td>${itemsHelp.helpLabel}</td>
-					<td width="18%"><fmt:formatDate value="${itemsHelp.dateHelp}" pattern="dd/MM/yyyy HH:mm"/></td>
-					<td align="center">
-					<div style="position:relative;height:10px; line-height:10px; width: 100%; min-width: 30px;">
-						<div class="progress progress-sm active" style="width:100%; -moz-transform: scaleX(-1); -o-transform: scaleX(-1); -webkit-transform: scaleX(-1); transform: scaleX(-1); ">
-					    	<div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
-					  	</div>
-					</div>
-					</td>
-				</tr>
-		    </c:forEach>
-		    		
+				    <c:forEach items="${dataHelp}" var="itemsHelp">
+					    <c:set var="statusItem" scope="session" value="${itemsHelp.statusBean.id}"/>
+					    <c:if test="${statusItem == 4}">
+					    	<c:set var="typeRow" value="#F5A9A9"/>
+					    </c:if>
+				    	<tr class="item" onclick="document.location='<c:url value="/chamados/open/"/>${itemsHelp.id}/${itemsHelp.hashSecure}'" style="cursor:hand; background-color:<c:out value="${typeRow}" />; ">
+							<td>${itemsHelp.user.name} ${itemsHelp.user.sname}</td>
+							<td>${itemsHelp.department.name}</td>
+							<td>${itemsHelp.helpLabel}</td>
+							<td width="18%"><fmt:formatDate value="${itemsHelp.dateHelp}" pattern="dd/MM/yyyy HH:mm"/></td>
+							<td align="center">
+						    	<c:choose>
+							    	 <c:when test="${statusItem == 1 }">
+							    	 	<c:set var="setBar" value="danger"/>
+							    	 	<c:set var="hideBar" value="block"/>
+							    	 	<c:set var="setCanceled" value="none" />
+							    	 </c:when>
+							    	 <c:when test="${statusItem == 2 }">
+							    	 	<c:set var="setBar" value="primary"/>
+							    	 	<c:set var="hideBar" value="block"/>
+							    	 	<c:set var="setCanceled" value="none" />
+							    	 </c:when>
+							    	 <c:when test="${statusItem == 3 }">
+							    	 	<c:set var="setBar" value="success"/>
+							    	 	<c:set var="hideBar" value="block"/>
+							    	 	<c:set var="setCanceled" value="none" />
+							    	 </c:when>
+							    	 <c:when test="${statusItem == 4 }">
+							    	 	<c:set var="setBar" value="danger"/>
+							    	 	<c:set var="hideBar" value="none"/>
+							    	 	<c:set var="setCanceled" value="block" />
+							    	 </c:when>
+						    	</c:choose>
+								<div style="position:relative;height:10px; line-height:10px; width: 100%; min-width: 30px;">
+									<div class="progress progress-sm active" style="display:<c:out value="${hideBar}" />; width:100%; -moz-transform: scaleX(-1); -o-transform: scaleX(-1); -webkit-transform: scaleX(-1); transform: scaleX(-1); ">
+								    	<div class="progress-bar progress-bar-<c:out value="${setBar}" /> progress-bar-striped" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+								  	</div>
+								  <span class="canceledFlag" style="display:<c:out value="${setCanceled}" />">	<i class="fa fa-remove" style="font-size: 26px; color: #f00;"></i> </span>
+								</div>
+							</td>
+						</tr>
+				    </c:forEach>
 				</tbody>
 			</table>
-    </section>
+    	</section>
       </div>
 
       <!-- this row will not appear when printing -->

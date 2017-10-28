@@ -55,6 +55,7 @@ public class AuthModel {
 			
 			List<User> dataUser = em.createQuery(UserData).getResultList();
 			int execLoginResult = dataUser.size();
+			//em.close();
 			
 //			for(User itemData: dataUser) {
 //				System.out.println("Nome do banco:: " + itemData.getName());
@@ -63,6 +64,7 @@ public class AuthModel {
 			if(execLoginResult == 1)
 			{
 				return dataUser;
+				
 			}else {
 				dataUser = null;
 				return dataUser;
