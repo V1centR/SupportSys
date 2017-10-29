@@ -2,6 +2,7 @@ package com.supportsys.controller;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -96,6 +97,41 @@ public class HelpController {
 		}else {
 			return Response.SC_INTERNAL_SERVER_ERROR;
 		}
+	}
+
+	@RequestMapping(value="/gethelplist", method=RequestMethod.GET)
+	public @ResponseBody String getItems() throws JSONException {
+
+		//String jsonDataStr = "{\"nome\":\"ASSPM\",\"email\":\"imprensa@asspm.org.br\"}";
+
+		JSONObject jsonContainer = new JSONObject();
+		JSONObject jsonItems = new JSONObject();
+
+		List<Help> helpList = new HelpModel().listItems();
+
+		List<String> containerItems = new ArrayList<String>();
+
+		for(Help dataItems: helpList) {
+
+			jsonItems.put("id", dataItems.getId());
+			jsonItems.put("helpLabel", dataItems.getHelpLabel());
+			jsonItems.put("helpTxt", dataItems.getHelpTxt());
+			jsonItems.put("userId", dataItems.getUser().getId());
+			jsonItems.put("userIdName", dataItems.getUser().getName() + " " + dataItems.getUser().getSname());
+			jsonItems.put("statusId", dataItems.getStatusBean().getId());
+			jsonItems.put("statusName", dataItems.getStatusBean().getName());
+			jsonItems.put("departmentId", dataItems.getDepartment().getId());
+			jsonItems.put("departmentName", dataItems.getDepartment().getName());
+			jsonItems.put("typeHelpId", dataItems.getTypeHelpBean().getId());
+			jsonItems.put("typeHelpName", dataItems.getTypeHelpBean().getName());
+			jsonItems.put("hashSecure", dataItems.getHashSecure());
+
+			jsonContainer.put("" + dataItems.getId() + "", jsonItems);
+			jsonItems = new JSONObject();
+
+		}
+
+		return jsonContainer.toString();
 	}
 
 	@RequestMapping("/chamados/list/{status}")

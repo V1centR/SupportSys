@@ -175,8 +175,6 @@ public class HelpModel {
 			break;
 		}
 
-		System.out.println("Tipo selecionado:: " + typeStatus);
-
 		if(typeStatus != 0) {
 			Status statusObj = em.find(Status.class, typeStatus);
 			List<Help> helpList = new HelpRepo().getListItemstatus(statusObj);
