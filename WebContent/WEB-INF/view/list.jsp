@@ -44,7 +44,6 @@ tr.item{cursor: pointer;}
             	<fmt:formatDate value="${now}" pattern="d/M/yyyy H:mm"/>
             </small>
           </h2>
-          
           <form name="type_chamado" method="post" action="#">
                 <input type="hidden" id="editMode" name="edit" value="false">
                 <button type="button" class="btn typeAtividade" id="btn_todos" value="0"><span class="glyphicon glyphicon-alert"></span> Todos</button>        

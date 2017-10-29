@@ -2,7 +2,6 @@ package com.supportsys.controller;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -99,17 +98,16 @@ public class HelpController {
 		}
 	}
 
-	@RequestMapping(value="/gethelplist", method=RequestMethod.GET)
-	public @ResponseBody String getItems() throws JSONException {
+	@RequestMapping(value="/gethelplist/{status}", method=RequestMethod.GET)
+	public @ResponseBody String getItems(@PathVariable String status) throws JSONException {
 
 		//String jsonDataStr = "{\"nome\":\"ASSPM\",\"email\":\"imprensa@asspm.org.br\"}";
 
 		JSONObject jsonContainer = new JSONObject();
 		JSONObject jsonItems = new JSONObject();
 
-		List<Help> helpList = new HelpModel().listItems();
+		List<Help> helpList = new HelpModel().list(status);
 
-		List<String> containerItems = new ArrayList<String>();
 
 		for(Help dataItems: helpList) {
 
@@ -142,7 +140,8 @@ public class HelpController {
 		List<Help> helpList = new HelpModel().list(status);
 		model.addAttribute("dataHelp", helpList);
 
-		return new ModelAndView("list");
+		//return new ModelAndView("list");
+		return new ModelAndView("listHelp-api");
 	}
 
 	@RequestMapping("/chamados/open/{idHelp}/{hashItem}")
