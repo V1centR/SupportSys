@@ -1,12 +1,63 @@
 <jsp:include page="header.jsp" />
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<script>
+<style>
+.table a
+{
+    display:block;
+    text-decoration:none;
+}
+
+tbody#result tr{
+margin: 0;
+padding: 0;
+}
+/*
+tbody#result tr:hover{
+
+	background-color: #CED8F6;
+}*/
+
+tbody#result tr td{
+	height: 40px;
+
+}
+
+tbody#result tr.negative{
+	background-color: #F2F2F2;
+}
+
+
+tbody#result tr td a:link{
+	text-decoration: none;
+	color: #303030;
+
+}
+
+tbody#result tr td a{
+	height: 100%;
+	display: block;
+	text-decoration: none;
+}
+
+tbody#result tr td div.cellSpace{
+	padding-top: 9px;
+	padding-right:8px;
+}
+
+
+
+</style>
+<script type="text/javascript">
+
   $(document).ready(function () {
   	 
       var base_url = '<c:url value="/"/>';
       var token = "75004f149038473757da0be07ef76dd4a9bdbc8d";
       
       orderAtividades(0);
+	 //cons
+      console.log("");
+	
       
       $("button#btn_todos").click(function(){	  
 	  	alert("Todos");
@@ -19,11 +70,10 @@
 	            url: base_url + 'gethelplist/all',
 	            data: 'token=' + token,
 	            success: function (data) {
-	        	
 	        		console.log(data);
-	                $('tbody').html('');
+	                //$('tbody').html('');
 	               // var ambient = localStorage.setItem('ambient', type);
-	              //  makeList(data);
+	                makeList(data);
 	            },
 	            error: function (data) {
 	                return false;
@@ -34,41 +84,42 @@
       
       
 	    function makeList(data) {
-
+		
+	        var setStripe = 0;
+	        var setNegative = '';
+	        
 	        $.each(data, function () {
 
-	            if (this.situacao == 0) {
-	                var labelSit = 'Inativo';
-	            } else {
-	                var labelSit = 'Ativo';
+	            if (this.statusId == 1) {
+	                console.log("Todos:: " + this.statusId);
+	                console.log("Hash:: " + this.hashSecure);
 	            }
-	            if (this.dataFim == 0 || this.dataFim == 'false') {
-	                var dataFinal = ' - ';
-	            } else {
-	                var dataFinal = this.dataFim;
+	            
+	            if(setStripe%2 == 0){
+	                setNegative = 'negative';
+	            }else{
+	                setNegative = '';
 	            }
-	            switch (this.statusId) {
-	                case 1:
-	                    var setColorStatus = "-success";
-	                    var backgroundLine = 'background-color:#e8ffce;';
-	                    break;
-	                case 2:
-	                    var setColorStatus = "-warning";
-	                    break;
-	                case 3:
-	                    var setColorStatus = "";
-	                    break;
-	                case 4:
-	                    var setColorStatus = "-danger";
-	                    break;
-	            }
-	            $('tbody').append(
-	                    '<tr class="hover-row" onclick="document.location=\'atividade.php?edit=true&atividade=' + this.id + '\'" style="cursor:hand; '+backgroundLine+'"><td>' + this.nome + '</td><td>' + this.descricao.substring(0, 70) + '...</td><td>' + this.dataInicio + '</td><td>' + dataFinal + '</td><td>' + labelSit + '</td><td><div class="progress status-running-desenvolvimento"><div class="progress-bar progress-bar' + setColorStatus + ' progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div></div></td></tr>'
-	                    );
+	            
+	            var statusBar = '<div style="position:relative; min-width:50px;line-height:10px;"><div class="progress progress-sm active" style="display:block; width:100%; -moz-transform: scaleX(-1); -o-transform: scaleX(-1); -webkit-transform: scaleX(-1); transform: scaleX(-1); ">\
+					<div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>\
+				    </div></div>';
+	            
+	            $('tbody#result').append('\
+	                    <tr class="'+setNegative+'">\
+						<td><a href="#"><div class="cellSpace">' + this.userIdName + '</div></a></td>\
+						<td><a href="#"><div class="cellSpace">' + this.departmentName +'</div></a></td>\
+						<td><a href="#"><div class="cellSpace">' + this.helpLabel +'</div></a></td>\
+						<td><a href="#"><div class="cellSpace">' + this.typeHelpName +'</div></a></td>\
+						<td><a href="#"><div class="cellSpace">' + this.dateHelp +'</div></a></td>\
+						<td><a href="#"><div class="cellSpace" style="position:relative; top:8px;">' + statusBar + '</div></a></td>\
+					</tr>\
+	                    ');
+	            
+	            setStripe++;
+	           
 	        });
 	    }
-      
-      
   });
 </script>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -120,11 +171,12 @@
 				        </div>
 	        		<!-- /.col -->
 	      			</div>
+				    
+				    <table style="width: 100%;" border="0">
+						<tbody id="result"></tbody>
+					</table>
 	      			
-	      			<!-- Content ##### -->
-	      			<tbody></tbody>
-	      			
-				</div>
+				</div><!-- Content ##### -->
 					
 
 				</div>

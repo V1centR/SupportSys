@@ -2,6 +2,8 @@ package com.supportsys.controller;
 
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -107,9 +109,11 @@ public class HelpController {
 		JSONObject jsonItems = new JSONObject();
 
 		List<Help> helpList = new HelpModel().list(status);
-
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy H:mm");
 
 		for(Help dataItems: helpList) {
+
+			String dateF = df.format(dataItems.getDateHelp());
 
 			jsonItems.put("id", dataItems.getId());
 			jsonItems.put("helpLabel", dataItems.getHelpLabel());
@@ -123,10 +127,10 @@ public class HelpController {
 			jsonItems.put("typeHelpId", dataItems.getTypeHelpBean().getId());
 			jsonItems.put("typeHelpName", dataItems.getTypeHelpBean().getName());
 			jsonItems.put("hashSecure", dataItems.getHashSecure());
+			jsonItems.put("dateHelp", dateF);
 
 			jsonContainer.put("" + dataItems.getId() + "", jsonItems);
 			jsonItems = new JSONObject();
-
 		}
 
 		return jsonContainer.toString();
