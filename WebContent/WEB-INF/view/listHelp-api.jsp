@@ -26,6 +26,10 @@ tbody#result tr.negative{
 	background-color: #F2F2F2;
 }
 
+tbody#result tr.canceled{
+	background-color: #F5A9A9;
+}
+
 
 tbody#result tr td a:link{
 	text-decoration: none;
@@ -63,7 +67,16 @@ tbody#result tr td div.cellSpace{
 	  	alert("Todos");
       });
       
+      
+      
       function orderAtividades(type) {
+          
+          var baseUrl = '<c:url value="/"/>';
+          
+          var loaderBig = '<div style="width:100%; text-align:center;"><img src="<c:url value="/resources/images/loaderBig.gif"/>" style="width:100px; height:100px;"></div>';
+          
+          
+          $('span#loader').append(loaderBig);
 	        $.ajax({
 	            type: 'GET',
 	            dataType: 'json',
@@ -71,9 +84,9 @@ tbody#result tr td div.cellSpace{
 	            data: 'token=' + token,
 	            success: function (data) {
 	        		console.log(data);
-	                //$('tbody').html('');
+	                $('span#loader').html('');
 	               // var ambient = localStorage.setItem('ambient', type);
-	                makeList(data);
+	               makeList(data);
 	            },
 	            error: function (data) {
 	                return false;
@@ -85,6 +98,7 @@ tbody#result tr td div.cellSpace{
       
 	    function makeList(data) {
 		
+	        var baseUrl = '<c:url value="/"/>';
 	        var setStripe = 0;
 	        var setNegative = '';
 	        
@@ -101,18 +115,57 @@ tbody#result tr td div.cellSpace{
 	                setNegative = '';
 	            }
 	            
-	            var statusBar = '<div style="position:relative; min-width:50px;line-height:10px;"><div class="progress progress-sm active" style="display:block; width:100%; -moz-transform: scaleX(-1); -o-transform: scaleX(-1); -webkit-transform: scaleX(-1); transform: scaleX(-1); ">\
-					<div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>\
-				    </div></div>';
 	            
+	            var setTypeBar = '';
+	            var cancelled = false;
+	            //1 aberto, 2 executando, 3 concluído, 4 cancelado
+	            switch (this.statusId) {
+                case 1:
+                    setTypeBar = 'danger';
+                    break;
+                case 2:
+                    setTypeBar = 'primary';
+                    break;
+                case 3:
+                    setTypeBar = 'success';
+                    break;
+                case 4:
+                    cancelled = true;
+                    break;
+                default:
+                    break;
+                }
+	            
+				if(cancelled == true){	                
+				    setNegative = 'canceled';
+	            }
+	            
+	            var statusSign = '';
+	            //style="position:relative; top:8px;"
+	            if(cancelled == false){
+	                statusSign = '<div style="position:relative; min-width:50px;line-height:10px; top:8px;"><div class="progress progress-sm active" style="display:block; width:100%; -moz-transform: scaleX(-1); -o-transform: scaleX(-1); -webkit-transform: scaleX(-1); transform: scaleX(-1); ">\
+						<div class="progress-bar progress-bar-'+setTypeBar+' progress-bar-striped" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>\
+					    </div></div>';
+	            }else{
+	                statusSign = '<div style="position:relative; left:40px;"><i class="fa fa-remove" style="font-size: 26px; color: #f00;"></i></div>';
+	            }
+				
+				var linkItem = baseUrl + "help/open/"+ this.id +"/"+ this.hashSecure;
+				//<img src="<c:url value="/resources/images/user20171003.jpg"/>" class="img-circle" alt="User Image">
+				
+				var userProfile = '<div style="position:relative; padding-top:2px; margin-left:4px;">\
+				    <div class="user-block">\
+                    <img src="<c:url value="/resources/images/user20171003.jpg"/>" style="width:36px; height:36px;" class="img-circle img-bordered-sm" alt="User Image">\
+                    <span class="username" style="color:#4e98c3">'+this.userIdName+'</span><span class="description">ASSPM - ' + this.departmentName +'</span></div></div>';
+				
+				
 	            $('tbody#result').append('\
 	                    <tr class="'+setNegative+'">\
-						<td><a href="#"><div class="cellSpace">' + this.userIdName + '</div></a></td>\
-						<td><a href="#"><div class="cellSpace">' + this.departmentName +'</div></a></td>\
-						<td><a href="#"><div class="cellSpace">' + this.helpLabel +'</div></a></td>\
-						<td><a href="#"><div class="cellSpace">' + this.typeHelpName +'</div></a></td>\
-						<td><a href="#"><div class="cellSpace">' + this.dateHelp +'</div></a></td>\
-						<td><a href="#"><div class="cellSpace" style="position:relative; top:8px;">' + statusBar + '</div></a></td>\
+						<td><a href="'+linkItem+'">' + userProfile + '</td>\
+						<td><a href="'+linkItem+'"><div class="cellSpace">' + this.typeHelpName +'</div></a></td>\
+						<td><a href="'+linkItem+'"><div class="cellSpace">' + this.helpLabel +'</div></a></td>\
+						<td><a href="'+linkItem+'"><div class="cellSpace">' + this.dateHelp +'</div></a></td>\
+						<td><a href="'+linkItem+'"><div class="cellSpace">' + statusSign + '</div></a></td>\
 					</tr>\
 	                    ');
 	            
@@ -171,9 +224,9 @@ tbody#result tr td div.cellSpace{
 				        </div>
 	        		<!-- /.col -->
 	      			</div>
-				    
+	      			
 				    <table style="width: 100%;" border="0">
-						<tbody id="result"></tbody>
+						<tbody id="result"><span id="loader"></span></tbody>
 					</table>
 	      			
 				</div><!-- Content ##### -->

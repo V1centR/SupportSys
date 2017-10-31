@@ -3,13 +3,9 @@
 $(document).ready(function () {
 	
     $('a#logout').click(function () {
-
-    	console.log("logOut press");
       var base_url = '<c:url value="/"/>';
       var infoLogout = $("input#hashSess").val();
       var strFormJson = "{\"infoLogout\":\"" + infoLogout + "\"}";
-      
-      console.log(strFormJson);
       
       var setJson = JSON.stringify(strFormJson);
       

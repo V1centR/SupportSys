@@ -148,7 +148,7 @@ public class HelpController {
 		return new ModelAndView("listHelp-api");
 	}
 
-	@RequestMapping("/chamados/open/{idHelp}/{hashItem}")
+	@RequestMapping("/help/open/{idHelp}/{hashItem}")
 	public ModelAndView openItem(Model model, @PathVariable Integer idHelp, @PathVariable String hashItem)
 	{
 		List<Help> dataItem = new HelpModel().openHelp(idHelp,hashItem);
