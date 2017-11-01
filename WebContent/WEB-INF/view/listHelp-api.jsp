@@ -57,22 +57,37 @@ tbody#result tr td div.cellSpace{
   	 
       var base_url = '<c:url value="/"/>';
       var token = "75004f149038473757da0be07ef76dd4a9bdbc8d";
+      orderAtividades('all');
+     // btnAll btnPending btnExec btnFinal btnCanceled
       
-      orderAtividades(0);
-	 //cons
-      console.log("");
-	
-      
-      $("button#btn_todos").click(function(){	  
-	  	alert("Todos");
+      $("button#btnAll").click(function(){
+	  	$('tbody#result').html('');
+	  	orderAtividades('all');
+      });
+     
+      $("button#btnPending").click(function(){
+  	  	$('tbody#result').html('');
+  	  	orderAtividades('pending');
       });
       
+      $("button#btnExec").click(function(){
+  	  	$('tbody#result').html('');
+  	  	orderAtividades('exec');
+      });
       
+      $("button#btnFinal").click(function(){
+  	  	$('tbody#result').html('');
+  	  	orderAtividades('done');
+      });
+      
+      $("button#btnCanceled").click(function(){
+  	  	$('tbody#result').html('');
+  	  	orderAtividades('canceled');
+      });
       
       function orderAtividades(type) {
           
           var baseUrl = '<c:url value="/"/>';
-          
           var loaderBig = '<div style="width:100%; text-align:center;"><img src="<c:url value="/resources/images/loaderBig.gif"/>" style="width:100px; height:100px;"></div>';
           
           
@@ -80,7 +95,7 @@ tbody#result tr td div.cellSpace{
 	        $.ajax({
 	            type: 'GET',
 	            dataType: 'json',
-	            url: base_url + 'gethelplist/all',
+	            url: base_url + 'gethelplist/' + type,
 	            data: 'token=' + token,
 	            success: function (data) {
 	        		console.log(data);
@@ -93,8 +108,6 @@ tbody#result tr td div.cellSpace{
 	            }
 	        });
 	    }
-      
-      
       
 	    function makeList(data) {
 		
@@ -118,7 +131,7 @@ tbody#result tr td div.cellSpace{
 	            
 	            var setTypeBar = '';
 	            var cancelled = false;
-	            //1 aberto, 2 executando, 3 concluído, 4 cancelado
+	            /*1 aberto, 2 executando, 3 concluído, 4 cancelado*/
 	            switch (this.statusId) {
                 case 1:
                     setTypeBar = 'danger';
@@ -141,7 +154,7 @@ tbody#result tr td div.cellSpace{
 	            }
 	            
 	            var statusSign = '';
-	            //style="position:relative; top:8px;"
+	           
 	            if(cancelled == false){
 	                statusSign = '<div style="position:relative; min-width:50px;line-height:10px; top:8px;"><div class="progress progress-sm active" style="display:block; width:100%; -moz-transform: scaleX(-1); -o-transform: scaleX(-1); -webkit-transform: scaleX(-1); transform: scaleX(-1); ">\
 						<div class="progress-bar progress-bar-'+setTypeBar+' progress-bar-striped" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>\
@@ -151,7 +164,7 @@ tbody#result tr td div.cellSpace{
 	            }
 				
 				var linkItem = baseUrl + "help/open/"+ this.id +"/"+ this.hashSecure;
-				//<img src="<c:url value="/resources/images/user20171003.jpg"/>" class="img-circle" alt="User Image">
+				/*<img src="<c:url value="/resources/images/user20171003.jpg"/>" class="img-circle" alt="User Image">*/
 				
 				var userProfile = '<div style="position:relative; padding-top:2px; margin-left:4px;">\
 				    <div class="user-block">\
@@ -170,7 +183,6 @@ tbody#result tr td div.cellSpace{
 	                    ');
 	            
 	            setStripe++;
-	           
 	        });
 	    }
   });
@@ -214,11 +226,12 @@ tbody#result tr td div.cellSpace{
 				          </h2>
 				          <form name="type_chamado" method="post" action="#">
 				                <input type="hidden" id="editMode" name="edit" value="false">
-				                <button type="button" class="btn typeAtividade" id="btn_todos" value="0"><span class="glyphicon glyphicon-alert"></span> Todos</button>        
-				                <button type="button" class="btn btn-danger typeAtividade" id="btn_pendente" value="4">Pendente</button>
-				                <button type="button" class="btn btn-primary typeAtividade" id="btn_exec" value="3">Executando</button>
+				                <button type="button" class="btn typeAtividade" id="btnAll" value="0"><span class="glyphicon glyphicon-alert"></span> Todos</button>        
+				                <button type="button" class="btn btn-danger typeAtividade" id="btnPending" value="4">Pendente</button>
+				                <button type="button" class="btn btn-primary typeAtividade" id="btnExec" value="3">Executando</button>
 				                &nbsp;&nbsp;
-				                <button type="button" class="btn btn-success typeAtividade" id="btn_final" value="1">Concluído</button>
+				                <button type="button" class="btn btn-success typeAtividade" id="btnFinal" value="1">Concluído</button>
+				                <button type="button" class="btn typeAtividade" id="btnCanceled" value="1"><i class="fa fa-remove" style="font-size: 20px; color: #f00;"></i> <span style="color:#f00; font-weight: bold;">Cancelados</span></button>
 				            </form>
 				            
 				        </div>
@@ -238,5 +251,4 @@ tbody#result tr td div.cellSpace{
 			</section>
 			<!-- /.content -->
 		</div>
-		<!-- /.content-wrapper -->
-		<jsp:include page="footer.jsp" />
+<jsp:include page="footer.jsp" />

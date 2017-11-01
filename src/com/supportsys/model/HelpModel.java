@@ -158,7 +158,7 @@ public class HelpModel {
 		Integer typeStatus = 0;
 
 		switch (status) {
-		case "opened":
+		case "pending":
 			typeStatus = 1;
 			break;
 		case "exec":
