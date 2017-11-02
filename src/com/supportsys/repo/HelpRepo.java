@@ -23,6 +23,7 @@ public class HelpRepo {
 	 */
 	public boolean checkIdAndHash(Integer id, String hashCode)
 	{
+
 		try {
 
 			EntityManager em = new EmModel().getEm();
@@ -32,7 +33,6 @@ public class HelpRepo {
 			setParameter("id", id).
 			setParameter("hashCode", hashCode).
 			getSingleResult();
-
 			em.close();
 			return true;
 
@@ -49,10 +49,9 @@ public class HelpRepo {
 	 * @param hashCode
 	 * @return
 	 */
-	public List<Help> getListItemstatus(Status statusId)
+	public List<Help> getListItemstatus(Status statusId,EntityManager em)
 	{
-
-		EntityManager em = new EmModel().getEm();
+//		EntityManager em = new EmModel().getEm();
 		String query = "SELECT h FROM Help h WHERE h.statusBean= :status";
 		List<Help> itemObj = em.createQuery(query, Help.class).
 		setParameter("status", statusId).

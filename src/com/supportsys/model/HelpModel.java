@@ -27,9 +27,7 @@ import com.supportsys.repo.HelpRepo;
 
 public class HelpModel {
 
-
-	public boolean updateItem(JSONObject jsonItems) throws JSONException
-	{
+	public boolean updateItem(JSONObject jsonItems) throws JSONException {
 		EntityManager em = getEm();
 
 		String itemHash = jsonItems.get("hashItem").toString();
@@ -37,24 +35,24 @@ public class HelpModel {
 
 		boolean checkItem = new HelpRepo().checkIdAndHash(itemId, itemHash);
 
-		if(checkItem == true) {
+		if (checkItem == true) {
 
-			//idUserSupport integer
-			Object supportUserSet =  Integer.parseInt(jsonItems.get("supportUser").toString());
-			//integer
+			// idUserSupport integer
+			Object supportUserSet = Integer.parseInt(jsonItems.get("supportUser").toString());
+			// integer
 			Object selectedStatus = Integer.parseInt(jsonItems.get("statusHelp").toString());
 			String textSolution = jsonItems.get("setTxt").toString();
 			Boolean canceled = Boolean.parseBoolean(jsonItems.get("canceled").toString());
 
-			//tirar da model esta validação
-			if(canceled == true) {
+			// tirar da model esta validação
+			if (canceled == true) {
 				textSolution = "<span style='color:#f00; font-wight:bold'>CANCELADO:</span> " + textSolution;
 			}
 
 			Status selectedStatusId = em.find(Status.class, selectedStatus);
 			SupportUser supportUserId = em.find(SupportUser.class, supportUserSet);
 
-			//Update ok
+			// Update ok
 			Help helpUpdt = em.find(Help.class, itemId);
 			em.clear();
 
@@ -68,45 +66,46 @@ public class HelpModel {
 			em.getTransaction().commit();
 
 		}
-
+		em.close();
 		return false;
 	}
 
 	/**
 	 * Creates help item
+	 *
 	 * @param jsonItems
 	 * @param user
 	 * @return
 	 * @throws JSONException
 	 */
-	public boolean createHelp(JSONObject jsonItems, Integer user,String sessId) throws JSONException
-	{
-		//Strings ###
+	public boolean createHelp(JSONObject jsonItems, Integer user, String sessId) throws JSONException {
+		// Strings ###
 		Object formMode = jsonItems.get("formMode").toString();
 		Object helpLabel = jsonItems.get("helpLabel").toString();
 		Object helpTxt = jsonItems.get("description").toString();
 
-		//integers ###
-		//Object client = Integer.parseInt(jsonItems.get("client").toString());
-		//Object idAtividade = Integer.parseInt(jsonItems.get("idAtividade").toString());
+		// integers ###
+		// Object client = Integer.parseInt(jsonItems.get("client").toString());
+		// Object idAtividade =
+		// Integer.parseInt(jsonItems.get("idAtividade").toString());
 		Object category = Integer.parseInt(jsonItems.get("category").toString());
 		Object dept = Integer.parseInt(jsonItems.get("dept").toString());
 
 		String tags = "Testes;Hibernate;JPA;MariaDb;Setembro2017";
 
-		//TimeStamp
+		// TimeStamp
 		long now = Calendar.getInstance().getTimeInMillis();
 		Timestamp tsNow = new Timestamp(now);
 
-		//Get unique hash to this item sha1
+		// Get unique hash to this item sha1
 		String convertNow = Long.toString(now);
-		String hashSecure = genHashItem(convertNow+sessId);
+		String hashSecure = genHashItem(convertNow + sessId);
 
-		//Client cliente = em.find(Client.class, 1);
-		//cliente.getName();
+		// Client cliente = em.find(Client.class, 1);
+		// cliente.getName();
 		User userCall = getEm().find(User.class, user);
 
-		//Default value is 1 in database
+		// Default value is 1 in database
 		// is required because entity config JPA
 		Status status = getEm().find(Status.class, 1);
 		Department deptCall = getEm().find(Department.class, dept);
@@ -119,8 +118,8 @@ public class HelpModel {
 
 			Help help = new Help();
 
-			help.setHelpLabel((String)helpLabel);
-			help.setHelpTxt((String)helpTxt);
+			help.setHelpLabel((String) helpLabel);
+			help.setHelpTxt((String) helpTxt);
 			help.setHashSecure(hashSecure);
 			help.setUser(userCall);
 			help.setStatusBean(status);
@@ -135,14 +134,16 @@ public class HelpModel {
 
 			Integer idTransAction = help.getId();
 
-			if(idTransAction == idTransAction) {
+			if (idTransAction == idTransAction) {
 				execOk = true;
-				em.close();
+				// em.close();
 			}
 
 		} catch (Exception e) {
 			// TODO: handle exception
 			execOk = false;
+		} finally {
+			em.close();
 		}
 
 		return execOk;
@@ -150,11 +151,16 @@ public class HelpModel {
 
 	/**
 	 * Get Help list
+	 *
 	 * @return
 	 */
-	public List<Help> list(String status)
-	{
-		EntityManager em = getEm();
+	public List<Help> list(String status) {
+
+		//EntityManager em = getEm();
+
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
+		EntityManager em = emf.createEntityManager();
+
 		Integer typeStatus = 0;
 
 		switch (status) {
@@ -175,25 +181,25 @@ public class HelpModel {
 			break;
 		}
 
-		if(typeStatus != 0) {
+		if (typeStatus != 0){
 			Status statusObj = em.find(Status.class, typeStatus);
-			List<Help> helpList = new HelpRepo().getListItemstatus(statusObj);
-			em.close();
+			List<Help> helpList = new HelpRepo().getListItemstatus(statusObj,em);
+			emf.close();
 			return helpList;
 
 		} else {
 			List<Help> helpListFull = listItems();
-			em.close();
+			emf.close();
 			return helpListFull;
 		}
 	}
 
 	/**
 	 * get full items status types
+	 *
 	 * @return
 	 */
-	public List<Help> listItems()
-	{
+	public List<Help> listItems() {
 		EntityManager em = getEm();
 		List<Help> fullItems = em.createNamedQuery("Help.findAll").getResultList();
 		em.close();
@@ -205,8 +211,7 @@ public class HelpModel {
 	 *
 	 * @return
 	 */
-	public List<TypeHelp> getTypes()
-	{
+	public List<TypeHelp> getTypes() {
 		EntityManager em = getEm();
 		List<TypeHelp> types = em.createNamedQuery("TypeHelp.findAll").getResultList();
 		em.close();
@@ -218,8 +223,7 @@ public class HelpModel {
 	 *
 	 * @return
 	 */
-	public List<Status> getStatus()
-	{
+	public List<Status> getStatus() {
 		EntityManager em = getEm();
 		List<Status> statusTypes = em.createNamedQuery("Status.findAll").getResultList();
 		em.close();
@@ -227,9 +231,7 @@ public class HelpModel {
 		return statusTypes;
 	}
 
-
-	public List<SupportUser> getSupportUsers()
-	{
+	public List<SupportUser> getSupportUsers() {
 		EntityManager em = getEm();
 		List<SupportUser> supportUsersList = em.createNamedQuery("SupportUser.findAll").getResultList();
 		em.close();
@@ -237,14 +239,13 @@ public class HelpModel {
 		return supportUsersList;
 	}
 
-
 	/**
 	 * Get list of departments from client
+	 *
 	 * @param clientId
 	 * @return
 	 */
-	public List<Department> getDepartment(Integer clientId)
-	{
+	public List<Department> getDepartment(Integer clientId) {
 		EntityManager em = getEm();
 
 		CriteriaBuilder criteriaSet = em.getCriteriaBuilder();
@@ -253,9 +254,7 @@ public class HelpModel {
 
 		departmentData = criteriaSet.createQuery(Department.class);
 		department = departmentData.from(Department.class);
-		departmentData.select(department).where(
-				criteriaSet.equal(department.get("clientBean"), clientId)
-				);
+		departmentData.select(department).where(criteriaSet.equal(department.get("clientBean"), clientId));
 
 		List<Department> dataDepartment = em.createQuery(departmentData).getResultList();
 		em.close();
@@ -263,8 +262,7 @@ public class HelpModel {
 		return dataDepartment;
 	}
 
-	public List<Help> openHelp(Integer idHelp, String hashItem)
-	{
+	public List<Help> openHelp(Integer idHelp, String hashItem) {
 
 		EntityManager em = getEm();
 
@@ -274,10 +272,8 @@ public class HelpModel {
 
 		helpData = criteriaSet.createQuery(Help.class);
 		help = helpData.from(Help.class);
-		helpData.select(help).where(
-				criteriaSet.equal(help.get("id"), idHelp),
-				criteriaSet.equal(help.get("hashSecure"), hashItem)
-				);
+		helpData.select(help).where(criteriaSet.equal(help.get("id"), idHelp),
+				criteriaSet.equal(help.get("hashSecure"), hashItem));
 
 		List<Help> dataHelp = em.createQuery(helpData).getResultList();
 		em.close();
@@ -285,13 +281,13 @@ public class HelpModel {
 		return dataHelp;
 	}
 
-
 	/**
 	 * Get EntityManager
+	 *
 	 * @return
 	 */
-	private EntityManager getEm()
-	{
+	private EntityManager getEm() {
+
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
 		EntityManager em = emf.createEntityManager();
 
@@ -300,11 +296,11 @@ public class HelpModel {
 
 	/**
 	 * Generates unique hash to item
+	 *
 	 * @param now
 	 * @return
 	 */
-	public String genHashItem(String now)
-	{
+	public String genHashItem(String now) {
 		HashFunction hf = Hashing.sha1();
 		HashCode hc = hf.newHasher().putString(now).hash();
 

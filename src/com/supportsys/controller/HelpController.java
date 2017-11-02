@@ -160,6 +160,9 @@ public class HelpController {
 		model.addAttribute("listSupportUsers", listSupportUsers);
 		model.addAttribute("statusList", listStatus);
 		model.addAttribute("dataItem", dataItem);
+		model.addAttribute("supportUserAdded", dataItem.get(0).getSupportUser().getId());
+		model.addAttribute("typeAdded", dataItem.get(0).getTypeHelpBean());
+		model.addAttribute("statusAdded", dataItem.get(0).getStatusBean().getId());
 
 		return new ModelAndView("open");
 

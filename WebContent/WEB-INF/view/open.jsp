@@ -178,21 +178,17 @@ $(document).ready(function () {
 					<i class="fa fa-hourglass-end" style="color:#FF4000;"></i> 
 				</span>
 					<hr>
-					<i class="fa fa-warning"></i> Assunto: <span style="font-size: 18px; font-weight: bold;">${helpItem.helpLabel}</span> <br>
-					<i class="fa fa-file-text"></i> Descrição: <br>
-					
+					<i class="fa fa-warning"></i> Assunto: <span style="font-size: 15px; font-weight: bold;">${helpItem.helpLabel}</span> <br>
+					<i class="fa fa-check-circle-o"></i> Tipo: <span style="font-size: 15px; font-weight: bold;">${helpItem.typeHelpBean.name}</span> <br><br>
+					<i class="fa fa-file-text"></i> Descrição: <span style="font-size: 18px;">${helpItem.helpTxt} </span>
 					<div class="box-body">
-						<span style="font-size: 18px;">${helpItem.helpTxt} </span>
+						
 					</div>
 						
 					</c:forEach>
               </div>
-              
             </div>
-            
             <hr>
-            
-            
             <!-- /.box-body -->
             <div class="box-footer box-comments">
               <div class="box-comment">
@@ -249,23 +245,41 @@ $(document).ready(function () {
             </div>
             <!-- /.box-header -->
             <div class="box-body">
+            ${idItem}<br>
+            ${hashItem}<br>
+            ${supportUserAdded}<br>
+            ${statusAdded}<br>
+           
+            
+            
 				<form name="alterHelp">
 				<input type="hidden" name="idItem" id="idItem" value="${idItem}" />
 				<input type="hidden" name="hashItem" id="hashItem" value="${hashItem}" />
 					
 					<label>Analista</label>
+					<c:set var="supportUserAdded" scope="session" value="${supportUserAdded}"/>
+					<c:set var="setUser" scope="session" value="selected"/>
 					<select name="supportUser" id="supportUser" class="form-control">
 						<option value="0">Selecione</option>
 						<c:forEach items="${listSupportUsers}" var="listSupport">
-							<option value="${listSupport.id}">${listSupport.name}</option>
+							<c:if test="${supportUserAdded == listSupport.id}">
+								<c:set var="setUser" scope="session" value="selected"/>
+							</c:if>
+							<option value="${listSupport.id}" ${setUser}>${listSupport.name} ${listSupport.snome}</option>
+							<c:set var="setUser" scope="session" value=""/>
 						</c:forEach>
 					</select>
 					
 					<label>Status</label>
+					<c:set var="statusAdded" scope="session" value="${statusAdded}"/>
 					<select name="statusHelp" id="statusHelp" class="form-control">
 						<option value="0">Selecione</option>
 						<c:forEach items="${statusList}" var="statusItem">
-							<option value="${statusItem.id}">${statusItem.name}</option>
+							<c:if test="${statusItem.id == statusAdded}">
+								<c:set var="setStatus" scope="session" value="selected"/>
+							</c:if>
+							<option value="${statusItem.id}" ${setStatus}>${statusItem.name}</option>
+							<c:set var="setStatus" scope="session" value=""/>
 						</c:forEach>
 					</select><br>
 					

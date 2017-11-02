@@ -35,7 +35,7 @@
           </a>
           <ul class="treeview-menu">
           	<li class="active">
-            	<a href="<c:url value="/chamados/list"/>"><i class="fa fa-flag-o"></i> Abertos
+            	<a href="<c:url value="/chamados/list/all"/>"><i class="fa fa-flag-o"></i> Abertos
             	<span class="pull-right-container">
               		<span class="label label-danger pull-right">18</span>
             	</span>

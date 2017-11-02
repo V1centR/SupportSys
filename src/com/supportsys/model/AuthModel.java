@@ -16,7 +16,7 @@ import org.json.JSONObject;
 import com.supportsys.entity.User;
 
 /**
- * 
+ *
  * @author vicentcdb@gmail.com
  * Class login, logout users
  *
@@ -31,45 +31,46 @@ public class AuthModel {
 	 */
 	public List<User> authUser(JSONObject userData) throws JSONException, IOException
 	{
-		//Data received json 
+		//Data received json
 		Object userEmail = userData.get("email").toString();
 		Object password = userData.get("pass").toString();
-		
+
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
 		EntityManager em = emf.createEntityManager();
-		
+
 		//Exec database validation data
 		try {
-			
+
 			//Set criteria to query
 			CriteriaBuilder criteriaSet = em.getCriteriaBuilder();
 			CriteriaQuery<User> UserData;
 			Root<User> user;
-			
+
 			UserData = criteriaSet.createQuery(User.class);
 			user = UserData.from(User.class);
 			UserData.select(user).where(
 					criteriaSet.equal(user.get("email"), userEmail),
 					criteriaSet.equal(user.get("pass"), password)
 					);
-			
+
 			List<User> dataUser = em.createQuery(UserData).getResultList();
 			int execLoginResult = dataUser.size();
 			//em.close();
-			
+
 //			for(User itemData: dataUser) {
 //				System.out.println("Nome do banco:: " + itemData.getName());
 //			}
-			
+
 			if(execLoginResult == 1)
 			{
+				em.close();
 				return dataUser;
-				
+
 			}else {
 				dataUser = null;
 				return dataUser;
 			}
-			
+
 		} catch (Exception e) {
 			List<User> dataUser = null;
 			return dataUser;
