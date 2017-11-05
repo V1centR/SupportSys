@@ -41,16 +41,6 @@ public class Help implements Serializable {
 	@JoinColumn(name="dept")
 	private Department department;
 
-	//bi-directional many-to-one association to SupportUser
-	@ManyToOne
-	@JoinColumn(name="supportUserId")
-	private SupportUser supportUser;
-
-	//bi-directional many-to-one association to User
-	@ManyToOne
-	@JoinColumn(name="userId")
-	private User user;
-
 	//bi-directional many-to-one association to Status
 	@ManyToOne
 	@JoinColumn(name="status")
@@ -60,6 +50,16 @@ public class Help implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="typeHelp")
 	private TypeHelp typeHelpBean;
+
+	//bi-directional many-to-one association to User
+	@ManyToOne
+	@JoinColumn(name="supportUserId")
+	private User supportUser;
+
+	//bi-directional many-to-one association to User
+	@ManyToOne
+	@JoinColumn(name="userId")
+	private User user;
 
 	//bi-directional many-to-one association to HelpTag
 	@OneToMany(mappedBy="help")
@@ -154,22 +154,6 @@ public class Help implements Serializable {
 		this.department = department;
 	}
 
-	public SupportUser getSupportUser() {
-		return this.supportUser;
-	}
-
-	public void setSupportUser(SupportUser supportUser) {
-		this.supportUser = supportUser;
-	}
-
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
 	public Status getStatusBean() {
 		return this.statusBean;
 	}
@@ -184,6 +168,22 @@ public class Help implements Serializable {
 
 	public void setTypeHelpBean(TypeHelp typeHelpBean) {
 		this.typeHelpBean = typeHelpBean;
+	}
+
+	public User getSupportUser() {
+		return this.supportUser;
+	}
+
+	public void setSupportUser(User supportUser) {
+		this.supportUser = supportUser;
+	}
+
+	public User getUser() {
+		return this.user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public List<HelpTag> getHelpTags() {

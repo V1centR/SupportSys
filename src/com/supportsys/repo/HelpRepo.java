@@ -6,6 +6,8 @@ import javax.persistence.EntityManager;
 
 import com.supportsys.entity.Help;
 import com.supportsys.entity.Status;
+import com.supportsys.entity.User;
+import com.supportsys.entity.UserGroup;
 import com.supportsys.model.EmModel;
 
 /**
@@ -39,6 +41,35 @@ public class HelpRepo {
 		} catch (Exception e) {
 			// TODO: handle exception
 			return false;
+		}
+
+	}
+
+	/**
+	 * Get support users
+	 * @param id
+	 * @param hashCode
+	 * @return
+	 */
+	public List<User> getSupportUsers()
+	{
+		try {
+
+			EntityManager em = new EmModel().getEm();
+
+			UserGroup groupObj = em.find(UserGroup.class, 7);
+
+			String query = "SELECT u FROM Users u WHERE u.group= :id";
+			//optimize this query
+			List<User> userList = em.createQuery(query, User.class).
+			setParameter("id", groupObj).
+			getResultList();
+			em.close();
+			return userList;
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
 		}
 
 	}

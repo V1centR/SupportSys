@@ -1,7 +1,6 @@
 package com.supportsys.controller;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -27,40 +26,34 @@ public class AuthController {
 	{
 		return new ModelAndView("login","","");
 	}
-	
+
 	@RequestMapping(value="authuser", method=RequestMethod.POST)
-	public @ResponseBody int authenticate(@RequestBody Object jsonAuth, HttpServletRequest request) throws JSONException, IOException 
+	public @ResponseBody int authenticate(@RequestBody Object jsonAuth, HttpServletRequest request) throws JSONException, IOException
 	{
 		String jsonData = jsonAuth.toString();
 		JSONObject loginData = new JSONObject(jsonData);
-		
-		List<User> authUser = new AuthModel().authUser(loginData);
-		
-		if(authUser != null) {
-			
-			for(User itemData: authUser)
-			{
-				
-				HttpSession userSession = request.getSession();
-				String avatar = itemData.getImage().getId()+"-"+ itemData.getImage().getImgName() + "." + itemData.getImage().getExt();
-				
-				userSession.setAttribute("userName", itemData.getName());
-				userSession.setAttribute("userSname", itemData.getSname());
-				userSession.setAttribute("userAvatar", avatar);
-				userSession.setAttribute("userEmail", itemData.getEmail());
-				userSession.setAttribute("userClient", itemData.getClient());
-				userSession.setAttribute("userHash", userSession.getId());
-				
-				//System.out.println(userSession.getAttribute("userAvatar"));
-			}
-			
+
+		User userData = new AuthModel().authUser(loginData);
+
+		if(userData != null) {
+
+			HttpSession userSession = request.getSession();
+			String avatar = userData.getImage().getId()+"-"+ userData.getImage().getImgName() + "." + userData.getImage().getExt();
+
+			userSession.setAttribute("userName", userData.getName());
+			userSession.setAttribute("userSname", userData.getSname());
+			userSession.setAttribute("userAvatar", avatar);
+			userSession.setAttribute("userEmail", userData.getEmail());
+			userSession.setAttribute("userClient", userData.getClient());
+			userSession.setAttribute("userHash", userSession.getId());
+
 			return Response.SC_OK; //200
 
 		}else {
 			return Response.SC_UNAUTHORIZED; //401
 		}
 	}
-	
+
 	@RequestMapping(value="logout", method=RequestMethod.POST)
 	public @ResponseBody int logOut(@RequestBody Object jsonLogOut, HttpServletRequest request) throws JSONException
 	{
@@ -68,20 +61,20 @@ public class AuthController {
 		JSONObject logOut = new JSONObject(jsonData);
 		//Object userEmail = userData.get("email").toString();
 		Object hashUser = logOut.get("infoLogout").toString();
-		
+
 		HttpSession sessionCheck = request.getSession();
-		
+
 		System.out.println("Hash eviado via json:: " + hashUser);
 		System.out.println("Session aberta:: " + sessionCheck.getId());
-		
+
 		try {
 			HttpSession userSession = request.getSession();
 			userSession.invalidate();
-			
+
 			return Response.SC_OK; //200
 		} catch (Exception e) {
 			// TODO: handle exception
 			return Response.SC_BAD_GATEWAY; //502
-		}	
+		}
 	}
 }

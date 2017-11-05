@@ -11,25 +11,26 @@ public class AuthValidate extends HandlerInterceptorAdapter {
 
 	/**
 	 * Session validation
-	 * 
+	 *
 	 */
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object controller) throws Exception, IOException 
+	@Override
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object controller) throws Exception, IOException
 	{
-		
+
 		String uri = request.getRequestURI();
 		if(uri.endsWith("login") || uri.contains("resources") || uri.endsWith("authuser")){
 			return true;
 		}
-		
-		if(request.getSession().getAttribute("userHash") != null) 
+
+		if(request.getSession().getAttribute("userHash") != null)
 		{
 			return true;
 		}
-		
-		response.sendRedirect("../login");
+
+		response.sendRedirect("/login");
 		return false;
-		
+
 	}
-	
-	
+
+
 }

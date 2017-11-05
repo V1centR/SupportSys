@@ -26,10 +26,6 @@ public class Image implements Serializable {
 	@OneToMany(mappedBy="image")
 	private List<Client> clients;
 
-	//bi-directional many-to-one association to SupportUser
-	@OneToMany(mappedBy="image")
-	private List<SupportUser> supportUsers;
-
 	//bi-directional many-to-one association to User
 	@OneToMany(mappedBy="image")
 	private List<User> users;
@@ -81,28 +77,6 @@ public class Image implements Serializable {
 		client.setImage(null);
 
 		return client;
-	}
-
-	public List<SupportUser> getSupportUsers() {
-		return this.supportUsers;
-	}
-
-	public void setSupportUsers(List<SupportUser> supportUsers) {
-		this.supportUsers = supportUsers;
-	}
-
-	public SupportUser addSupportUser(SupportUser supportUser) {
-		getSupportUsers().add(supportUser);
-		supportUser.setImage(this);
-
-		return supportUser;
-	}
-
-	public SupportUser removeSupportUser(SupportUser supportUser) {
-		getSupportUsers().remove(supportUser);
-		supportUser.setImage(null);
-
-		return supportUser;
 	}
 
 	public List<User> getUsers() {

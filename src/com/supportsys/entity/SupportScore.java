@@ -23,10 +23,10 @@ public class SupportScore implements Serializable {
 
 	private int value;
 
-	//bi-directional many-to-one association to SupportUser
+	//bi-directional many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="idUser")
-	private SupportUser supportUser;
+	private User user;
 
 	public SupportScore() {
 	}
@@ -55,12 +55,12 @@ public class SupportScore implements Serializable {
 		this.value = value;
 	}
 
-	public SupportUser getSupportUser() {
-		return this.supportUser;
+	public User getUser() {
+		return this.user;
 	}
 
-	public void setSupportUser(SupportUser supportUser) {
-		this.supportUser = supportUser;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

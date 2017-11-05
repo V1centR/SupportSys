@@ -21,10 +21,6 @@ public class ChatHelp implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
 
-	private int idUserPost;
-
-	private String txt;
-
 	//bi-directional many-to-one association to Help
 	@ManyToOne
 	@JoinColumn(name="idHelp")
@@ -47,22 +43,6 @@ public class ChatHelp implements Serializable {
 
 	public void setDate(Date date) {
 		this.date = date;
-	}
-
-	public int getIdUserPost() {
-		return this.idUserPost;
-	}
-
-	public void setIdUserPost(int idUserPost) {
-		this.idUserPost = idUserPost;
-	}
-
-	public String getTxt() {
-		return this.txt;
-	}
-
-	public void setTxt(String txt) {
-		this.txt = txt;
 	}
 
 	public Help getHelp() {

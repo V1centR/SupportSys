@@ -4,12 +4,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <script>
 $(document).ready(function () {
-	
-	//$("span#updateButton").append('<button id="send" type="button" name="btn-update" id="btnUpdate" class="btn btn-primary btn-lg btn-send"><i class="fa fa-floppy-o"></i> Atualizar</button>');
+
 	$("span#textAreaSolutionHideShow").hide();
 	$("span#textAreaCancelReportHideShow").hide();
 	$("span#btnSendSw").show();
 	$("span#btnCancel").hide();
+	getChat();
 	$("select#statusHelp").change(function(){
 		
 		if($(this).val() != 3){
@@ -42,14 +42,7 @@ $(document).ready(function () {
 		}
 	});
 	
-	$("select#statusHelp").change(function(){
-		
-		console.log("Item selected");
-	});
-	
-	var statusTEste = 		$("select#statusHelp option:selected").val();
-	console.log(statusTEste);
-	
+	var statusTEste = $("select#statusHelp option:selected").val();
 	
 	$("button#send").click(function(){
 		
@@ -111,6 +104,46 @@ $(document).ready(function () {
         }); //final $.ajax
 		
 	}); //final .click()
+	
+	
+	
+	//Chat controls
+	function getChat()
+	{
+	    var idItem = 	$("input[type=hidden]#idItem").val();
+	    var hashItem = 	$("input:hidden[id=hashItem]").val();
+	    
+	    var setJson = "{\"idItem\":\""+ idItem +"\",\"hashItem\":\" "+ hashItem +"\"}";
+	    var jsonReady = JSON.stringify(setJson);
+	    
+	    $.ajax({        	
+            type: 'GET',
+            dataType: 'json',
+            url: '<c:url value="/chat/'+ idItem +'/'+ hashItem +'"/>',
+            data: '/'+idItem+'/' + hashItem,
+            contentType : 'application/json; charset=utf-8',
+            headers: { 
+                'Accept': 'application/json',
+                'Content-Type': 'application/json' 
+            },
+            success: function (data) {
+               console.log("retorno:: " + data);
+               return true;
+            },
+            error: function (data) {
+                console.log(data);
+                return false;
+            }
+        }); //final $.ajax
+	}
+	
+	function chating()
+	{
+	    
+	    
+	    
+	}
+	
 	
 });
 </script>
@@ -190,7 +223,12 @@ $(document).ready(function () {
             </div>
             <hr>
             <!-- /.box-body -->
+            <span class="description">
+            	 &nbsp;&nbsp; &nbsp;<i class="fa fa-comments"></i> Acompanhamento:
+            </span>
             <div class="box-footer box-comments">
+            
+            <!-- chat box ############## -->
               <div class="box-comment">
                 <!-- User image -->
                 <img class="img-circle img-sm" src="../dist/img/user3-128x128.jpg" alt="User Image">
@@ -249,8 +287,6 @@ $(document).ready(function () {
             ${hashItem}<br>
             ${supportUserAdded}<br>
             ${statusAdded}<br>
-           
-            
             
 				<form name="alterHelp">
 				<input type="hidden" name="idItem" id="idItem" value="${idItem}" />
@@ -283,7 +319,6 @@ $(document).ready(function () {
 						</c:forEach>
 					</select><br>
 					
-					
 					<span id="textAreaSolutionHideShow" style="display:none;">
 						<label>Solução:</label>
 						<textarea style="width: 100%; height: 100px;" id="textAreaSolution"></textarea>
@@ -303,10 +338,8 @@ $(document).ready(function () {
 						<span id="btnCancel" style="display:none;">
 							<button type="button" name="btn-cancel" id="send" class="btn btn-danger btn-lg btn-send"><i class="fa fa-times"></i> Cancelar</button>
 						</span>
-
 					</div>
 				</form>
-
             </div>
             <!-- /.box-body -->
             

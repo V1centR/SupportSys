@@ -20,7 +20,6 @@ import com.google.common.hash.Hashing;
 import com.supportsys.entity.Department;
 import com.supportsys.entity.Help;
 import com.supportsys.entity.Status;
-import com.supportsys.entity.SupportUser;
 import com.supportsys.entity.TypeHelp;
 import com.supportsys.entity.User;
 import com.supportsys.repo.HelpRepo;
@@ -50,7 +49,7 @@ public class HelpModel {
 			}
 
 			Status selectedStatusId = em.find(Status.class, selectedStatus);
-			SupportUser supportUserId = em.find(SupportUser.class, supportUserSet);
+			User supportUserId = em.find(User.class, supportUserSet);
 
 			// Update ok
 			Help helpUpdt = em.find(Help.class, itemId);
@@ -176,6 +175,9 @@ public class HelpModel {
 		case "canceled":
 			typeStatus = 4;
 			break;
+		case "all":
+			typeStatus = 0;
+			break;
 		default:
 			typeStatus = 0;
 			break;
@@ -188,7 +190,7 @@ public class HelpModel {
 			return helpList;
 
 		} else {
-			List<Help> helpListFull = listItems();
+			List<Help> helpListFull = listItems(em);
 			emf.close();
 			return helpListFull;
 		}
@@ -199,10 +201,9 @@ public class HelpModel {
 	 *
 	 * @return
 	 */
-	public List<Help> listItems() {
-		EntityManager em = getEm();
+	public List<Help> listItems(EntityManager em) {
+		//EntityManager em = getEm();
 		List<Help> fullItems = em.createNamedQuery("Help.findAll").getResultList();
-		em.close();
 
 		return fullItems;
 	}
@@ -231,13 +232,13 @@ public class HelpModel {
 		return statusTypes;
 	}
 
-	public List<SupportUser> getSupportUsers() {
-		EntityManager em = getEm();
-		List<SupportUser> supportUsersList = em.createNamedQuery("SupportUser.findAll").getResultList();
-		em.close();
-
-		return supportUsersList;
-	}
+//	public List<SupportUser> getSupportUsers() {
+//		EntityManager em = getEm();
+//		List<SupportUser> supportUsersList = em.createNamedQuery("SupportUser.findAll").getResultList();
+//		em.close();
+//
+//		return supportUsersList;
+//	}
 
 	/**
 	 * Get list of departments from client

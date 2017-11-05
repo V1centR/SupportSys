@@ -24,9 +24,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.supportsys.entity.Department;
 import com.supportsys.entity.Help;
 import com.supportsys.entity.Status;
-import com.supportsys.entity.SupportUser;
 import com.supportsys.entity.TypeHelp;
+import com.supportsys.entity.User;
 import com.supportsys.model.HelpModel;
+import com.supportsys.repo.HelpRepo;
 
 
 @Controller
@@ -107,6 +108,7 @@ public class HelpController {
 
 		JSONObject jsonContainer = new JSONObject();
 		JSONObject jsonItems = new JSONObject();
+		JSONObject supportUserAdded = new JSONObject();
 
 		List<Help> helpList = new HelpModel().list(status);
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy H:mm");
@@ -115,11 +117,31 @@ public class HelpController {
 
 			String dateF = df.format(dataItems.getDateHelp());
 
+			//supportUserAdded.put("id", dataItems.getSupportUser().getId());
+
+			if(dataItems.getSupportUser() == null)
+			{
+				supportUserAdded = null;
+
+			} else {
+
+				String supportUserName = dataItems.getSupportUser().getName() +" " + dataItems.getSupportUser().getSname();
+				String supportUserAvatar = dataItems.getSupportUser().getImage().getId() +"." + dataItems.getSupportUser().getImage().getExt();
+				String supportUserDept = dataItems.getSupportUser().getDepartment().getName();
+
+				supportUserAdded.put("id", dataItems.getSupportUser().getId());
+				supportUserAdded.put("name", supportUserName);
+				supportUserAdded.put("supportUserAvatar", supportUserAvatar);
+				supportUserAdded.put("supportDept", supportUserDept);
+
+			}
+
 			jsonItems.put("id", dataItems.getId());
 			jsonItems.put("helpLabel", dataItems.getHelpLabel());
 			jsonItems.put("helpTxt", dataItems.getHelpTxt());
 			jsonItems.put("userId", dataItems.getUser().getId());
 			jsonItems.put("userIdName", dataItems.getUser().getName() + " " + dataItems.getUser().getSname());
+			jsonItems.put("userAvatar", dataItems.getUser().getImage().getId() +"." + dataItems.getUser().getImage().getExt());
 			jsonItems.put("statusId", dataItems.getStatusBean().getId());
 			jsonItems.put("statusName", dataItems.getStatusBean().getName());
 			jsonItems.put("departmentId", dataItems.getDepartment().getId());
@@ -127,10 +149,12 @@ public class HelpController {
 			jsonItems.put("typeHelpId", dataItems.getTypeHelpBean().getId());
 			jsonItems.put("typeHelpName", dataItems.getTypeHelpBean().getName());
 			jsonItems.put("hashSecure", dataItems.getHashSecure());
+			jsonItems.put("supportUser", supportUserAdded);
 			jsonItems.put("dateHelp", dateF);
 
 			jsonContainer.put("" + dataItems.getId() + "", jsonItems);
 			jsonItems = new JSONObject();
+			supportUserAdded = new JSONObject();
 		}
 
 		return jsonContainer.toString();
@@ -153,7 +177,9 @@ public class HelpController {
 	{
 		List<Help> dataItem = new HelpModel().openHelp(idHelp,hashItem);
 		List<Status> listStatus = new HelpModel().getStatus();
-		List<SupportUser> listSupportUsers = new HelpModel().getSupportUsers();
+		List<User> listSupportUsers = new HelpRepo().getSupportUsers();
+
+		//User supportUserId = em.find(User.class, supportUserSet);
 
 		model.addAttribute("idItem", dataItem.get(0).getId());
 		model.addAttribute("hashItem", dataItem.get(0).getHashSecure());

@@ -41,27 +41,31 @@ public class User implements Serializable {
 	private String sname;
 
 	//bi-directional many-to-one association to Help
-	@OneToMany(mappedBy="user")
-	private List<Help> helps;
+	@OneToMany(mappedBy="supportUser")
+	private List<Help> helps1;
 
-	//bi-directional many-to-one association to ScoreUser
+	//bi-directional many-to-one association to Help
 	@OneToMany(mappedBy="user")
-	private List<ScoreUser> scoreUsers;
+	private List<Help> helps2;
 
-	//bi-directional many-to-one association to Image
-	@ManyToOne
-	@JoinColumn(name="avatar")
-	private Image image;
+	//bi-directional many-to-one association to SupportScore
+	@OneToMany(mappedBy="user")
+	private List<SupportScore> supportScores;
 
 	//bi-directional many-to-one association to Department
 	@ManyToOne
 	@JoinColumn(name="dept")
 	private Department department;
 
-	//bi-directional many-to-one association to Level
+	//bi-directional many-to-one association to Image
 	@ManyToOne
-	@JoinColumn(name="level")
-	private Level levelBean;
+	@JoinColumn(name="avatar")
+	private Image image;
+
+	//bi-directional many-to-one association to UserGroup
+	@ManyToOne
+	@JoinColumn(name="group")
+	private UserGroup userGroup;
 
 	public User() {
 	}
@@ -154,56 +158,70 @@ public class User implements Serializable {
 		this.sname = sname;
 	}
 
-	public List<Help> getHelps() {
-		return this.helps;
+	public List<Help> getHelps1() {
+		return this.helps1;
 	}
 
-	public void setHelps(List<Help> helps) {
-		this.helps = helps;
+	public void setHelps1(List<Help> helps1) {
+		this.helps1 = helps1;
 	}
 
-	public Help addHelp(Help help) {
-		getHelps().add(help);
-		help.setUser(this);
+	public Help addHelps1(Help helps1) {
+		getHelps1().add(helps1);
+		helps1.setSupportUser(this);
 
-		return help;
+		return helps1;
 	}
 
-	public Help removeHelp(Help help) {
-		getHelps().remove(help);
-		help.setUser(null);
+	public Help removeHelps1(Help helps1) {
+		getHelps1().remove(helps1);
+		helps1.setSupportUser(null);
 
-		return help;
+		return helps1;
 	}
 
-	public List<ScoreUser> getScoreUsers() {
-		return this.scoreUsers;
+	public List<Help> getHelps2() {
+		return this.helps2;
 	}
 
-	public void setScoreUsers(List<ScoreUser> scoreUsers) {
-		this.scoreUsers = scoreUsers;
+	public void setHelps2(List<Help> helps2) {
+		this.helps2 = helps2;
 	}
 
-	public ScoreUser addScoreUser(ScoreUser scoreUser) {
-		getScoreUsers().add(scoreUser);
-		scoreUser.setUser(this);
+	public Help addHelps2(Help helps2) {
+		getHelps2().add(helps2);
+		helps2.setUser(this);
 
-		return scoreUser;
+		return helps2;
 	}
 
-	public ScoreUser removeScoreUser(ScoreUser scoreUser) {
-		getScoreUsers().remove(scoreUser);
-		scoreUser.setUser(null);
+	public Help removeHelps2(Help helps2) {
+		getHelps2().remove(helps2);
+		helps2.setUser(null);
 
-		return scoreUser;
+		return helps2;
 	}
 
-	public Image getImage() {
-		return this.image;
+	public List<SupportScore> getSupportScores() {
+		return this.supportScores;
 	}
 
-	public void setImage(Image image) {
-		this.image = image;
+	public void setSupportScores(List<SupportScore> supportScores) {
+		this.supportScores = supportScores;
+	}
+
+	public SupportScore addSupportScore(SupportScore supportScore) {
+		getSupportScores().add(supportScore);
+		supportScore.setUser(this);
+
+		return supportScore;
+	}
+
+	public SupportScore removeSupportScore(SupportScore supportScore) {
+		getSupportScores().remove(supportScore);
+		supportScore.setUser(null);
+
+		return supportScore;
 	}
 
 	public Department getDepartment() {
@@ -214,12 +232,20 @@ public class User implements Serializable {
 		this.department = department;
 	}
 
-	public Level getLevelBean() {
-		return this.levelBean;
+	public Image getImage() {
+		return this.image;
 	}
 
-	public void setLevelBean(Level levelBean) {
-		this.levelBean = levelBean;
+	public void setImage(Image image) {
+		this.image = image;
+	}
+
+	public UserGroup getUserGroup() {
+		return this.userGroup;
+	}
+
+	public void setUserGroup(UserGroup userGroup) {
+		this.userGroup = userGroup;
 	}
 
 }

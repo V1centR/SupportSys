@@ -1,14 +1,10 @@
 package com.supportsys.model;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,7 +25,7 @@ public class AuthModel {
 	 * @return
 	 * @throws JSONException
 	 */
-	public List<User> authUser(JSONObject userData) throws JSONException, IOException
+	public User authUser(JSONObject userData) throws JSONException, IOException
 	{
 		//Data received json
 		Object userEmail = userData.get("email").toString();
@@ -42,28 +38,30 @@ public class AuthModel {
 		try {
 
 			//Set criteria to query
-			CriteriaBuilder criteriaSet = em.getCriteriaBuilder();
-			CriteriaQuery<User> UserData;
-			Root<User> user;
+//			CriteriaBuilder criteriaSet = em.getCriteriaBuilder();
+//			CriteriaQuery<User> UserData;
+//			Root<User> user;
+//
+//			UserData = criteriaSet.createQuery(User.class);
+//			user = UserData.from(User.class);
+//			UserData.select(user).where(
+//					criteriaSet.equal(user.get("email"), userEmail),
+//					criteriaSet.equal(user.get("pass"), password)
+//					);
 
-			UserData = criteriaSet.createQuery(User.class);
-			user = UserData.from(User.class);
-			UserData.select(user).where(
-					criteriaSet.equal(user.get("email"), userEmail),
-					criteriaSet.equal(user.get("pass"), password)
-					);
+			String query = "SELECT u FROM User u WHERE u.email= :email AND u.pass= :pass";
 
-			List<User> dataUser = em.createQuery(UserData).getResultList();
-			int execLoginResult = dataUser.size();
-			//em.close();
+			//User dataUser = em.createQuery(UserData).getSingleResult();
+			User dataUser = em.createQuery(query, User.class).
+					setParameter("email", userEmail).
+					setParameter("pass", password).
+					getSingleResult();
+			emf.close();
 
-//			for(User itemData: dataUser) {
-//				System.out.println("Nome do banco:: " + itemData.getName());
-//			}
+			String execLoginResult = Integer.toString(dataUser.getId());
 
-			if(execLoginResult == 1)
+			if(execLoginResult != "" || execLoginResult != null)
 			{
-				em.close();
 				return dataUser;
 
 			}else {
@@ -72,8 +70,8 @@ public class AuthModel {
 			}
 
 		} catch (Exception e) {
-			List<User> dataUser = null;
-			return dataUser;
+
+			return null;
 		}
 	}
 }
