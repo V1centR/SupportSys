@@ -199,26 +199,25 @@ $(document).ready(function () {
 		<div class="box box-widget">
             <div class="box-header with-border">
               <div class="user-block">
-              <c:forEach items="${dataItem}" var="helpItem">
+              
               	<img class="img-circle" src="../dist/img/user1-128x128.jpg" alt="User Image">
-              	<span class="username"><a href="#">${helpItem.user.name} ${helpItem.user.sname}</a></span>
-              	<div style="margin-left: 50px;"><i class="fa fa-map-marker"></i> <span font-weight: bold;">${helpItem.department.clientBean.name} - ${helpItem.department.name}</span></div>
+              	<span class="username"><a href="#">${dataItem.user.name} ${dataItem.user.sname}</a></span>
+              	<div style="margin-left: 50px;"><i class="fa fa-map-marker"></i> <span font-weight: bold;">${dataItem.department.clientBean.name} - ${dataItem.department.name}</span></div>
                 <span class="description">
-					Aberto em: <fmt:formatDate value="${helpItem.dateHelp}" pattern="dd/MM/yyyy HH:mm"/> 
+					Aberto em: <fmt:formatDate value="${dataItem.dateHelp}" pattern="dd/MM/yyyy HH:mm"/> 
 					<i class="fa fa-star" style="color:#FFBF00;"></i>
 					<i class="fa fa-bomb" style="color:#000;"></i>
 					<i class="fa fa-birthday-cake" style="color:#f00;"></i>
 					<i class="fa fa-hourglass-end" style="color:#FF4000;"></i> 
 				</span>
 					<hr>
-					<i class="fa fa-warning"></i> Assunto: <span style="font-size: 15px; font-weight: bold;">${helpItem.helpLabel}</span> <br>
-					<i class="fa fa-check-circle-o"></i> Tipo: <span style="font-size: 15px; font-weight: bold;">${helpItem.typeHelpBean.name}</span> <br><br>
-					<i class="fa fa-file-text"></i> Descrição: <span style="font-size: 18px;">${helpItem.helpTxt} </span>
+					<i class="fa fa-warning"></i> Assunto: <span style="font-size: 15px; font-weight: bold;">${dataItem.helpLabel}</span> <br>
+					<i class="fa fa-check-circle-o"></i> Tipo: <span style="font-size: 15px; font-weight: bold;">${dataItem.typeHelpBean.name}</span> <br><br>
+					<i class="fa fa-file-text"></i> Descrição: <span style="font-size: 18px;">${dataItem.helpTxt} </span>
 					<div class="box-body">
 						
 					</div>
 						
-					</c:forEach>
               </div>
             </div>
             <hr>
@@ -283,25 +282,21 @@ $(document).ready(function () {
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-            ${idItem}<br>
-            ${hashItem}<br>
-            ${supportUserAdded}<br>
-            ${statusAdded}<br>
-            
 				<form name="alterHelp">
 				<input type="hidden" name="idItem" id="idItem" value="${idItem}" />
 				<input type="hidden" name="hashItem" id="hashItem" value="${hashItem}" />
-					
 					<label>Analista</label>
 					<c:set var="supportUserAdded" scope="session" value="${supportUserAdded}"/>
-					<c:set var="setUser" scope="session" value="selected"/>
 					<select name="supportUser" id="supportUser" class="form-control">
 						<option value="0">Selecione</option>
 						<c:forEach items="${listSupportUsers}" var="listSupport">
-							<c:if test="${supportUserAdded == listSupport.id}">
+							<c:if test="${supportUserAdded == listSupport.id }">
 								<c:set var="setUser" scope="session" value="selected"/>
 							</c:if>
-							<option value="${listSupport.id}" ${setUser}>${listSupport.name} ${listSupport.snome}</option>
+							<c:if test="${supportUserAdded == 0 }">
+								<c:set var="setUser" scope="session" value=""/>
+							</c:if>
+							<option value="${listSupport.id}" ${setUser}>${listSupport.name} ${listSupport.sname}</option>
 							<c:set var="setUser" scope="session" value=""/>
 						</c:forEach>
 					</select>

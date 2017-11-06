@@ -3,6 +3,8 @@ package com.supportsys.repo;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 import com.supportsys.entity.Help;
 import com.supportsys.entity.Status;
@@ -46,32 +48,30 @@ public class HelpRepo {
 	}
 
 	/**
-	 * Get support users
-	 * @param id
-	 * @param hashCode
+	 * Get support users by group
 	 * @return
 	 */
 	public List<User> getSupportUsers()
 	{
+
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
+		EntityManager em = emf.createEntityManager();
+
 		try {
+				UserGroup groupObj = em.find(UserGroup.class, 7);
+				String query = "SELECT u FROM User u WHERE u.userGroup= :id";
+				//optimize this query
+				List<User> userList = em.createQuery(query, User.class).
+				setParameter("id", groupObj).getResultList();
+				emf.close();
 
-			EntityManager em = new EmModel().getEm();
-
-			UserGroup groupObj = em.find(UserGroup.class, 7);
-
-			String query = "SELECT u FROM Users u WHERE u.group= :id";
-			//optimize this query
-			List<User> userList = em.createQuery(query, User.class).
-			setParameter("id", groupObj).
-			getResultList();
-			em.close();
-			return userList;
+				return userList;
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			System.out.println("ERROR:: " + e);
 			return null;
 		}
-
 	}
 
 

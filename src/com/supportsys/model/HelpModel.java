@@ -263,7 +263,7 @@ public class HelpModel {
 		return dataDepartment;
 	}
 
-	public List<Help> openHelp(Integer idHelp, String hashItem) {
+	public Help openHelp(Integer idHelp, String hashItem) {
 
 		EntityManager em = getEm();
 
@@ -276,7 +276,7 @@ public class HelpModel {
 		helpData.select(help).where(criteriaSet.equal(help.get("id"), idHelp),
 				criteriaSet.equal(help.get("hashSecure"), hashItem));
 
-		List<Help> dataHelp = em.createQuery(helpData).getResultList();
+		Help dataHelp = em.createQuery(helpData).getSingleResult();
 		em.close();
 
 		return dataHelp;

@@ -175,20 +175,28 @@ public class HelpController {
 	@RequestMapping("/help/open/{idHelp}/{hashItem}")
 	public ModelAndView openItem(Model model, @PathVariable Integer idHelp, @PathVariable String hashItem)
 	{
-		List<Help> dataItem = new HelpModel().openHelp(idHelp,hashItem);
+		Help dataItem = new HelpModel().openHelp(idHelp,hashItem);
 		List<Status> listStatus = new HelpModel().getStatus();
 		List<User> listSupportUsers = new HelpRepo().getSupportUsers();
 
-		//User supportUserId = em.find(User.class, supportUserSet);
+		try {
 
-		model.addAttribute("idItem", dataItem.get(0).getId());
-		model.addAttribute("hashItem", dataItem.get(0).getHashSecure());
+			Integer checkSupportAdded = dataItem.getSupportUser().getId();
+			model.addAttribute("supportUserAdded", checkSupportAdded);
+
+		} catch (Exception e) {
+
+			Integer setNone = 0;
+			model.addAttribute("supportUserAdded", setNone);
+		}
+
+		model.addAttribute("idItem", dataItem.getId());
+		model.addAttribute("hashItem", dataItem.getHashSecure());
 		model.addAttribute("listSupportUsers", listSupportUsers);
 		model.addAttribute("statusList", listStatus);
 		model.addAttribute("dataItem", dataItem);
-		model.addAttribute("supportUserAdded", dataItem.get(0).getSupportUser().getId());
-		model.addAttribute("typeAdded", dataItem.get(0).getTypeHelpBean());
-		model.addAttribute("statusAdded", dataItem.get(0).getStatusBean().getId());
+		model.addAttribute("typeAdded", dataItem.getTypeHelpBean());
+		model.addAttribute("statusAdded", dataItem.getStatusBean().getId());
 
 		return new ModelAndView("open");
 
