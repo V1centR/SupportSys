@@ -180,15 +180,14 @@ public class HelpController {
 		List<User> listSupportUsers = new HelpRepo().getSupportUsers();
 
 		try {
-
 			Integer checkSupportAdded = dataItem.getSupportUser().getId();
 			model.addAttribute("supportUserAdded", checkSupportAdded);
-
 		} catch (Exception e) {
-
 			Integer setNone = 0;
 			model.addAttribute("supportUserAdded", setNone);
 		}
+
+
 
 		model.addAttribute("idItem", dataItem.getId());
 		model.addAttribute("hashItem", dataItem.getHashSecure());
@@ -197,6 +196,7 @@ public class HelpController {
 		model.addAttribute("dataItem", dataItem);
 		model.addAttribute("typeAdded", dataItem.getTypeHelpBean());
 		model.addAttribute("statusAdded", dataItem.getStatusBean().getId());
+		model.addAttribute("webChat", dataItem.getStatusBean().getId());
 
 		return new ModelAndView("open");
 

@@ -2,6 +2,7 @@ package com.supportsys.controller;
 
 import java.io.IOException;
 
+import org.jdom2.JDOMException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -23,7 +24,7 @@ import com.supportsys.repo.HelpRepo;
 public class ChatController {
 
 	@RequestMapping(value="/chat/{idItem}/{hashItem}", method=RequestMethod.GET)
-	public @ResponseBody String loadChat(@PathVariable Integer idItem, @PathVariable String hashItem) throws JSONException, IOException
+	public @ResponseBody String loadChat(@PathVariable Integer idItem, @PathVariable String hashItem) throws JSONException, IOException, JDOMException
 	{
 		JSONObject jsonContainer = new JSONObject();
 		JSONObject jsonItem = new JSONObject();
@@ -35,18 +36,12 @@ public class ChatController {
 
 		if(validChat == true)
 		{
-
-			Boolean chatEngaged = new ChatModel().initChat();
+			Boolean chatEngaged = new ChatModel().initChat(hashItem);
 
 			if(chatEngaged == true) {
-
 				System.out.println("Chat Iniciado OK");
 			}
-
-
 		}
-
-
 
 		String testOK = "TEST-OK";
 
