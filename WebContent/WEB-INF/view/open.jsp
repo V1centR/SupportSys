@@ -118,16 +118,20 @@ $(document).ready(function () {
 	    
 	    $.ajax({        	
             type: 'GET',
-            dataType: 'json',
+            dataType: 'xml',
             url: '<c:url value="/chat/'+ idItem +'/'+ hashItem +'"/>',
             data: '/'+idItem+'/' + hashItem,
-            contentType : 'application/json; charset=utf-8',
+            contentType : 'application/xml; charset=utf-8',
             headers: { 
                 'Accept': 'application/json',
                 'Content-Type': 'application/json' 
             },
             success: function (data) {
-               console.log("retorno:: " + data);
+                             
+               var xmlFile = data;
+           
+               chating(xmlFile);
+               
                return true;
             },
             error: function (data) {
@@ -137,8 +141,17 @@ $(document).ready(function () {
         }); //final $.ajax
 	}
 	
-	function chating()
+	function chating(xmlData)
 	{
+	    console.log("chating() exec " + xmlData);
+	    
+	    $(xmlData).find("userMsg").each(function(){
+            
+            var nameUser = $(this).find("firstName").text();
+            $("span#boxComment").append(nameUser + "<br>");
+	        
+	    });
+	    
 	    
 	    
 	    
@@ -225,42 +238,33 @@ $(document).ready(function () {
             <span class="description">
             	 &nbsp;&nbsp; &nbsp;<i class="fa fa-comments"></i> Acompanhamento:
             </span>
-            <div class="box-footer box-comments">
+            
+            
+            <div class="box-footer box-comments" style="height:300px; overflow-y: scroll;">
             
             <!-- chat box ############## -->
+            <span id="boxComment"></span>
+            
+            
               <div class="box-comment">
-                <!-- User image -->
                 <img class="img-circle img-sm" src="../dist/img/user3-128x128.jpg" alt="User Image">
-
                 <div class="comment-text">
                       <span class="username">
                         Maria Gonzales
-                        <span class="text-muted pull-right">8:03 PM Today</span>
+                        <span class="text-muted">&nbsp;&nbsp; 8:03 PM Today</span>
                       </span>
-                  <!-- /.username -->
                   It is a long established fact that a reader will be distracted
                   by the readable content of a page when looking at its layout.
                 </div>
-                <!-- /.comment-text -->
               </div>
-              <!-- /.box-comment -->
-              <div class="box-comment">
-                <!-- User image -->
-                <img class="img-circle img-sm" src="../dist/img/user5-128x128.jpg" alt="User Image">
-
-                <div class="comment-text">
-                      <span class="username">
-                        Nora Havisham
-                        <span class="text-muted pull-right">8:03 PM Today</span>
-                      </span><!-- /.username -->
-                  The point of using Lorem Ipsum is that it has a more-or-less
-                  normal distribution of letters, as opposed to using
-                  'Content here, content here', making it look like readable English.
-                </div>
-                <!-- /.comment-text -->
-              </div>
-              <!-- /.box-comment -->
+              
+              
+              
+              
             </div>
+            
+            
+            
             <!-- /.box-footer -->
             <div class="box-footer">
               <form action="#" method="post">
