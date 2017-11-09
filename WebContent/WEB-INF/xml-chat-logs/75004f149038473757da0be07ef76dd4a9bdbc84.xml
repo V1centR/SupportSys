@@ -1,45 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chat>
   <userMsg id="1">
-    <firstName>Miguel</firstName>
-    <lastName>C</lastName>
-    <avatar>3.jpg</avatar>
-    <msg>Depois do almoço passa aqui</msg>
+    <userName>Miguel Carvalho</userName>
+    <avatar>3.png</avatar>
+    <msg>Depois do almoço passa aqui, que farei os relatórios a tarde!</msg>
     <date>04/10/2017 18:27</date>
   </userMsg>
-  <userMsg id="1">
-    <firstName>Otávio</firstName>
-    <lastName>Evangelista</lastName>
-    <avatar>3.jpg</avatar>
-    <msg>Ok 5min eu chego</msg>
-    <date>04/10/2017 13:35</date>
+  <userMsg id="2">
+    <userName>Vicente Ramos</userName>
+    <avatar>1.jpg</avatar>
+    <msg>Avatar ok</msg>
+    <date>09/11/2017 19:37</date>
   </userMsg>
   <userMsg id="2">
-    <firstName>Otávio</firstName>
-    <lastName>Evangelista</lastName>
-    <avatar>3.jpg</avatar>
-    <msg>Ok 5min eu chego</msg>
-    <date>04/10/2017 13:35</date>
+    <userName>Vicente Ramos</userName>
+    <avatar>1.jpg</avatar>
+    <msg>asdasd</msg>
+    <date>09/11/2017 19:44</date>
   </userMsg>
   <userMsg id="3">
-    <firstName>Otávio</firstName>
-    <lastName>Evangelista</lastName>
-    <avatar>3.jpg</avatar>
-    <msg>Ok 5min eu chego</msg>
-    <date>04/10/2017 13:35</date>
-  </userMsg>
-  <userMsg id="4">
-    <firstName>Otávio</firstName>
-    <lastName>Evangelista</lastName>
-    <avatar>3.jpg</avatar>
-    <msg>Ok 5min eu chego</msg>
-    <date>04/10/2017 13:35</date>
-  </userMsg>
-  <userMsg id="5">
-    <firstName>Otávio</firstName>
-    <lastName>Evangelista</lastName>
-    <avatar>3.jpg</avatar>
-    <msg>Ok 5min eu chego</msg>
-    <date>04/10/2017 13:35</date>
+    <userName>Vicente Ramos</userName>
+    <avatar>1.jpg</avatar>
+    <msg>Este chamado esta com o otávio OK?</msg>
+    <date>09/11/2017 19:46</date>
   </userMsg>
 </chat>

@@ -38,8 +38,9 @@ public class AuthController {
 		if(userData != null) {
 
 			HttpSession userSession = request.getSession();
-			String avatar = userData.getImage().getId()+"-"+ userData.getImage().getImgName() + "." + userData.getImage().getExt();
+			String avatar = userData.getImage().getId()+"." + userData.getImage().getExt();
 
+			userSession.setAttribute("idUser", userData.getId());
 			userSession.setAttribute("userName", userData.getName());
 			userSession.setAttribute("userSname", userData.getSname());
 			userSession.setAttribute("userAvatar", avatar);

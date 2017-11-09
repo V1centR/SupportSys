@@ -4,12 +4,16 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <script>
 $(document).ready(function () {
-
+    
+    getChat(false,0);
+    $('div#divChat').scrollTop($('#divChat')[0].scrollHeight);
+    var loaderBig = '<div style="width:100%; text-align:center;">Carregando chat...<br><img src="<c:url value="/resources/images/loaderBig.gif"/>" style="width:100px; height:100px;"></div>';
+    $('span#loader').append(loaderBig);
+    
 	$("span#textAreaSolutionHideShow").hide();
 	$("span#textAreaCancelReportHideShow").hide();
 	$("span#btnSendSw").show();
 	$("span#btnCancel").hide();
-	getChat();
 	$("select#statusHelp").change(function(){
 		
 		if($(this).val() != 3){
@@ -20,8 +24,7 @@ $(document).ready(function () {
 			$("span#textAreaSolutionHideShow").hide();
 			$("span#textAreaCancelReportHideShow").hide();
 		}
-		
-		//if concluído
+
 		if($(this).val() == 3){
 			$("span#updateButton").html("");
 			$("span.textAreaSolution").html("");
@@ -29,10 +32,8 @@ $(document).ready(function () {
 			$("span#btnSendSw").show();
 			$("span#textAreaSolutionHideShow").show();
 			$("span#textAreaCancelReportHideShow").hide();
-			//$("span.textAreaSolution").append('<label>Solução:</label><br><textarea style="width: 100%; height: 100px;" id="textAreaSolution"></textarea>');
 		}
 		
-		//4 default value cancel help
 		if($(this).val() == 4){
 			$("span.textAreaSolution").html("");
 			alert("Atenção! Cancelar um chamado ocorre perca de score");
@@ -43,7 +44,6 @@ $(document).ready(function () {
 	});
 	
 	var statusTEste = $("select#statusHelp option:selected").val();
-	
 	$("button#send").click(function(){
 		
 		var statusHelp = 		$("select#statusHelp option:selected").val();
@@ -64,13 +64,12 @@ $(document).ready(function () {
 	    
 		$("form.addhelpForm :input").attr("disabled", true);
 		$("button.btn-send").attr("disabled","disabled");
-		$('span#loader').append('<img src="<c:url value="/resources/images/loader.gif"/>">');
+		
     
 		var strFormJson = "{\"statusHelp\":\"" + statusHelp + "\",\"supportUser\":\""+ supportUser + "\",\"setTxt\":\""+ setTxt + "\",\"idItem\":\""+ idItem + "\",\"hashItem\":\""+ hashItem + "\",\"canceled\":\""+ canceled + "\"}";  
     
     	var setJson = JSON.stringify(strFormJson);
-    	console.log(setJson);
-      
+    	      
         $.ajax({        	
             type: 'POST',
             dataType: 'json',
@@ -81,12 +80,9 @@ $(document).ready(function () {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json' 
             },
-            success: function (data) {
-               console.log(data);
-               
+            success: function (data) {              
                $('span#loader').hide();
                $('#modal-success').modal('show');
-               
                if(data == 201){
             	   $('span.message').append('<div class="alert alert-success" role="alert">Atividade registrada com sucesso! <a href="/">(Clique para voltar)</a></div>');
                }
@@ -101,63 +97,71 @@ $(document).ready(function () {
                 console.log(data);
                 return false;
             }
-        }); //final $.ajax
+        });
 		
-	}); //final .click()
+	});
 	
-	
-	
-	//Chat controls
-	function getChat()
+	$("input[type=text]#postChat").keypress(function(e){
+	    if(e.which == 13){	        
+	        var msgTxt = $("input[type=text]#postChat").val();
+	        $("input[type=text]#postChat").val('');
+	        getChat(msgTxt,1);
+	        return false;
+	    }
+	});
+
+	function getChat(msgTxt,setMode)
 	{
-	    var idItem = 	$("input[type=hidden]#idItem").val();
-	    var hashItem = 	$("input:hidden[id=hashItem]").val();
-	    
-	    var setJson = "{\"idItem\":\""+ idItem +"\",\"hashItem\":\" "+ hashItem +"\"}";
-	    var jsonReady = JSON.stringify(setJson);
-	    
+        var idItem = $("input[type=hidden]#idItem").val();
+        var hashItem = $("input[type=hidden]#hashItem").val();
+        var setMsgJson = "{\"msgTxt\":\"" + msgTxt + "\",\"idItem\":\""+ idItem + "\",\"hashItem\":\""+ hashItem + "\",\"setMode\":\""+ setMode + "\"}";
+        var setJson = JSON.stringify(setMsgJson);
+       
 	    $.ajax({        	
-            type: 'GET',
+            type: 'POST',
             dataType: 'xml',
             url: '<c:url value="/chat/'+ idItem +'/'+ hashItem +'"/>',
-            data: '/'+idItem+'/' + hashItem,
-            contentType : 'application/xml; charset=utf-8',
+            data: setJson,
+            contentType : 'application/json; charset=utf-8',
             headers: { 
                 'Accept': 'application/json',
                 'Content-Type': 'application/json' 
             },
             success: function (data) {
-                             
                var xmlFile = data;
-           
+               $("span#boxComment").html('');
                chating(xmlFile);
-               
                return true;
             },
             error: function (data) {
                 console.log(data);
                 return false;
             }
-        }); //final $.ajax
+        });
 	}
 	
 	function chating(xmlData)
 	{
-	    console.log("chating() exec " + xmlData);
+	    var baseUrl = '<c:url value="/"/>';
 	    
 	    $(xmlData).find("userMsg").each(function(){
+            var userName = $(this).find("userName").text();
+            var avatarUser = $(this).find("avatar").text();
+            var msgUser = $(this).find("msg").text();
+            var dateMsg = $(this).find("date").text();
             
-            var nameUser = $(this).find("firstName").text();
-            $("span#boxComment").append(nameUser + "<br>");
-	        
+            $("span#boxComment").append('\
+                    <div class="box-comment">\
+                    <img class="img-circle img-sm" src="<c:url value="/resources/images/'+avatarUser+'"/>" alt="User Image">\
+                    <div class="comment-text">\
+                          <span class="username">'+ userName +'<span class="text-muted">&nbsp;&nbsp; '+ dateMsg +'</span></span>\
+                      '+ msgUser +'\
+                    </div>\
+                  </div>');
 	    });
-	    
-	    
-	    
-	    
+	    $('span#loader').html('');
+	    $('div#divChat').scrollTop($('#divChat')[0].scrollHeight);
 	}
-	
-	
 });
 </script>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -239,31 +243,11 @@ $(document).ready(function () {
             	 &nbsp;&nbsp; &nbsp;<i class="fa fa-comments"></i> Acompanhamento:
             </span>
             
-            
-            <div class="box-footer box-comments" style="height:300px; overflow-y: scroll;">
-            
-            <!-- chat box ############## -->
-            <span id="boxComment"></span>
-            
-            
-              <div class="box-comment">
-                <img class="img-circle img-sm" src="../dist/img/user3-128x128.jpg" alt="User Image">
-                <div class="comment-text">
-                      <span class="username">
-                        Maria Gonzales
-                        <span class="text-muted">&nbsp;&nbsp; 8:03 PM Today</span>
-                      </span>
-                  It is a long established fact that a reader will be distracted
-                  by the readable content of a page when looking at its layout.
-                </div>
-              </div>
-              
-              
-              
-              
+            <div class="box-footer box-comments" id="divChat" style="height:300px; overflow-y: scroll;">
+	            <!-- chat box ############## -->
+	            <span id="boxComment"></span>
+	            <span id="loader"></span>
             </div>
-            
-            
             
             <!-- /.box-footer -->
             <div class="box-footer">
@@ -271,7 +255,7 @@ $(document).ready(function () {
                 <img class="img-responsive img-circle img-sm" src="../dist/img/user4-128x128.jpg" alt="Alt Text">
                 <!-- .img-push is used to add margin to elements next to floating images -->
                 <div class="img-push">
-                  <input type="text" class="form-control input-sm" placeholder="Press enter to post comment">
+                  <input type="text" id="postChat" class="form-control input-sm" placeholder="Press enter to post comment">
                 </div>
               </form>
             </div>

@@ -3,6 +3,9 @@ package com.supportsys.model;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.jdom2.Attribute;
@@ -26,20 +29,36 @@ public class ChatModel {
 		}
 	}
 
-	public String initChat(String hashItem) throws IOException, JDOMException {
+
+
+	public String initChat(String hashItem, Object idUser, String nameUser, String userAvatar, String txtMsg, String mode) throws IOException, JDOMException
+	{
 
 		//check chat file exists
 		String DIRECTORY_FILES = "/var/www/java/supportSys/WebContent/WEB-INF/xml-chat-logs/";
 		File f = new File(DIRECTORY_FILES+hashItem+".xml");
+
+		Date todaysDate = new Date();
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy H:mm");
+		String datef = dateFormat.format(todaysDate);
+		Integer setMode = Integer.parseInt(mode);
+
+
 		if(f.exists() && !f.isDirectory()) {
 
-			System.out.println("Chat já iniciado::");
-			boolean update = updateChat(hashItem);
+			if(setMode == 0) {
 
-			if(update == true)
-			{
 				String chatFile = DIRECTORY_FILES+hashItem+".xml";
 				return chatFile;
+
+			} else {
+
+				boolean update = updateChat(hashItem,idUser, nameUser, userAvatar,datef, txtMsg);
+				if(update == true)
+				{
+					String chatFile = DIRECTORY_FILES+hashItem+".xml";
+					return chatFile;
+				}
 			}
 
 		}else {
@@ -51,11 +70,10 @@ public class ChatModel {
 
 			Element userMsg = new Element("userMsg");
 			userMsg.setAttribute(new Attribute("id", "1"));
-			userMsg.addContent(new Element("firstName").setText("Miguel"));
-			userMsg.addContent(new Element("lastName").setText("C"));
-			userMsg.addContent(new Element("avatar").setText("3.jpg"));
-			userMsg.addContent(new Element("msg").setText("Depois do almoço passa aqui"));
-			userMsg.addContent(new Element("date").setText("04/10/2017 18:27"));
+			userMsg.addContent(new Element("userName").setText(nameUser));
+			userMsg.addContent(new Element("avatar").setText(userAvatar));
+			userMsg.addContent(new Element("msg").setText(txtMsg));
+			userMsg.addContent(new Element("date").setText(datef));
 			makeChat.getRootElement().addContent(userMsg);
 
 			XMLOutputter makeChatFile = new XMLOutputter();
@@ -67,11 +85,11 @@ public class ChatModel {
 
 			return chatFile;
 		}
-
 		return null;
+
 	}
 
-	public boolean updateChat(String hashItem) throws JDOMException, IOException
+	public boolean updateChat(String hashItem,Object idUser, String nameUser, String userAvatar, String dateF, String txtMsg) throws JDOMException, IOException
 	{
 
 		String path = "/var/www/java/supportSys/WebContent/WEB-INF/xml-chat-logs/";
@@ -89,19 +107,16 @@ public class ChatModel {
 
 		Element userMsg = new Element("userMsg");
 		userMsg.setAttribute(new Attribute("id", nextMsgId));
-		userMsg.addContent(new Element("firstName").setText("Otávio"));
-		userMsg.addContent(new Element("lastName").setText("Evangelista"));
-		userMsg.addContent(new Element("avatar").setText("3.jpg"));
-		userMsg.addContent(new Element("msg").setText("Ok 5min eu chego"));
-		userMsg.addContent(new Element("date").setText("04/10/2017 13:35"));
+		userMsg.addContent(new Element("userName").setText(nameUser));
+		userMsg.addContent(new Element("avatar").setText(userAvatar));
+		userMsg.addContent(new Element("msg").setText(txtMsg));
+		userMsg.addContent(new Element("date").setText(dateF));
 		rootElement.addContent(userMsg);
 
 		XMLOutputter makeChatFile = new XMLOutputter();
 
 		makeChatFile.setFormat(Format.getPrettyFormat());
 		makeChatFile.output(doc, new FileWriter("/var/www/java/supportSys/WebContent/WEB-INF/xml-chat-logs/"+hashItem+".xml"));
-
-		System.out.println("Chat em execução...");
 
 		return true;
 	}
