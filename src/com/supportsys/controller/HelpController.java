@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.catalina.connector.Response;
+import org.jdom2.JDOMException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,7 @@ import com.supportsys.entity.Help;
 import com.supportsys.entity.Status;
 import com.supportsys.entity.TypeHelp;
 import com.supportsys.entity.User;
+import com.supportsys.model.ChatModel;
 import com.supportsys.model.HelpModel;
 import com.supportsys.repo.HelpRepo;
 
@@ -50,7 +52,7 @@ public class HelpController {
 	}
 
 	@RequestMapping("/help/update")
-	public @ResponseBody int updateItem(@RequestBody Object jsonStr) throws JSONException
+	public @ResponseBody int updateItem(@RequestBody Object jsonStr, HttpServletRequest request) throws JSONException, JDOMException, IOException
 	{
 		String jsonFormData = jsonStr.toString();
 		JSONObject jsonItems = new JSONObject(jsonFormData);
@@ -61,7 +63,51 @@ public class HelpController {
 
 		boolean updateItemOk = new HelpModel().updateItem(jsonItems);
 
+
+		//##################
+		Object idUser = request.getSession().getAttribute("idUser");
+		String nameUser = request.getSession().getAttribute("userName").toString();
+		String userSname =  request.getSession().getAttribute("userSname").toString();
+		String userAvatar =  request.getSession().getAttribute("userAvatar").toString();
+		String userName = nameUser +" "+ userSname;
+
+
+
+
 		if(updateItemOk == true) {
+
+			System.out.println("updateItemOk OK::");
+
+			//melhorar esta verificação!
+			Integer selectedStatus = Integer.parseInt(jsonItems.get("statusHelp").toString());
+			String msgTemplate = "Alterou este chamado para ";
+			String changeStatus = "";
+
+
+
+			switch (selectedStatus) {
+
+			case 1:
+				 changeStatus = "Aberto";
+				break;
+			case 2:
+				changeStatus = "Executando";
+				break;
+			case 3:
+				changeStatus = "Concluído";
+				break;
+			case 4:
+				 changeStatus = "Cancelado";
+				break;
+
+			default:
+				break;
+			}
+
+			String txtMsg = msgTemplate + changeStatus;
+
+			boolean setStatus = new ChatModel().updateChatStatus(hashThisItem,idUser,userName,userAvatar,txtMsg,selectedStatus);
+
 			return Response.SC_CREATED;
 		}else {
 			return Response.SC_INTERNAL_SERVER_ERROR;
@@ -173,7 +219,7 @@ public class HelpController {
 	}
 
 	@RequestMapping("/help/open/{idHelp}/{hashItem}")
-	public ModelAndView openItem(Model model, @PathVariable Integer idHelp, @PathVariable String hashItem)
+	public ModelAndView openItem(Model model, @PathVariable Integer idHelp, @PathVariable String hashItem, HttpServletRequest request)
 	{
 		Help dataItem = new HelpModel().openHelp(idHelp,hashItem);
 		List<Status> listStatus = new HelpModel().getStatus();
@@ -187,9 +233,12 @@ public class HelpController {
 			model.addAttribute("supportUserAdded", setNone);
 		}
 
+		HttpSession userSession = request.getSession();
+		String userAvatar =  (String) userSession.getAttribute("userAvatar");
 
 
 		model.addAttribute("idItem", dataItem.getId());
+		model.addAttribute("userAvatar", userAvatar);
 		model.addAttribute("hashItem", dataItem.getHashSecure());
 		model.addAttribute("listSupportUsers", listSupportUsers);
 		model.addAttribute("statusList", listStatus);

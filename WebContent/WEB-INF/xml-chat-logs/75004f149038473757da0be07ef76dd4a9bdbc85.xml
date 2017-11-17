@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chat>
+  <userMsg id="1">
+    <userName>Vicente Ramos</userName>
+    <avatar>1.jpg</avatar>
+    <msg>ok</msg>
+    <date>10/11/2017 23:29</date>
+  </userMsg>
+  <userMsg id="1">
+    <userName>Vicente Ramos</userName>
+    <avatar>1.jpg</avatar>
+    <msg>oi</msg>
+    <date>10/11/2017 23:29</date>
+  </userMsg>
+</chat>

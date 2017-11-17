@@ -14,6 +14,7 @@ $(document).ready(function () {
 	$("span#textAreaCancelReportHideShow").hide();
 	$("span#btnSendSw").show();
 	$("span#btnCancel").hide();
+	
 	$("select#statusHelp").change(function(){
 		
 		if($(this).val() != 3){
@@ -35,12 +36,16 @@ $(document).ready(function () {
 		}
 		
 		if($(this).val() == 4){
+		    
 			$("span.textAreaSolution").html("");
 			alert("Atenção! Cancelar um chamado ocorre perca de score");
 			$("span#btnSendSw").hide();
 			$("span#btnCancel").show();
 			$("span#textAreaCancelReportHideShow").show();
 		}
+		
+		//AQUI##########
+		
 	});
 	
 	var statusTEste = $("select#statusHelp option:selected").val();
@@ -83,6 +88,7 @@ $(document).ready(function () {
             success: function (data) {              
                $('span#loader').hide();
                $('#modal-success').modal('show');
+               getChat(false,0);
                if(data == 201){
             	   $('span.message').append('<div class="alert alert-success" role="alert">Atividade registrada com sucesso! <a href="/">(Clique para voltar)</a></div>');
                }
@@ -252,7 +258,7 @@ $(document).ready(function () {
             <!-- /.box-footer -->
             <div class="box-footer">
               <form action="#" method="post">
-                <img class="img-responsive img-circle img-sm" src="../dist/img/user4-128x128.jpg" alt="Alt Text">
+                <img class="img-responsive img-circle img-sm" src="<c:url value="/resources/images/${userAvatar}"/>" alt="Alt Text">
                 <!-- .img-push is used to add margin to elements next to floating images -->
                 <div class="img-push">
                   <input type="text" id="postChat" class="form-control input-sm" placeholder="Press enter to post comment">

@@ -177,10 +177,11 @@ tbody#result tr td div.cellSpace{
 				var userProfile = '<div style="position:relative; padding-top:2px; margin-left:4px;">\
 				    <div class="user-block">\
                     <img src="<c:url value="/resources/images/'+this.userAvatar+'"/>" style="width:36px; height:36px;" class="img-circle img-bordered-sm" alt="User Image">\
-                    <span class="username" style="color:#4e98c3">'+this.userIdName+'</span><span class="description">ASSPM - ' + this.departmentName +'</span></div></div>';
+                    <span class="username" style="color:#4e98c3">'+this.userIdName+'</span><span class="description">SousaNogueira - ' + this.departmentName +'</span></div></div>';
 				
 	            $('tbody#result').append('\
 	                    <tr class="'+setNegative+'">\
+						<td><a href="'+linkItem+'"><div style="padding-top:12px; padding-left:4px;"> <i class="fa fa-circle-o text-red"></i></div></td>\
 						<td><a href="'+linkItem+'">' + userProfile + '</td>\
 						<td><a href="'+linkItem+'">' + supportUserAdded + '</td>\
 						<td><a href="'+linkItem+'"><div class="cellSpace">' + this.typeHelpName +'</div></a></td>\

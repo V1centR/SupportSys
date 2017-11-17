@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chat>
+  <userMsg id="1">
+    <userName>Vicente Ramos</userName>
+    <avatar>1.jpg</avatar>
+    <msg>false</msg>
+    <date>10/11/2017 22:29</date>
+  </userMsg>
+</chat>

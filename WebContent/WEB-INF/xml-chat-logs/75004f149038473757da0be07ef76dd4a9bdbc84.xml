@@ -21,7 +21,94 @@
   <userMsg id="3">
     <userName>Vicente Ramos</userName>
     <avatar>1.jpg</avatar>
-    <msg>Este chamado esta com o otávio OK?</msg>
+    <msg>Este chamado esta com o Pedro agora OK?</msg>
+    <code>1</code>
+    <status>transfer</status>
+    <toUserName>Pedro Henrique</toUserName>
+    <avatarToUser>3.png</avatarToUser>
     <date>09/11/2017 19:46</date>
+  </userMsg>
+  <userMsg id="4">
+    <userName>Vicente Ramos</userName>
+    <avatar>1.jpg</avatar>
+    <msg>TEste tags de status</msg>
+    <date>09/11/2017 20:18</date>
+  </userMsg>
+  <userMsg id="5">
+    <statusFlag>true</statusFlag>
+    <userName>Vicente Ramos</userName>
+    <avatar>1.jpg</avatar>
+    <code>1</code>
+    <toUser />
+    <msg>Alterou este chamado para Aberto</msg>
+    <date>17/11/2017 0:18</date>
+    <toUserName />
+    <avatarToUser />
+  </userMsg>
+  <userMsg id="6">
+    <statusFlag>true</statusFlag>
+    <userName>Vicente Ramos</userName>
+    <avatar>1.jpg</avatar>
+    <code>4</code>
+    <toUser />
+    <msg>Alterou este chamado para Cancelado</msg>
+    <date>17/11/2017 0:20</date>
+    <toUserName />
+    <avatarToUser />
+  </userMsg>
+  <userMsg id="7">
+    <statusFlag>true</statusFlag>
+    <userName>Vicente Ramos</userName>
+    <avatar>1.jpg</avatar>
+    <code>4</code>
+    <toUser />
+    <msg>Alterou este chamado para Cancelado</msg>
+    <date>17/11/2017 0:21</date>
+    <toUserName />
+    <avatarToUser />
+  </userMsg>
+  <userMsg id="8">
+    <statusFlag>true</statusFlag>
+    <userName>Vicente Ramos</userName>
+    <avatar>1.jpg</avatar>
+    <code>2</code>
+    <toUser />
+    <msg>Alterou este chamado para Executando</msg>
+    <date>17/11/2017 0:23</date>
+    <toUserName />
+    <avatarToUser />
+  </userMsg>
+  <userMsg id="9">
+    <statusFlag>true</statusFlag>
+    <userName>Vicente Ramos</userName>
+    <avatar>1.jpg</avatar>
+    <code>1</code>
+    <toUser />
+    <msg>Alterou este chamado para Aberto</msg>
+    <date>17/11/2017 0:23</date>
+    <toUserName />
+    <avatarToUser />
+  </userMsg>
+  <userMsg id="10">
+    <statusFlag>true</statusFlag>
+    <userName>Vicente Ramos</userName>
+    <avatar>1.jpg</avatar>
+    <code>2</code>
+    <toUser />
+    <msg>Alterou este chamado para Executando</msg>
+    <date>17/11/2017 0:24</date>
+    <toUserName />
+    <avatarToUser />
+  </userMsg>
+  <userMsg id="11">
+    <statusFlag>true</statusFlag>
+    <userName>Vicente Ramos</userName>
+    <avatar>1.jpg</avatar>
+    <code>1</code>
+    <toUser />
+    <msg>Alterou este chamado para Aberto</msg>
+    <date>17/11/2017 0:24</date>
+    <toUserName />
+    <avatarToUser />
   </userMsg>
 </chat>

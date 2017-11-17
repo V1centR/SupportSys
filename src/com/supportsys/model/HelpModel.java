@@ -1,5 +1,6 @@
 package com.supportsys.model;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
@@ -11,6 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import org.jdom2.JDOMException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,7 +28,7 @@ import com.supportsys.repo.HelpRepo;
 
 public class HelpModel {
 
-	public boolean updateItem(JSONObject jsonItems) throws JSONException {
+	public boolean updateItem(JSONObject jsonItems) throws JSONException, JDOMException, IOException {
 		EntityManager em = getEm();
 
 		String itemHash = jsonItems.get("hashItem").toString();
@@ -63,6 +65,8 @@ public class HelpModel {
 			em.getTransaction().begin();
 			helpUpdt = em.merge(helpUpdt);
 			em.getTransaction().commit();
+
+			return true;
 
 		}
 		em.close();

@@ -29,8 +29,6 @@ public class ChatModel {
 		}
 	}
 
-
-
 	public String initChat(String hashItem, Object idUser, String nameUser, String userAvatar, String txtMsg, String mode) throws IOException, JDOMException
 	{
 
@@ -47,7 +45,6 @@ public class ChatModel {
 		if(f.exists() && !f.isDirectory()) {
 
 			if(setMode == 0) {
-
 				String chatFile = DIRECTORY_FILES+hashItem+".xml";
 				return chatFile;
 
@@ -63,27 +60,41 @@ public class ChatModel {
 
 		}else {
 
-			System.out.println("Iniciando chat::");
+			if(setMode == 0) {
+				String emptyChat = "";
 
-			Element chat = new Element("chat");
-			Document makeChat = new Document(chat);
+				return emptyChat;
 
-			Element userMsg = new Element("userMsg");
-			userMsg.setAttribute(new Attribute("id", "1"));
-			userMsg.addContent(new Element("userName").setText(nameUser));
-			userMsg.addContent(new Element("avatar").setText(userAvatar));
-			userMsg.addContent(new Element("msg").setText(txtMsg));
-			userMsg.addContent(new Element("date").setText(datef));
-			makeChat.getRootElement().addContent(userMsg);
+			} else {
 
-			XMLOutputter makeChatFile = new XMLOutputter();
+				Element chat = new Element("chat");
+				Document makeChat = new Document(chat);
 
-			makeChatFile.setFormat(Format.getPrettyFormat());
-			makeChatFile.output(makeChat, new FileWriter(DIRECTORY_FILES+hashItem+".xml"));
+				Element userMsg = new Element("userMsg");
+				userMsg.setAttribute(new Attribute("id", "1"));
+				userMsg.addContent(new Element("statusFlag").setText("false"));
+				userMsg.addContent(new Element("userName").setText(nameUser));
+				userMsg.addContent(new Element("avatar").setText(userAvatar));
+				userMsg.addContent(new Element("code").setText(""));
+				userMsg.addContent(new Element("toUser").setText(""));
+				userMsg.addContent(new Element("msg").setText(txtMsg));
+				userMsg.addContent(new Element("date").setText(datef));
+				userMsg.addContent(new Element("toUserName").setText(""));
+				userMsg.addContent(new Element("avatarToUser").setText(""));
 
-			String chatFile = DIRECTORY_FILES+hashItem+".xml";
+				makeChat.getRootElement().addContent(userMsg);
 
-			return chatFile;
+				XMLOutputter makeChatFile = new XMLOutputter();
+
+				makeChatFile.setFormat(Format.getPrettyFormat());
+				makeChatFile.output(makeChat, new FileWriter(DIRECTORY_FILES+hashItem+".xml"));
+
+				String chatFile = DIRECTORY_FILES+hashItem+".xml";
+
+				return chatFile;
+			}
+
+
 		}
 		return null;
 
@@ -102,15 +113,26 @@ public class ChatModel {
 		Element rootElement = doc.getRootElement();
 		//##########################
 
+		Date todaysDate = new Date();
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy H:mm");
+		String datef = dateFormat.format(todaysDate);
+
 		List<Element> docElements = rootElement.getChildren("userMsg");
 		String nextMsgId = Integer.toString(docElements.size());
 
+
 		Element userMsg = new Element("userMsg");
 		userMsg.setAttribute(new Attribute("id", nextMsgId));
+		userMsg.addContent(new Element("statusFlag").setText(nameUser));
 		userMsg.addContent(new Element("userName").setText(nameUser));
 		userMsg.addContent(new Element("avatar").setText(userAvatar));
+		userMsg.addContent(new Element("code").setText(userAvatar));
+		userMsg.addContent(new Element("status").setText(userAvatar));
+		userMsg.addContent(new Element("toUser").setText(userAvatar));
 		userMsg.addContent(new Element("msg").setText(txtMsg));
-		userMsg.addContent(new Element("date").setText(dateF));
+		userMsg.addContent(new Element("date").setText(datef));
+		userMsg.addContent(new Element("userName").setText(nameUser));
+
 		rootElement.addContent(userMsg);
 
 		XMLOutputter makeChatFile = new XMLOutputter();
@@ -119,6 +141,61 @@ public class ChatModel {
 		makeChatFile.output(doc, new FileWriter("/var/www/java/supportSys/WebContent/WEB-INF/xml-chat-logs/"+hashItem+".xml"));
 
 		return true;
+	}
+
+
+	public boolean updateChatStatus(String hashItem,Object idUser, String nameUser, String userAvatar, String txtMsg, Integer statusCode) throws JDOMException, IOException
+	{
+
+		String path = "/var/www/java/supportSys/WebContent/WEB-INF/xml-chat-logs/";
+
+		Date todaysDate = new Date();
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy H:mm");
+		String datef = dateFormat.format(todaysDate);
+
+		//get file
+		File chatXMLFile = new File(path+hashItem+".xml");
+		System.out.println("Aquivo carregado:: " + path+hashItem+".xml");
+		SAXBuilder saxBuilder = new SAXBuilder();
+		Document doc = saxBuilder.build(chatXMLFile);
+		Element rootElement = doc.getRootElement();
+		//##########################
+
+		String statusCodeStr = statusCode.toString();
+
+		List<Element> docElements = rootElement.getChildren("userMsg");
+		String nextMsgId = Integer.toString(docElements.size());
+
+
+		Element userMsg = new Element("userMsg");
+		userMsg.setAttribute(new Attribute("id", nextMsgId));
+		userMsg.addContent(new Element("statusFlag").setText("true"));
+		userMsg.addContent(new Element("userName").setText(nameUser));
+		userMsg.addContent(new Element("avatar").setText(userAvatar));
+		userMsg.addContent(new Element("code").setText(statusCodeStr));
+		//userMsg.addContent(new Element("status").setText(statusCode));
+		userMsg.addContent(new Element("toUser").setText(""));
+		userMsg.addContent(new Element("msg").setText(txtMsg));
+		userMsg.addContent(new Element("date").setText(datef));
+		userMsg.addContent(new Element("toUserName").setText(""));
+		userMsg.addContent(new Element("avatarToUser").setText(""));
+
+
+		rootElement.addContent(userMsg);
+
+		XMLOutputter makeChatFile = new XMLOutputter();
+
+		makeChatFile.setFormat(Format.getPrettyFormat());
+		makeChatFile.output(doc, new FileWriter("/var/www/java/supportSys/WebContent/WEB-INF/xml-chat-logs/"+hashItem+".xml"));
+
+		return true;
+	}
+
+	public boolean updateChatTransfer()
+	{
+
+		return false;
+
 	}
 
 }
