@@ -70,7 +70,7 @@
             </li>
             
             <li class="active">
-            <a href="<c:url value="/chamados/novo-chamado"/>"><i class="fa fa-circle-o"></i> Novo</a>
+            <a href="<c:url value="/users/new"/>"><i class="fa fa-circle-o"></i> Novo</a>
             </li>
           </ul>
         </li>

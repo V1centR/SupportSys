@@ -1,114 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chat>
   <userMsg id="1">
-    <userName>Miguel Carvalho</userName>
-    <avatar>3.png</avatar>
-    <msg>Depois do almoço passa aqui, que farei os relatórios a tarde!</msg>
-    <date>04/10/2017 18:27</date>
-  </userMsg>
-  <userMsg id="2">
+    <statusFlag>false</statusFlag>
     <userName>Vicente Ramos</userName>
     <avatar>1.jpg</avatar>
-    <msg>Avatar ok</msg>
-    <date>09/11/2017 19:37</date>
+    <code>false</code>
+    <toUser>false</toUser>
+    <msg>oi</msg>
+    <date>18/11/2017 13:59</date>
+    <toUserName>false</toUserName>
+    <avatarToUser>false</avatarToUser>
   </userMsg>
   <userMsg id="2">
+    <statusFlag>true</statusFlag>
     <userName>Vicente Ramos</userName>
     <avatar>1.jpg</avatar>
-    <msg>asdasd</msg>
-    <date>09/11/2017 19:44</date>
+    <code>2</code>
+    <status>false</status>
+    <toUser>false</toUser>
+    <msg>Alterou este chamado para &lt;b&gt;Executando&lt;/b&gt;</msg>
+    <date>18/11/2017 13:59</date>
+    <toUserName>false</toUserName>
+    <avatarToUser>false</avatarToUser>
   </userMsg>
   <userMsg id="3">
+    <statusFlag>true</statusFlag>
     <userName>Vicente Ramos</userName>
     <avatar>1.jpg</avatar>
-    <msg>Este chamado esta com o Pedro agora OK?</msg>
-    <code>1</code>
-    <status>transfer</status>
-    <toUserName>Pedro Henrique</toUserName>
+    <code>2</code>
+    <status>false</status>
+    <toUser>true</toUser>
+    <msg>Transferiu o chamado para &lt;b&gt;Miguel .C&lt;/b&gt;</msg>
+    <date>18/11/2017 13:59</date>
+    <toUserName>Miguel .C</toUserName>
     <avatarToUser>3.png</avatarToUser>
-    <date>09/11/2017 19:46</date>
   </userMsg>
   <userMsg id="4">
+    <statusFlag>true</statusFlag>
     <userName>Vicente Ramos</userName>
     <avatar>1.jpg</avatar>
-    <msg>TEste tags de status</msg>
-    <date>09/11/2017 20:18</date>
+    <code>2</code>
+    <status>false</status>
+    <toUser>true</toUser>
+    <msg>Transferiu o chamado para &lt;b&gt;Rodrigo Basanese&lt;/b&gt;</msg>
+    <date>19/11/2017 18:01</date>
+    <toUserName>Rodrigo Basanese</toUserName>
+    <avatarToUser>3.png</avatarToUser>
   </userMsg>
   <userMsg id="5">
     <statusFlag>true</statusFlag>
     <userName>Vicente Ramos</userName>
     <avatar>1.jpg</avatar>
-    <code>1</code>
-    <toUser />
-    <msg>Alterou este chamado para Aberto</msg>
-    <date>17/11/2017 0:18</date>
-    <toUserName />
-    <avatarToUser />
-  </userMsg>
-  <userMsg id="6">
-    <statusFlag>true</statusFlag>
-    <userName>Vicente Ramos</userName>
-    <avatar>1.jpg</avatar>
-    <code>4</code>
-    <toUser />
-    <msg>Alterou este chamado para Cancelado</msg>
-    <date>17/11/2017 0:20</date>
-    <toUserName />
-    <avatarToUser />
-  </userMsg>
-  <userMsg id="7">
-    <statusFlag>true</statusFlag>
-    <userName>Vicente Ramos</userName>
-    <avatar>1.jpg</avatar>
-    <code>4</code>
-    <toUser />
-    <msg>Alterou este chamado para Cancelado</msg>
-    <date>17/11/2017 0:21</date>
-    <toUserName />
-    <avatarToUser />
-  </userMsg>
-  <userMsg id="8">
-    <statusFlag>true</statusFlag>
-    <userName>Vicente Ramos</userName>
-    <avatar>1.jpg</avatar>
     <code>2</code>
-    <toUser />
-    <msg>Alterou este chamado para Executando</msg>
-    <date>17/11/2017 0:23</date>
-    <toUserName />
-    <avatarToUser />
-  </userMsg>
-  <userMsg id="9">
-    <statusFlag>true</statusFlag>
-    <userName>Vicente Ramos</userName>
-    <avatar>1.jpg</avatar>
-    <code>1</code>
-    <toUser />
-    <msg>Alterou este chamado para Aberto</msg>
-    <date>17/11/2017 0:23</date>
-    <toUserName />
-    <avatarToUser />
-  </userMsg>
-  <userMsg id="10">
-    <statusFlag>true</statusFlag>
-    <userName>Vicente Ramos</userName>
-    <avatar>1.jpg</avatar>
-    <code>2</code>
-    <toUser />
-    <msg>Alterou este chamado para Executando</msg>
-    <date>17/11/2017 0:24</date>
-    <toUserName />
-    <avatarToUser />
-  </userMsg>
-  <userMsg id="11">
-    <statusFlag>true</statusFlag>
-    <userName>Vicente Ramos</userName>
-    <avatar>1.jpg</avatar>
-    <code>1</code>
-    <toUser />
-    <msg>Alterou este chamado para Aberto</msg>
-    <date>17/11/2017 0:24</date>
-    <toUserName />
-    <avatarToUser />
+    <status>false</status>
+    <toUser>false</toUser>
+    <msg>Alterou este chamado para &lt;b&gt;Executando&lt;/b&gt;</msg>
+    <date>19/11/2017 18:30</date>
+    <toUserName>false</toUserName>
+    <avatarToUser>false</avatarToUser>
   </userMsg>
 </chat>

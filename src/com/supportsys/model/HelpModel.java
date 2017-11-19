@@ -53,7 +53,6 @@ public class HelpModel {
 			Status selectedStatusId = em.find(Status.class, selectedStatus);
 			User supportUserId = em.find(User.class, supportUserSet);
 
-			// Update ok
 			Help helpUpdt = em.find(Help.class, itemId);
 			em.clear();
 
@@ -158,8 +157,6 @@ public class HelpModel {
 	 * @return
 	 */
 	public List<Help> list(String status) {
-
-		//EntityManager em = getEm();
 
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
 		EntityManager em = emf.createEntityManager();

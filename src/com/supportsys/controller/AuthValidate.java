@@ -27,7 +27,7 @@ public class AuthValidate extends HandlerInterceptorAdapter {
 			return true;
 		}
 
-		response.sendRedirect("/login");
+		response.sendRedirect("/supportSys/login");
 		return false;
 
 	}

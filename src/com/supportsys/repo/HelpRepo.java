@@ -29,20 +29,47 @@ public class HelpRepo {
 	{
 
 		try {
-
 			EntityManager em = new EmModel().getEm();
 			String query = "SELECT h FROM Help h WHERE h.id= :id AND h.hashSecure= :hashCode";
 			//optimize this query
 			Help itemChecked = em.createQuery(query, Help.class).
-			setParameter("id", id).
-			setParameter("hashCode", hashCode).
-			getSingleResult();
+					setParameter("id", id).
+					setParameter("hashCode", hashCode).
+					getSingleResult();
 			em.close();
 			return true;
 
 		} catch (Exception e) {
 			// TODO: handle exception
 			return false;
+		}
+
+	}
+
+	/**
+	 * Get support user added to Item
+	 * @param id
+	 * @param hashCode
+	 * @return
+	 */
+	public Help getItem(Integer id, String hashCode)
+	{
+
+		try {
+				EntityManager em = new EmModel().getEm();
+				String query = "SELECT h FROM Help h WHERE h.id= :id AND h.hashSecure= :hashCode";
+				//optimize this query
+				Help itemData = em.createQuery(query, Help.class).
+				setParameter("id", id).
+				setParameter("hashCode", hashCode).
+				getSingleResult();
+				em.close();
+
+				return itemData;
+
+		} catch (Exception e) {
+
+			return null;
 		}
 
 	}

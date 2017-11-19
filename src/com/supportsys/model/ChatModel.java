@@ -16,7 +16,10 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
+import com.supportsys.entity.Help;
+import com.supportsys.entity.User;
 import com.supportsys.repo.HelpRepo;
+import com.supportsys.repo.UserRepo;
 
 public class ChatModel {
 
@@ -62,7 +65,6 @@ public class ChatModel {
 
 			if(setMode == 0) {
 				String emptyChat = "";
-
 				return emptyChat;
 
 			} else {
@@ -75,12 +77,12 @@ public class ChatModel {
 				userMsg.addContent(new Element("statusFlag").setText("false"));
 				userMsg.addContent(new Element("userName").setText(nameUser));
 				userMsg.addContent(new Element("avatar").setText(userAvatar));
-				userMsg.addContent(new Element("code").setText(""));
-				userMsg.addContent(new Element("toUser").setText(""));
+				userMsg.addContent(new Element("code").setText("false"));
+				userMsg.addContent(new Element("toUser").setText("false"));
 				userMsg.addContent(new Element("msg").setText(txtMsg));
 				userMsg.addContent(new Element("date").setText(datef));
-				userMsg.addContent(new Element("toUserName").setText(""));
-				userMsg.addContent(new Element("avatarToUser").setText(""));
+				userMsg.addContent(new Element("toUserName").setText("false"));
+				userMsg.addContent(new Element("avatarToUser").setText("false"));
 
 				makeChat.getRootElement().addContent(userMsg);
 
@@ -93,8 +95,6 @@ public class ChatModel {
 
 				return chatFile;
 			}
-
-
 		}
 		return null;
 
@@ -104,6 +104,7 @@ public class ChatModel {
 	{
 
 		String path = "/var/www/java/supportSys/WebContent/WEB-INF/xml-chat-logs/";
+		String statusKeys = "false";
 
 		//get file
 		File chatXMLFile = new File(path+hashItem+".xml");
@@ -118,20 +119,20 @@ public class ChatModel {
 		String datef = dateFormat.format(todaysDate);
 
 		List<Element> docElements = rootElement.getChildren("userMsg");
-		String nextMsgId = Integer.toString(docElements.size());
-
+		String nextMsgId = Integer.toString(docElements.size() + 1);
 
 		Element userMsg = new Element("userMsg");
 		userMsg.setAttribute(new Attribute("id", nextMsgId));
-		userMsg.addContent(new Element("statusFlag").setText(nameUser));
+		userMsg.addContent(new Element("statusFlag").setText(statusKeys));
 		userMsg.addContent(new Element("userName").setText(nameUser));
 		userMsg.addContent(new Element("avatar").setText(userAvatar));
-		userMsg.addContent(new Element("code").setText(userAvatar));
-		userMsg.addContent(new Element("status").setText(userAvatar));
-		userMsg.addContent(new Element("toUser").setText(userAvatar));
+		userMsg.addContent(new Element("code").setText(statusKeys));
+		userMsg.addContent(new Element("status").setText(statusKeys));
+		userMsg.addContent(new Element("toUser").setText(statusKeys));
 		userMsg.addContent(new Element("msg").setText(txtMsg));
 		userMsg.addContent(new Element("date").setText(datef));
-		userMsg.addContent(new Element("userName").setText(nameUser));
+		userMsg.addContent(new Element("toUserName").setText(statusKeys));
+		userMsg.addContent(new Element("avatarToUser").setText(statusKeys));
 
 		rootElement.addContent(userMsg);
 
@@ -144,58 +145,101 @@ public class ChatModel {
 	}
 
 
-	public boolean updateChatStatus(String hashItem,Object idUser, String nameUser, String userAvatar, String txtMsg, Integer statusCode) throws JDOMException, IOException
+	public boolean updateChatStatus(Integer idItem, String hashItem,Object idUser, String nameUser, String userAvatar, String txtMsg, Integer statusCode, Integer userAdded) throws JDOMException, IOException
 	{
 
+		String nameAddedUser = "false";
+		String avatarAddedUser = "false";
 		String path = "/var/www/java/supportSys/WebContent/WEB-INF/xml-chat-logs/";
+		String statusFlag;
+		Integer supportUserAdded;
+		File f = new File(path+hashItem+".xml");
 
 		Date todaysDate = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy H:mm");
 		String datef = dateFormat.format(todaysDate);
 
-		//get file
-		File chatXMLFile = new File(path+hashItem+".xml");
-		System.out.println("Aquivo carregado:: " + path+hashItem+".xml");
-		SAXBuilder saxBuilder = new SAXBuilder();
-		Document doc = saxBuilder.build(chatXMLFile);
-		Element rootElement = doc.getRootElement();
-		//##########################
+		//get item edit
+		Help itemdata = new HelpRepo().getItem(idItem, hashItem);
 
-		String statusCodeStr = statusCode.toString();
+		try {
+			supportUserAdded = itemdata.getSupportUser().getId();
+		} catch (Exception e) {
+			supportUserAdded = 0;
+		}
 
-		List<Element> docElements = rootElement.getChildren("userMsg");
-		String nextMsgId = Integer.toString(docElements.size());
+		//block update 2 times
+		Integer itemStatus = itemdata.getStatusBean().getId();
 
+		String toUser = "false";
 
-		Element userMsg = new Element("userMsg");
-		userMsg.setAttribute(new Attribute("id", nextMsgId));
-		userMsg.addContent(new Element("statusFlag").setText("true"));
-		userMsg.addContent(new Element("userName").setText(nameUser));
-		userMsg.addContent(new Element("avatar").setText(userAvatar));
-		userMsg.addContent(new Element("code").setText(statusCodeStr));
-		//userMsg.addContent(new Element("status").setText(statusCode));
-		userMsg.addContent(new Element("toUser").setText(""));
-		userMsg.addContent(new Element("msg").setText(txtMsg));
-		userMsg.addContent(new Element("date").setText(datef));
-		userMsg.addContent(new Element("toUserName").setText(""));
-		userMsg.addContent(new Element("avatarToUser").setText(""));
+		if(supportUserAdded == userAdded)
+		{
+			System.out.println("Mesmo supportUser");
+			nameAddedUser = "false";
+			avatarAddedUser = "false";
+			txtMsg = txtMsg;
 
+		} else if(supportUserAdded == 0 || supportUserAdded != userAdded) {
 
-		rootElement.addContent(userMsg);
+			User userInfo = new UserRepo().getUserInfo(userAdded);
+			toUser = "true";
+			nameAddedUser = userInfo.getName() +" "+ userInfo.getSname();
+			avatarAddedUser = userInfo.getImage().getId() +"."+ userInfo.getImage().getExt();
+			txtMsg = "Transferiu o chamado para " + "<b>" + nameAddedUser + "</b>";
+		}
 
-		XMLOutputter makeChatFile = new XMLOutputter();
+		//TODO não ultilizado melhorias futuras
+		if(itemStatus == statusCode)
+		{
+			System.out.println("Status já ativado");
+			statusFlag = "true";
+			//return true;
+		} else {
+			statusFlag = "true";
+		}
 
-		makeChatFile.setFormat(Format.getPrettyFormat());
-		makeChatFile.output(doc, new FileWriter("/var/www/java/supportSys/WebContent/WEB-INF/xml-chat-logs/"+hashItem+".xml"));
+		System.out.println("Parou aqui::: ");
+
+		if(f.exists() && !f.isDirectory()) {
+
+			//get file
+			File chatXMLFile = new File(path+hashItem+".xml");
+			System.out.println("Aquivo carregado:: " + path+hashItem+".xml");
+			SAXBuilder saxBuilder = new SAXBuilder();
+			Document doc = saxBuilder.build(chatXMLFile);
+			Element rootElement = doc.getRootElement();
+			//##########################
+
+			String statusCodeStr = statusCode.toString();
+
+			List<Element> docElements = rootElement.getChildren("userMsg");
+			String nextMsgId = Integer.toString(docElements.size() + 1);
+
+			Element userMsg = new Element("userMsg");
+			userMsg.setAttribute(new Attribute("id", nextMsgId));
+			userMsg.addContent(new Element("statusFlag").setText(statusFlag));
+			userMsg.addContent(new Element("userName").setText(nameUser));
+			userMsg.addContent(new Element("avatar").setText(userAvatar));
+			userMsg.addContent(new Element("code").setText(statusCodeStr));
+			userMsg.addContent(new Element("status").setText("false"));
+			userMsg.addContent(new Element("toUser").setText(toUser));
+			userMsg.addContent(new Element("msg").setText(txtMsg));
+			userMsg.addContent(new Element("date").setText(datef));
+			userMsg.addContent(new Element("toUserName").setText(nameAddedUser));
+			userMsg.addContent(new Element("avatarToUser").setText(avatarAddedUser));
+			rootElement.addContent(userMsg);
+
+			XMLOutputter makeChatFile = new XMLOutputter();
+
+			makeChatFile.setFormat(Format.getPrettyFormat());
+			makeChatFile.output(doc, new FileWriter("/var/www/java/supportSys/WebContent/WEB-INF/xml-chat-logs/"+hashItem+".xml"));
+
+		} else {
+
+			String initChat = initChat(hashItem, idUser, nameUser, userAvatar, txtMsg, "0");
+		}
 
 		return true;
 	}
-
-	public boolean updateChatTransfer()
-	{
-
-		return false;
-
-	}
-
 }

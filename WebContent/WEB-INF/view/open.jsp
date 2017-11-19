@@ -43,9 +43,6 @@ $(document).ready(function () {
 			$("span#btnCancel").show();
 			$("span#textAreaCancelReportHideShow").show();
 		}
-		
-		//AQUI##########
-		
 	});
 	
 	var statusTEste = $("select#statusHelp option:selected").val();
@@ -70,6 +67,9 @@ $(document).ready(function () {
 		$("form.addhelpForm :input").attr("disabled", true);
 		$("button.btn-send").attr("disabled","disabled");
 		
+		var loaderSmall = 'Processando... <img src="<c:url value="/resources/images/loader.gif"/>" style="">';
+	    $('span#proccessloader').append(loaderSmall);
+		
     
 		var strFormJson = "{\"statusHelp\":\"" + statusHelp + "\",\"supportUser\":\""+ supportUser + "\",\"setTxt\":\""+ setTxt + "\",\"idItem\":\""+ idItem + "\",\"hashItem\":\""+ hashItem + "\",\"canceled\":\""+ canceled + "\"}";  
     
@@ -85,9 +85,12 @@ $(document).ready(function () {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json' 
             },
-            success: function (data) {              
-               $('span#loader').hide();
+            success: function (data) {
+
+               $('span#proccessloader').html('');
                $('#modal-success').modal('show');
+               $("form.addhelpForm :input").attr("disabled", false);
+       		   $("button.btn-send").attr("disabled",false);
                getChat(false,0);
                if(data == 201){
             	   $('span.message').append('<div class="alert alert-success" role="alert">Atividade registrada com sucesso! <a href="/">(Clique para voltar)</a></div>');
@@ -156,14 +159,31 @@ $(document).ready(function () {
             var msgUser = $(this).find("msg").text();
             var dateMsg = $(this).find("date").text();
             
+            var alertStatus = $(this).find("statusFlag").text();
+            var alertTransfer = $(this).find("toUser").text();
+            
+            if(alertStatus == 'true')
+            {
+                console.log("status message ok");
+                var setStyle = 'style="background-color:#ffddcc"';
+            }
+            
+            if(alertTransfer == 'true')
+            {
+                var setStyle = 'style="background-color:#cce0ff"';
+                
+            }
+            
             $("span#boxComment").append('\
-                    <div class="box-comment">\
-                    <img class="img-circle img-sm" src="<c:url value="/resources/images/'+avatarUser+'"/>" alt="User Image">\
+                    <div class="box-comment" ' + setStyle + '> \
+                    <img class="img-circle img-sm" style="position:relative; left:5px;" src="<c:url value="/resources/images/'+avatarUser+'"/>" alt="User Image">\
                     <div class="comment-text">\
                           <span class="username">'+ userName +'<span class="text-muted">&nbsp;&nbsp; '+ dateMsg +'</span></span>\
                       '+ msgUser +'\
                     </div>\
                   </div>');
+            
+            var setStyle = '';
 	    });
 	    $('span#loader').html('');
 	    $('div#divChat').scrollTop($('#divChat')[0].scrollHeight);
@@ -175,7 +195,6 @@ $(document).ready(function () {
 		<jsp:include page="horizontal-bar.jsp" />
 		<!-- Left side column. contains the logo and sidebar -->
 		<jsp:include page="sidemenu.jsp" />
-
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper">
 			<!-- Content Header (Page header) -->
@@ -189,8 +208,6 @@ $(document).ready(function () {
 					<li class="active">Blank page</li>
 				</ol>
 			</section>
-
-
 	<!-- Main content -->
 	<section class="content">
 	
@@ -319,8 +336,8 @@ $(document).ready(function () {
 					</span>
 					
 					<div style="margin-top: 8px; text-align: right;">
+					<span id="proccessloader"></span>
 						<button id="back" type="button" name="btn-back" class="btn btn-primary btn-lg btn-send"><i class="fa fa-arrow-left"></i>  Voltar</button>
-						<span id="loader"></span>
 						<span id="btnSendSw" style="display:none;">
 							<button id="send" type="button" name="btn-update" class="btn btn-primary btn-lg btn-send"><i class="fa fa-floppy-o"></i> Atualizar Fixo</button>
 						</span>
@@ -334,17 +351,11 @@ $(document).ready(function () {
             
             <!-- /.box-footer -->
             <div class="box-footer">
-              
-
             </div>
             <!-- /.box-footer -->
           </div>
           <!-- /.box -->
         </div>
-		
-			
-	<!-- Chamado ##################### -->
-			
 	</section>
 			<!-- /.content -->
 		</div>

@@ -44,7 +44,6 @@ public class ChatController {
 
 		if(validChat == true)
 		{
-
 			Object idUser = request.getSession().getAttribute("idUser");
 			String nameUser = request.getSession().getAttribute("userName").toString();
 			String userSname =  request.getSession().getAttribute("userSname").toString();

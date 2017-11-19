@@ -57,59 +57,51 @@ public class HelpController {
 		String jsonFormData = jsonStr.toString();
 		JSONObject jsonItems = new JSONObject(jsonFormData);
 
+		String txtMsg;
+
+		Integer itemId = Integer.parseInt(jsonItems.get("idItem").toString());
 		String hashThisItem = jsonItems.get("hashItem").toString();
 
-		System.out.println(hashThisItem);
-
-		boolean updateItemOk = new HelpModel().updateItem(jsonItems);
-
-
-		//##################
 		Object idUser = request.getSession().getAttribute("idUser");
 		String nameUser = request.getSession().getAttribute("userName").toString();
 		String userSname =  request.getSession().getAttribute("userSname").toString();
 		String userAvatar =  request.getSession().getAttribute("userAvatar").toString();
 		String userName = nameUser +" "+ userSname;
 
+		Integer supportUserAdded = Integer.parseInt(jsonItems.get("supportUser").toString());
+		Integer selectedStatus = Integer.parseInt(jsonItems.get("statusHelp").toString());
+		String msgTemplate = "Alterou este chamado para ";
+		String changeStatus = "";
 
+		Help thisItem = new HelpRepo().getItem(itemId, hashThisItem);
+		Integer statusSet = thisItem.getStatusBean().getId();
 
-
-		if(updateItemOk == true) {
-
-			System.out.println("updateItemOk OK::");
-
-			//melhorar esta verificação!
-			Integer selectedStatus = Integer.parseInt(jsonItems.get("statusHelp").toString());
-			String msgTemplate = "Alterou este chamado para ";
-			String changeStatus = "";
-
-
-
-			switch (selectedStatus) {
+		switch (selectedStatus) {
 
 			case 1:
-				 changeStatus = "Aberto";
+				 changeStatus = "<b>Aberto</b>";
 				break;
 			case 2:
-				changeStatus = "Executando";
+				changeStatus = "<b>Executando</b>";
 				break;
 			case 3:
-				changeStatus = "Concluído";
+				changeStatus = "<b>Concluído</b>";
 				break;
 			case 4:
-				 changeStatus = "Cancelado";
+				 changeStatus = "<b>Cancelado</b>";
 				break;
+		}
 
-			default:
-				break;
-			}
+		txtMsg = msgTemplate + changeStatus;
 
-			String txtMsg = msgTemplate + changeStatus;
+		try {
 
-			boolean setStatus = new ChatModel().updateChatStatus(hashThisItem,idUser,userName,userAvatar,txtMsg,selectedStatus);
+			new ChatModel().updateChatStatus(itemId,hashThisItem,idUser,userName,userAvatar,txtMsg,selectedStatus,supportUserAdded);
+			new HelpModel().updateItem(jsonItems);
 
 			return Response.SC_CREATED;
-		}else {
+
+		} catch (Exception e) {
 			return Response.SC_INTERNAL_SERVER_ERROR;
 		}
 	}
@@ -127,10 +119,9 @@ public class HelpController {
 	 */
 	@RequestMapping(value="addhelp", method=RequestMethod.POST)
 	//@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody int addHelp(@RequestBody Object jsonStr, HttpServletRequest request) throws JSONException, IOException	{
-		//edresxe
+	public @ResponseBody int addHelp(@RequestBody Object jsonStr, HttpServletRequest request) throws JSONException, IOException
+	{
 
-		//Funcionando! formato recebido "{\"nome\":\"ASSPM\",\"email\":\"imprensa@asspm.org.br\"}";
 		String jsonFormData = jsonStr.toString();
 		JSONObject jsonItems = new JSONObject(jsonFormData);
 		//aqui virá uma sessão
@@ -150,8 +141,6 @@ public class HelpController {
 	@RequestMapping(value="/gethelplist/{status}", method=RequestMethod.GET)
 	public @ResponseBody String getItems(@PathVariable String status) throws JSONException {
 
-		//String jsonDataStr = "{\"nome\":\"ASSPM\",\"email\":\"imprensa@asspm.org.br\"}";
-
 		JSONObject jsonContainer = new JSONObject();
 		JSONObject jsonItems = new JSONObject();
 		JSONObject supportUserAdded = new JSONObject();
@@ -162,8 +151,6 @@ public class HelpController {
 		for(Help dataItems: helpList) {
 
 			String dateF = df.format(dataItems.getDateHelp());
-
-			//supportUserAdded.put("id", dataItems.getSupportUser().getId());
 
 			if(dataItems.getSupportUser() == null)
 			{
@@ -179,7 +166,6 @@ public class HelpController {
 				supportUserAdded.put("name", supportUserName);
 				supportUserAdded.put("supportUserAvatar", supportUserAvatar);
 				supportUserAdded.put("supportDept", supportUserDept);
-
 			}
 
 			jsonItems.put("id", dataItems.getId());
@@ -209,12 +195,10 @@ public class HelpController {
 	@RequestMapping("/chamados/list/{status}")
 	public ModelAndView listHelp(Model model, @PathVariable String status)
 	{
-		System.out.println("Selecionar apenas::" + status);
 
 		List<Help> helpList = new HelpModel().list(status);
 		model.addAttribute("dataHelp", helpList);
 
-		//return new ModelAndView("list");
 		return new ModelAndView("listHelp-api");
 	}
 
@@ -235,7 +219,6 @@ public class HelpController {
 
 		HttpSession userSession = request.getSession();
 		String userAvatar =  (String) userSession.getAttribute("userAvatar");
-
 
 		model.addAttribute("idItem", dataItem.getId());
 		model.addAttribute("userAvatar", userAvatar);
