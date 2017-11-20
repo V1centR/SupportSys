@@ -32,6 +32,8 @@ public class UserController {
 		String jsonFormData = jsonStr.toString();
 		JSONObject jsonItems = new JSONObject(jsonFormData);
 
+		System.out.println("Json itens received:: " + jsonItems);
+
 
 
 		return Response.SC_CREATED;
