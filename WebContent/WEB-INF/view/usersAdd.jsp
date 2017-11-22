@@ -17,6 +17,49 @@ $(document).ready(function () {
     selectClient
     userGroup */
     
+    
+    $("select#selectClient").change(function(){
+        
+        console.log("Client ID Selected:: " + this.value);
+        
+        
+        
+        
+        $.ajax({        	
+            type: 'GET',
+            dataType: 'json',
+            url: '<c:url value="/getdepartmentlist/'+ this.value +'"/>',
+            contentType : 'application/json; charset=utf-8',
+            headers: { 
+                'Accept': 'application/json',
+                'Content-Type': 'application/json' 
+            },
+            success: function (data) {
+               console.log(data);
+               
+               $('select#userGroup').html('');
+               $.each(data, function(key, value) {   
+                   $('select#userGroup')
+                       .append($("<option></option>")
+                                  .attr("value",key)
+                                  .text(value.name)); 
+              });
+               
+             
+               return true;
+            },
+            error: function (data) {
+                console.log(data);
+                return false;
+            }
+        });
+        
+        
+        
+        
+    });
+    
+    
     $('button#addUserExec').click(function () {
 
         $('span.message-danger').html("");
@@ -122,7 +165,7 @@ $(document).ready(function () {
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="textinput">Nome</label>  
 						  <div class="col-md-4">
-						  <input id="nameUser" name="textinput" type="text" placeholder="name" class="form-control" style="font-size:16px; font-weight: bold;">
+						  <input id="nameUser" name="textinput" type="text" placeholder="name" class="form-control" style="font-size:16px; font-weight: bold;" value="Wagner">
 						  </div>
 						</div>
 						
@@ -130,7 +173,7 @@ $(document).ready(function () {
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="textinput">Sobrenome</label>  
 						  <div class="col-md-4">
-						  <input id="sNameUser" name="textinput" type="text" placeholder="sobrenome" class="form-control" style="font-size:16px; font-weight: bold;">
+						  <input id="sNameUser" name="textinput" type="text" placeholder="sobrenome" class="form-control" style="font-size:16px; font-weight: bold;" value="Ribeiro">
 						  </div>
 						</div>
 						
@@ -157,7 +200,7 @@ $(document).ready(function () {
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="textinput">E-mail</label>  
 						  <div class="col-md-4">
-						  <input id="emailUser" name="emailUser" type="text" placeholder="email" class="form-control input-md">
+						  <input id="emailUser" name="emailUser" type="text" placeholder="email" class="form-control input-md" value="test@test.com">
 						  <span class="help-block">this e-mail has been registered!</span>  
 						  </div>
 						</div>
@@ -168,8 +211,9 @@ $(document).ready(function () {
 						  <div class="col-md-4">
 						    <select id="selectClient" name="selectClient" class="form-control">
 						      <option value="0">Selecione</option>
-						      <option value="2">SousaNogueira.com</option>
-						      <option value="3">Support::Sys</option>
+	                              <c:forEach items="${clientList}" var="listClients">
+	                              	<option value="${listClients.id}">${listClients.name}</option>
+	                              </c:forEach>
 						    </select>
 						  </div>
 						</div>
@@ -180,8 +224,6 @@ $(document).ready(function () {
 						  <div class="col-md-4">
 						    <select id="userGroup" name="userGroup" class="form-control">
 						      <option value="0">Selecione</option>
-						      <option value="2">Users</option>
-						      <option value="3">Operators</option>
 						    </select>
 						  </div>
 						</div>
