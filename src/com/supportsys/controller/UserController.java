@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.supportsys.entity.Client;
 import com.supportsys.entity.Department;
+import com.supportsys.entity.User;
 import com.supportsys.entity.UserGroup;
 import com.supportsys.model.UserModel;
 
@@ -52,6 +53,15 @@ public class UserController {
 
 	}
 
+	@RequestMapping("/users/all")
+	public ModelAndView listUsersAction(Model model)
+	{
+		List<User> allUsers = new UserModel().getAllUsers();
+
+		model.addAttribute("listUsers", allUsers);
+
+		return new ModelAndView("usersList","", "");
+	}
 
 	@RequestMapping("/users/new")
 	public ModelAndView addUserAction(Model model)

@@ -76,7 +76,7 @@ $(document).ready(function () {
             url: '<c:url value="/users/exec"/>',
             data: setJson,
             contentType : 'application/json; charset=utf-8',
-            headers: { 
+            headers: {  
                 'Accept': 'application/json',
                 'Content-Type': 'application/json' 
             },

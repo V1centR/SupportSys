@@ -22,6 +22,22 @@ public class UserModel {
 
 
 	/**
+	 * Return full list of users
+	 * @return
+	 */
+	public List<User> getAllUsers()
+	{
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
+		EntityManager em = emf.createEntityManager();
+
+		List<User> usersFull = em.createNamedQuery("User.findAll").getResultList();
+		emf.close();
+
+		return usersFull;
+	}
+
+
+	/**
 	 * Add user method
 	 * @param jsonItems
 	 * @return boolean
