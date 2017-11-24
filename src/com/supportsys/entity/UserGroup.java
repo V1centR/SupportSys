@@ -25,7 +25,7 @@ public class UserGroup implements Serializable {
 	private int score;
 
 	//bi-directional many-to-one association to User
-	@OneToMany(mappedBy="userGroup")
+	@OneToMany(mappedBy="userGroupBean")
 	private List<User> users;
 
 	public UserGroup() {
@@ -73,14 +73,14 @@ public class UserGroup implements Serializable {
 
 	public User addUser(User user) {
 		getUsers().add(user);
-		user.setUserGroup(this);
+		user.setUserGroupBean(this);
 
 		return user;
 	}
 
 	public User removeUser(User user) {
 		getUsers().remove(user);
-		user.setUserGroup(null);
+		user.setUserGroupBean(null);
 
 		return user;
 	}

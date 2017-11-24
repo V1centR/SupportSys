@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chat>
+  <userMsg id="1">
+    <statusFlag>false</statusFlag>
+    <userName>Vicente Ramos</userName>
+    <avatar>1.jpg</avatar>
+    <code>false</code>
+    <toUser>false</toUser>
+    <msg>ok</msg>
+    <date>22/11/2017 0:45</date>
+    <toUserName>false</toUserName>
+    <avatarToUser>false</avatarToUser>
+  </userMsg>
+  <userMsg id="2">
+    <statusFlag>false</statusFlag>
+    <userName>Vicente Ramos</userName>
+    <avatar>1.jpg</avatar>
+    <code>false</code>
+    <status>false</status>
+    <toUser>false</toUser>
+    <msg>Raissa foi eliminada do masterChef :(</msg>
+    <date>22/11/2017 0:46</date>
+    <toUserName>false</toUserName>
+    <avatarToUser>false</avatarToUser>
+  </userMsg>
+</chat>

@@ -45,7 +45,7 @@ public class AuthController {
 			userSession.setAttribute("userSname", userData.getSname());
 			userSession.setAttribute("userAvatar", avatar);
 			userSession.setAttribute("userEmail", userData.getEmail());
-			userSession.setAttribute("userClient", userData.getClient());
+			userSession.setAttribute("userClient", userData.getDepartment().getClientBean().getId());
 			userSession.setAttribute("userHash", userSession.getId());
 
 			return Response.SC_OK; //200

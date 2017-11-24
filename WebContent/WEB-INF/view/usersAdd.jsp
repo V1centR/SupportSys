@@ -7,24 +7,10 @@ $(document).ready(function () {
     $('button#back').click(function(){        
         window.location.href = '/supportSys';
         return false;
-    });
-    
-    /*
-    nameUser
-    sNameUser
-    gender
-    emailUser
-    selectClient
-    userGroup */
-    
+    });    
     
     $("select#selectClient").change(function(){
-        
-        console.log("Client ID Selected:: " + this.value);
-        
-        
-        
-        
+
         $.ajax({        	
             type: 'GET',
             dataType: 'json',
@@ -35,16 +21,14 @@ $(document).ready(function () {
                 'Content-Type': 'application/json' 
             },
             success: function (data) {
-               console.log(data);
                
-               $('select#userGroup').html('');
+               $('select#department').html('');
                $.each(data, function(key, value) {   
-                   $('select#userGroup')
+                   $('select#department')
                        .append($("<option></option>")
                                   .attr("value",key)
                                   .text(value.name)); 
               });
-               
              
                return true;
             },
@@ -53,39 +37,35 @@ $(document).ready(function () {
                 return false;
             }
         });
-        
-        
-        
-        
     });
     
     
     $('button#addUserExec').click(function () {
 
-        $('span.message-danger').html("");
-        var idItem = 		$("input#idItem").val();
-        var hashItem = 		$("input#hashItemu").val();
-       
-        var nameUser = 		$("input#nameUser").val();
-        var sNameUser = 	$("input#sNameUser").val();
-        var gender = 		$('input[name=gender]:checked', '#addUser').val();
-        var emailUser = 	$("input#emailUser").val();
-        var selectClient = 	$("select#selectClient").val();
-        var userGroup = 	$("select#userGroup").val();
-        var loaderSmall = 'Processando... <img src="<c:url value="/resources/images/loader.gif"/>" style="">';
+      $('span.message-danger').html("");
+      var idItem = 		$("input#idItem").val();
+      var hashItem = 		$("input#hashItemu").val();
+     
+      var nameUser = 		$("input#nameUser").val();
+      var sNameUser = 	$("input#sNameUser").val();
+      var gender = 		$('input[name=gender]:checked', '#addUser').val();
+      var emailUser = 	$("input#emailUser").val();
+      var selectClient = 	$("select#selectClient").val();
+      var userGroup = 	$("select#selectUserGroup").val();
+      var department = 	$("select#department").val();
+      var loaderSmall = 'Processando... <img src="<c:url value="/resources/images/loader.gif"/>" style="">';
+
         
-        //var helpLabel = $('input[name="situacao"]:checked').val();
-        
-        if(emailUser == ''){                
-            $('span.message-danger').append('<div class="alert alert-danger" role="alert"><strong>ATENÇÃO!</strong> Todos os campos são obrigatórios!</div>');
-            return false;
-        }
+      if(emailUser == ''){                
+          $('span.message-danger').append('<div class="alert alert-danger" role="alert"><strong>ATENÇÃO!</strong> Todos os campos são obrigatórios!</div>');
+          return false;
+      }
         
 	  $("button#addUserExec").attr("disabled","disabled");
 	  $("form#addUser :input").attr("disabled", true);
 	  $('span#proccessloader').append(loaderSmall);
       
-      var strFormJson = "{\"idItem\":\"" + idItem + "\",\"hashItem\":\""+ hashItem + "\",\"nameUser\":\""+ nameUser + "\",\"sNameUser\":\""+ sNameUser + "\",\"gender\":\""+ gender + "\",\"emailUser\":\""+ emailUser + "\",\"selectClient\":\""+ selectClient + "\",\"userGroup\":\""+ userGroup + "\"}"; 
+      var strFormJson = "{\"idItem\":\"" + idItem + "\",\"hashItem\":\""+ hashItem + "\",\"nameUser\":\""+ nameUser + "\",\"sNameUser\":\""+ sNameUser + "\",\"gender\":\""+ gender + "\",\"emailUser\":\""+ emailUser + "\",\"selectClient\":\""+ selectClient + "\",\"userGroup\":\""+ userGroup + "\",\"department\":\""+ department + "\"}"; 
       var setJson = JSON.stringify(strFormJson);
       
       console.log("String Json" + setJson);
@@ -112,7 +92,7 @@ $(document).ready(function () {
                }
                
                if(data == 500){
-            	   $('span.message').append('<div class="alert alert-danger" role="alert">Houve um erro de procesamento, seu chamado não foi registrado! <a href="/">(Clique para voltar)</a></div>');
+            	   $('span.message').append('<div class="alert alert-danger" role="alert">Houve um erro de procesamento, usuário não foi registrado! <a href="/">(Clique para voltar)</a></div>');
                }
               
                return true;
@@ -183,13 +163,13 @@ $(document).ready(function () {
 						  <div class="col-md-4">
 						  <div class="radio">
 						    <label for="radios-0">
-						      <input type="radio" name="gender" class="gender" id="radios-0" value="1" checked="checked">
+						      <input type="radio" name="gender" class="gender" id="radios-0" value="M" checked="checked">
 						      Masculino
 						    </label>
 							</div>
 						  <div class="radio">
 						    <label for="radios-1">
-						      <input type="radio" name="gender" class="gender" id="radios-1" value="2">
+						      <input type="radio" name="gender" class="gender" id="radios-1" value="F">
 						      Feminino
 						    </label>
 							</div>
@@ -220,10 +200,22 @@ $(document).ready(function () {
 						
 						<!-- Select Basic -->
 						<div class="form-group">
+						  <label class="col-md-4 control-label" for="selectbasic">Departamento</label>
+						  <div class="col-md-4">
+						    <select id="department" name="department" class="form-control">
+						      <option value="0">Selecione</option>
+						    </select>
+						  </div>
+						</div>
+						
+						<div class="form-group">
 						  <label class="col-md-4 control-label" for="selectbasic">Grupo</label>
 						  <div class="col-md-4">
-						    <select id="userGroup" name="userGroup" class="form-control">
+						    <select id="selectUserGroup" name="selectUserGroup" class="form-control">
 						      <option value="0">Selecione</option>
+	                              <c:forEach items="${groupList}" var="listGroup">
+	                              	<option value="${listGroup.id}">${listGroup.name}</option>
+	                              </c:forEach>
 						    </select>
 						  </div>
 						</div>

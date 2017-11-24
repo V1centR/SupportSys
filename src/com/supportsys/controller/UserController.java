@@ -18,17 +18,49 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.supportsys.entity.Client;
 import com.supportsys.entity.Department;
+import com.supportsys.entity.UserGroup;
 import com.supportsys.model.UserModel;
 
 @Controller
 public class UserController {
 
 
+	@RequestMapping(value="/users/exec", method=RequestMethod.POST)
+	public @ResponseBody int execUserAdd(@RequestBody Object jsonStr, HttpServletRequest resquest) throws JSONException
+	{
+		String jsonFormData = jsonStr.toString();
+		JSONObject jsonItems = new JSONObject(jsonFormData);
+
+		/*
+	    nameUser
+	    sNameUser
+	    gender
+	    emailUser
+	    selectClient
+	    userGroup */
+
+		System.out.println("Json itens received:: " + jsonItems);
+
+		boolean addUserOk = new UserModel().addUser(jsonItems);
+
+		if(addUserOk == true)
+		{
+			return Response.SC_CREATED;
+		} else {
+			return Response.SC_INTERNAL_SERVER_ERROR;
+		}
+
+	}
+
+
 	@RequestMapping("/users/new")
 	public ModelAndView addUserAction(Model model)
 	{
 		List<Client> fullClients = new UserModel().getClients();
+		List<UserGroup> groupList = new UserModel().getGroups();
+
 		model.addAttribute("clientList", fullClients);
+		model.addAttribute("groupList", groupList);
 
 		return new ModelAndView("usersAdd","", "");
 	}
@@ -60,16 +92,5 @@ public class UserController {
 		return jsonContainer.toString();
 	}
 
-
-	@RequestMapping(value="/users/exec", method=RequestMethod.POST)
-	public @ResponseBody int userLogged(@RequestBody Object jsonStr, HttpServletRequest resquest) throws JSONException
-	{
-		String jsonFormData = jsonStr.toString();
-		JSONObject jsonItems = new JSONObject(jsonFormData);
-
-		System.out.println("Json itens received:: " + jsonItems);
-
-		return Response.SC_CREATED;
-	}
 
 }

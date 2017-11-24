@@ -19,14 +19,14 @@ public class User implements Serializable {
 	@Id
 	private int id;
 
-	private int client;
-
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataRegister;
 
 	private String description;
 
 	private String email;
+
+	private String gender;
 
 	private String idConfEmail;
 
@@ -52,20 +52,20 @@ public class User implements Serializable {
 	@OneToMany(mappedBy="user")
 	private List<SupportScore> supportScores;
 
-	//bi-directional many-to-one association to Department
-	@ManyToOne
-	@JoinColumn(name="dept")
-	private Department department;
-
 	//bi-directional many-to-one association to Image
 	@ManyToOne
 	@JoinColumn(name="avatar")
 	private Image image;
 
+	//bi-directional many-to-one association to Department
+	@ManyToOne
+	@JoinColumn(name="dept")
+	private Department department;
+
 	//bi-directional many-to-one association to UserGroup
 	@ManyToOne
-	@JoinColumn(name="group")
-	private UserGroup userGroup;
+	@JoinColumn(name="userGroup")
+	private UserGroup userGroupBean;
 
 	public User() {
 	}
@@ -76,14 +76,6 @@ public class User implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public int getClient() {
-		return this.client;
-	}
-
-	public void setClient(int client) {
-		this.client = client;
 	}
 
 	public Date getDataRegister() {
@@ -108,6 +100,14 @@ public class User implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getGender() {
+		return this.gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 
 	public String getIdConfEmail() {
@@ -224,14 +224,6 @@ public class User implements Serializable {
 		return supportScore;
 	}
 
-	public Department getDepartment() {
-		return this.department;
-	}
-
-	public void setDepartment(Department department) {
-		this.department = department;
-	}
-
 	public Image getImage() {
 		return this.image;
 	}
@@ -240,12 +232,20 @@ public class User implements Serializable {
 		this.image = image;
 	}
 
-	public UserGroup getUserGroup() {
-		return this.userGroup;
+	public Department getDepartment() {
+		return this.department;
 	}
 
-	public void setUserGroup(UserGroup userGroup) {
-		this.userGroup = userGroup;
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
+
+	public UserGroup getUserGroupBean() {
+		return this.userGroupBean;
+	}
+
+	public void setUserGroupBean(UserGroup userGroupBean) {
+		this.userGroupBean = userGroupBean;
 	}
 
 }
