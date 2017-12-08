@@ -86,7 +86,7 @@ public class HelpRepo {
 
 		try {
 				UserGroup groupObj = em.find(UserGroup.class, 7);
-				String query = "SELECT u FROM User u WHERE u.userGroup= :id";
+				String query = "SELECT u FROM User u WHERE u.userGroupBean= :id";
 				//optimize this query
 				List<User> userList = em.createQuery(query, User.class).
 				setParameter("id", groupObj).getResultList();

@@ -36,6 +36,20 @@ public class UserModel {
 		return usersFull;
 	}
 
+	/**
+	 * Return full list of Clients
+	 * @return
+	 */
+	public List<Client> getAllClients()
+	{
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
+		EntityManager em = emf.createEntityManager();
+
+		List<Client> fullList = em.createNamedQuery("Client.findAll").getResultList();
+		emf.close();
+
+		return fullList;
+	}
 
 	/**
 	 * Add user method

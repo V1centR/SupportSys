@@ -1,5 +1,6 @@
 package com.supportsys.controller;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import com.supportsys.entity.Department;
 import com.supportsys.entity.User;
 import com.supportsys.entity.UserGroup;
 import com.supportsys.model.UserModel;
+import com.supportsys.repo.UserRepo;
 
 @Controller
 public class UserController {
@@ -53,14 +55,62 @@ public class UserController {
 
 	}
 
+	/**
+	 *
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("/users/all")
 	public ModelAndView listUsersAction(Model model)
 	{
 		List<User> allUsers = new UserModel().getAllUsers();
+		List<Client> allClients = new UserModel().getClients();
 
 		model.addAttribute("listUsers", allUsers);
+		model.addAttribute("listClients", allClients);
 
 		return new ModelAndView("usersList","", "");
+	}
+
+	@RequestMapping(value="/users/byClient/{clientId}", method=RequestMethod.POST)
+	public @ResponseBody String userByClient(@RequestBody Object jsonStr, HttpServletRequest request) throws JSONException, SQLException
+	{
+		String jsonStrConvert = jsonStr.toString();
+		JSONObject jsonItem = new JSONObject(jsonStrConvert);
+
+		JSONObject jsonContainer = new JSONObject();
+		JSONObject jsonUserData = new JSONObject();
+
+		Integer idClient = Integer.parseInt(jsonItem.get("idClient").toString());
+
+		List<Object[]> usersByClient = new UserRepo().getUsersByClient(idClient);
+
+		if(!usersByClient.isEmpty())
+		{
+			for(Object[] userData : usersByClient)
+			{
+
+				String nomeUser = userData[1] +" "+ userData[2];
+
+				jsonUserData.put("idUser", userData[0]);
+				jsonUserData.put("nameUser", nomeUser);
+				jsonUserData.put("avatar", userData[6]);
+				jsonUserData.put("deptUser", userData[8]);
+				jsonUserData.put("groupUser", userData[9]);
+				jsonUserData.put("clientName", userData[11]);
+
+				jsonContainer.put("" + userData[0] + "", jsonUserData);
+				jsonUserData = new JSONObject();
+			}
+
+			return jsonContainer.toString();
+
+		} else {
+
+			System.out.println("Não há usuarios cadastrados");
+			return "empty";
+		}
+
 	}
 
 	@RequestMapping("/users/new")

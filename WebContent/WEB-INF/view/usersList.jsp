@@ -3,7 +3,56 @@
 <script>
 $(document).ready(function () {
     
-    
+    $("select#selectClient").change(function(){
+        
+        //autenticar!
+        var strFormJson = "{\"idClient\":\"" + this.value + "\"}";
+        
+        var setJson = JSON.stringify(strFormJson);
+        
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '<c:url value="/users/byClient/'+ this.value +'"/>',
+            data: setJson,
+            contentType : 'application/json; charset=utf-8',
+            headers: { 
+                'Accept': 'application/json',
+                'Content-Type': 'application/json' 
+            },
+            success: function (data) {
+                
+               $('table.serviceUserList').html('');
+               $.each(data, function () {
+                  
+               $('table.serviceUserList').append('<tr>\
+							<td>\
+							<img src="<c:url value="/resources/images/' + this.avatar +'"/>" style="width:36px; height:36px;" class="img-circle img-bordered-sm" alt="User Image">\
+						</td>\
+						<td>' + this.nameUser +' &nbsp;</td>\
+						<td>' + this.deptUser +' &nbsp;&nbsp;</td>\
+						<td>' + this.groupUser +' &nbsp;&nbsp;</td>\
+					</tr>');
+               });
+             
+               return true;
+            },
+            error: function (data) {
+                
+                if(data.responseText == "empty")
+                {
+                    $('table.serviceUserList').html('');
+                    $('table.serviceUserList').append('<tr><td>Não há usuários cadastrados para este cliente.</td></tr>');
+                    
+                    return false;
+                }
+                
+                return false;
+            }
+        });
+        
+        
+    });
 });
 </script>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -29,33 +78,25 @@ $(document).ready(function () {
 
 			<!-- Main content -->
 			<section class="content">
-
 				<!-- Default box -->
 				<div class="box">
-				
-				<div style=" padding: 10px;">
-					<form id="search">
-					<label>Buscar usuário: </label>
-						<input type="text" name="search" placeholder="search">
-					</form>
-				
-				</div>
-				
-					<table class="table table-bordered table-hover dataTable">
-						<div class="box-body">
-							<c:forEach items="${listUsers}" var="userList">
-								<tr>
-									<td>
-										<img src="<c:url value="/resources/images/${userList.image.id}.${userList.image.ext}"/>" style="width:36px; height:36px;" class="img-circle img-bordered-sm" alt="User Image">
-									</td>
-									<td>${userList.name} ${userList.sname} &nbsp;</td>
-									<td>${userList.department.name} &nbsp;&nbsp;</td>
-									<td>${userList.userGroupBean.name} &nbsp;&nbsp;</td>
-								</tr>
-							
-							
-							</c:forEach>
+					<div style=" padding: 10px;">
+						<form id="searchByUser">
+							<label>Buscar usuário: </label>
+							<input type="text" id="searchByUser" name="searchByUser" placeholder="press enter to search" class="form-control">
+						</form>
 						
+						<form id="searchByClient">
+							<label>Listar por cliente: </label>
+							<select class="form-control" id="selectClient">
+								<option value="0">Todos</option>
+								<c:forEach items="${listClients}" var="clientList">
+									<option value="${clientList.id}">${clientList.name} | ${clientList.bairro} - ${clientList.city}</option>
+								</c:forEach>
+							</select><br>
+						</form>
+					</div>
+					<table class="table table-bordered table-hover dataTable serviceUserList">
 					</table>
 						</div>
 					<!-- /.box-body -->
