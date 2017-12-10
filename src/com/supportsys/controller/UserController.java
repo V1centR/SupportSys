@@ -107,7 +107,6 @@ public class UserController {
 
 		} else {
 
-			System.out.println("Não há usuarios cadastrados");
 			return "empty";
 		}
 

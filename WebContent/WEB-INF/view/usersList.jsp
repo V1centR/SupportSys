@@ -1,19 +1,26 @@
 <jsp:include page="header.jsp" />
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <script>
-$(document).ready(function () {
+$(document).ready(function (){
+    
+    var clientList = localStorage.getItem("clientList");
+    getList(clientList);
     
     $("select#selectClient").change(function(){
-        
-        //autenticar!
-        var strFormJson = "{\"idClient\":\"" + this.value + "\"}";
-        
+        localStorage.setItem("clientList", this.value);
+        getList(this.value);
+    });
+    
+    function getList(idClient)
+    {
+      //autenticar!
+        var strFormJson = "{\"idClient\":\"" + idClient + "\"}";
         var setJson = JSON.stringify(strFormJson);
         
         $.ajax({
             type: 'POST',
             dataType: 'json',
-            url: '<c:url value="/users/byClient/'+ this.value +'"/>',
+            url: '<c:url value="/users/byClient/'+ idClient +'"/>',
             data: setJson,
             contentType : 'application/json; charset=utf-8',
             headers: { 
@@ -22,16 +29,17 @@ $(document).ready(function () {
             },
             success: function (data) {
                 
-               $('table.serviceUserList').html('');
+               $('tbody.serviceUserList').html('');
                $.each(data, function () {
                   
-               $('table.serviceUserList').append('<tr>\
+               $('tbody.serviceUserList').append('<tr>\
 							<td>\
-							<img src="<c:url value="/resources/images/' + this.avatar +'"/>" style="width:36px; height:36px;" class="img-circle img-bordered-sm" alt="User Image">\
+							<img src="<c:url value="/resources/images/' + this.avatar +'"/>" style="width:32px; height:32px;" class="img-circle img-bordered-sm" alt="User Image">\
 						</td>\
 						<td>' + this.nameUser +' &nbsp;</td>\
 						<td>' + this.deptUser +' &nbsp;&nbsp;</td>\
 						<td>' + this.groupUser +' &nbsp;&nbsp;</td>\
+						<td>' + this.clientName +' &nbsp;&nbsp;</td>\
 					</tr>');
                });
              
@@ -41,8 +49,8 @@ $(document).ready(function () {
                 
                 if(data.responseText == "empty")
                 {
-                    $('table.serviceUserList').html('');
-                    $('table.serviceUserList').append('<tr><td>Não há usuários cadastrados para este cliente.</td></tr>');
+                    $('tbody.serviceUserList').html('');
+                    $('tbody.serviceUserList').append('<tr><td>Não há usuários cadastrados para este cliente.</td></tr>');
                     
                     return false;
                 }
@@ -50,9 +58,7 @@ $(document).ready(function () {
                 return false;
             }
         });
-        
-        
-    });
+    }
 });
 </script>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -96,8 +102,55 @@ $(document).ready(function () {
 							</select><br>
 						</form>
 					</div>
-					<table class="table table-bordered table-hover dataTable serviceUserList">
+					<table class="table table-hover">
+					<tr style="border-bottom: none;">
+	                  <th>Avatar</th>
+	                  <th>User</th>
+	                  <th>Department</th>
+	                  <th>Group</th>
+	                  <th>Client</th>
+                	</tr>
+					<tbody class="serviceUserList"></tbody>
 					</table>
+					
+					<table class="table table-hover">
+                <tbody><tr>
+                  <th>ID</th>
+                  <th>User</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Reason</th>
+                </tr>
+                <tr>
+                  <td>183</td>
+                  <td>John Doe</td>
+                  <td>11-7-2014</td>
+                  <td><span class="label label-success">Approved</span></td>
+                  <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                </tr>
+                <tr>
+                  <td>219</td>
+                  <td>Alexander Pierce</td>
+                  <td>11-7-2014</td>
+                  <td><span class="label label-warning">Pending</span></td>
+                  <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                </tr>
+                <tr>
+                  <td>657</td>
+                  <td>Bob Doe</td>
+                  <td>11-7-2014</td>
+                  <td><span class="label label-primary">Approved</span></td>
+                  <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                </tr>
+                <tr>
+                  <td>175</td>
+                  <td>Mike Doe</td>
+                  <td>11-7-2014</td>
+                  <td><span class="label label-danger">Denied</span></td>
+                  <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                </tr>
+              </tbody></table>
+					
 						</div>
 					<!-- /.box-body -->
 					<div class="box-footer">Footer</div>

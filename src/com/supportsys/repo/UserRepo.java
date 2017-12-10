@@ -41,15 +41,24 @@ public class UserRepo {
 		try {
 				Client clientObj = em.find(Client.class, idClient);
 				System.out.println("Client Obj:: " + clientObj);
-				String query = "SELECT u.id,u.name,u.sname,u.email,u.department,u.image,CONCAT(i.id,'.',i.ext) as imageUser,u.userGroupBean,d.name as deptUser,g.name as groupUser,d.clientBean,c.name,c.id as clientId FROM User u INNER JOIN UserGroup g ON u.userGroupBean = g.id INNER JOIN Image i ON u.image = i.id INNER JOIN Department d ON u.department = d.id INNER JOIN Client c ON u.department = d.id WHERE d.clientBean = :departmentId GROUP BY u.id";
-				//String query = "SELECT users.name,users.sname,users.email,users.dept,users.avatar,CONCAT(images.id,'.',images.ext) as userImage, users.userGroup,department.name as deptUser,userGroup.name as groupUser,department.client,clients.name as clientName,clients.id as clientId FROM users INNER JOIN userGroup ON users.userGroup = userGroup.id INNER JOIN images ON users.avatar = images.id INNER JOIN department ON users.dept = department.id INNER JOIN clients ON users.dept = department.id WHERE department.client = :departmentId GROUP BY users.id";
 
-				//optimize this query
-				List<Object[]> clientsByClient = em.createQuery(query).
-				setParameter("departmentId", clientObj).getResultList();
-				emf.close();
+				if(idClient == 0)
+				{
+					String query = "SELECT u.id,u.name,u.sname,u.email,u.department,u.image,CONCAT(i.id,'.',i.ext) as imageUser,u.userGroupBean,d.name as deptUser,g.name as groupUser,d.clientBean,c.name,c.id as clientId FROM User u INNER JOIN UserGroup g ON u.userGroupBean = g.id INNER JOIN Image i ON u.image = i.id INNER JOIN Department d ON u.department = d.id INNER JOIN Client c ON d.clientBean = c.id GROUP BY u.id";
+					List<Object[]> clientsByClient = em.createQuery(query).getResultList();
+					emf.close();
+					return clientsByClient;
 
-				return clientsByClient;
+				}else {
+
+					String query = "SELECT u.id,u.name,u.sname,u.email,u.department,u.image,CONCAT(i.id,'.',i.ext) as imageUser,u.userGroupBean,d.name as deptUser,g.name as groupUser,d.clientBean,c.name,c.id as clientId FROM User u INNER JOIN UserGroup g ON u.userGroupBean = g.id INNER JOIN Image i ON u.image = i.id INNER JOIN Department d ON u.department = d.id INNER JOIN Client c ON d.clientBean = c.id WHERE d.clientBean = :departmentId GROUP BY u.id";
+					//String query = "SELECT users.name,users.sname,users.email,users.dept,users.avatar,CONCAT(images.id,'.',images.ext) as userImage, users.userGroup,department.name as deptUser,userGroup.name as groupUser,department.client,clients.name as clientName,clients.id as clientId FROM users INNER JOIN userGroup ON users.userGroup = userGroup.id INNER JOIN images ON users.avatar = images.id INNER JOIN department ON users.dept = department.id INNER JOIN clients ON users.dept = department.id WHERE department.client = :departmentId GROUP BY users.id";
+
+					List<Object[]> clientsByClient = em.createQuery(query).
+					setParameter("departmentId", clientObj).getResultList();
+					emf.close();
+					return clientsByClient;
+				}
 
 		} catch (Exception e) {
 			// TODO: handle exception
