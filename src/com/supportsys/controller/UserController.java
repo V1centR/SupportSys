@@ -34,14 +34,6 @@ public class UserController {
 		String jsonFormData = jsonStr.toString();
 		JSONObject jsonItems = new JSONObject(jsonFormData);
 
-		/*
-	    nameUser
-	    sNameUser
-	    gender
-	    emailUser
-	    selectClient
-	    userGroup */
-
 		System.out.println("Json itens received:: " + jsonItems);
 
 		boolean addUserOk = new UserModel().addUser(jsonItems);
@@ -103,6 +95,7 @@ public class UserController {
 				jsonUserData = new JSONObject();
 			}
 
+			System.out.println("Data User:: " + jsonContainer.toString());
 			return jsonContainer.toString();
 
 		} else {
@@ -112,6 +105,31 @@ public class UserController {
 
 	}
 
+	/**
+	 *
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/users/edit/{idUser}")
+	public ModelAndView editUserAction(Model model, @PathVariable Integer idUser )
+	{
+		List<Client> fullClients = new UserModel().getClients();
+		List<UserGroup> groupList = new UserModel().getGroups();
+		User userInfo = new UserRepo().getUserInfo(idUser);
+
+		model.addAttribute("clientList", fullClients);
+		model.addAttribute("groupList", groupList);
+		model.addAttribute("userInfo", userInfo);
+		model.addAttribute("mode", "edit");
+
+		return new ModelAndView("usersForm","", "");
+	}
+
+	/**
+	 *
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("/users/new")
 	public ModelAndView addUserAction(Model model)
 	{
@@ -120,8 +138,9 @@ public class UserController {
 
 		model.addAttribute("clientList", fullClients);
 		model.addAttribute("groupList", groupList);
+		model.addAttribute("mode", "add");
 
-		return new ModelAndView("usersAdd","", "");
+		return new ModelAndView("usersForm","", "");
 	}
 
 	/**

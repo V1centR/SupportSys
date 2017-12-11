@@ -3,11 +3,70 @@
 <script>
 $(document).ready(function () {
 	    
+    
+    var mode = '${mode}';
+    console.log("Mode:: " + mode);
+    
+    if(mode == 'edit')
+    {
+        var clientId = '${userInfo.department.clientBean.id}';
+        var departmentId = '${userInfo.department.id}';
+        var groupUser = '${userInfo.userGroupBean.id}';
+        
+        console.log("ClientId:: " + clientId);
+        console.log("departmentId:: " + departmentId);
+        
+        getDepartment(clientId);
+        $('select#selectClient option[value=' + clientId +']').attr('selected','selected');
+        $('select#selectUserGroup option[value=' + groupUser +']').attr('selected','selected');
+    }
+    
     $('form#addUser')[0].reset();
     $('button#back').click(function(){        
         window.location.href = '/supportSys';
         return false;
-    });    
+    });
+
+    function getDepartment(clientId){
+        
+        var mode = '${mode}';
+        
+        $.ajax({        	
+            type: 'GET',
+            dataType: 'json',
+            url: '<c:url value="/getdepartmentlist/'+ clientId +'"/>',
+            contentType : 'application/json; charset=utf-8',
+            headers: { 
+                'Accept': 'application/json',
+                'Content-Type': 'application/json' 
+            },
+            success: function (data) {
+               
+               $('select#department').html('');
+               $.each(data, function(key, value) {   
+                   $('select#department')
+                       .append($("<option></option>")
+                                  .attr("value",key)
+                                  .text(value.name)); 
+              });
+               
+               if(mode == 'edit'){
+                   
+                   $('select#department option[value=' + departmentId +']').attr('selected','selected');
+               }
+             
+               return true;
+            },
+            error: function (data) {
+                console.log(data);
+                return false;
+            }
+        });    
+        
+        
+    }
+    
+    
     
     $("select#selectClient").change(function(){
 
@@ -140,12 +199,39 @@ $(document).ready(function () {
 						<input type="hidden" name="hashItem" id="hashItem" value="888" />
 						<!-- Form Name -->
 						<legend>Novo usuário</legend>
+						Formulário: ${mode} <br>
+						
+						<c:set var="mode" scope="session" value="${mode}" />
+						<c:choose>
+						<c:when test="${mode == 'edit'}">
+							<h2>Modo de edição ok!</h2>
+							<c:set var="nomeUser" scope="session" value="${userInfo.name}" />
+							<c:set var="snomeUser" scope="session" value="${userInfo.sname}" />
+							<c:set var="gender" scope="session" value="${userInfo.gender}" />
+							<c:set var="emailUser" scope="session" value="${userInfo.email}" />
+							<c:set var="client" scope="session" value="${userInfo.department.clientBean.id}" />
+							<c:set var="department" scope="session" value="${userInfo.department.id}" />
+							<c:set var="groupUser" scope="session" value="${userInfo.userGroupBean.id}" />
+							
+							
+							<option value="${listGroup.id}">${listGroup.name}</option>
+						</c:when>
+						<c:otherwise>
+							<c:set var="nomeUser" scope="session" value="" />
+							<c:set var="snomeUser" scope="session" value="" />
+							<c:set var="gender" scope="session" value="" />
+							<c:set var="emailUser" scope="session" value="" />
+							<c:set var="client" scope="session" value="" />
+							<c:set var="department" scope="session" value="" />
+							<c:set var="groupUser" scope="session" value="" />
+						</c:otherwise>
+						</c:choose>
 						
 						<!-- Text input-->
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="textinput">Nome</label>  
 						  <div class="col-md-4">
-						  <input id="nameUser" name="textinput" type="text" placeholder="name" class="form-control" style="font-size:16px; font-weight: bold;" value="Wagner">
+						  <input id="nameUser" name="textinput" type="text" placeholder="name" class="form-control" style="font-size:16px; font-weight: bold;" value="${nomeUser}">
 						  </div>
 						</div>
 						
@@ -153,7 +239,7 @@ $(document).ready(function () {
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="textinput">Sobrenome</label>  
 						  <div class="col-md-4">
-						  <input id="sNameUser" name="textinput" type="text" placeholder="sobrenome" class="form-control" style="font-size:16px; font-weight: bold;" value="Ribeiro">
+						  <input id="sNameUser" name="textinput" type="text" placeholder="sobrenome" class="form-control" style="font-size:16px; font-weight: bold;" value="${snomeUser}">
 						  </div>
 						</div>
 						
@@ -180,8 +266,7 @@ $(document).ready(function () {
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="textinput">E-mail</label>  
 						  <div class="col-md-4">
-						  <input id="emailUser" name="emailUser" type="text" placeholder="email" class="form-control input-md" value="test@test.com">
-						  <span class="help-block">this e-mail has been registered!</span>  
+						  <input id="emailUser" name="emailUser" type="text" placeholder="email" class="form-control input-md" value="${emailUser}">
 						  </div>
 						</div>
 						

@@ -1,10 +1,35 @@
 <jsp:include page="header.jsp" />
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<style>
+tbody.serviceUserList tr td a{
+	height: 100%;
+	display: block;
+	text-decoration: none;
+}
+
+tbody.serviceUserList tr td div.cellSpace{
+	padding-top: 9px;
+	padding-right:8px;
+}
+
+tbody.serviceUserList tr{
+ margin: 0px;
+ padding: 0px;
+
+}
+
+</style>
 <script>
 $(document).ready(function (){
     
     var clientList = localStorage.getItem("clientList");
-    getList(clientList);
+    
+    if(clientList == "undefined" || clientList == "" || clientList == "0"){
+        getList(0);
+        console.log("Todo os usuários!");
+    }else{
+        getList(clientList);
+    }
     
     $("select#selectClient").change(function(){
         localStorage.setItem("clientList", this.value);
@@ -36,7 +61,7 @@ $(document).ready(function (){
 							<td>\
 							<img src="<c:url value="/resources/images/' + this.avatar +'"/>" style="width:32px; height:32px;" class="img-circle img-bordered-sm" alt="User Image">\
 						</td>\
-						<td>' + this.nameUser +' &nbsp;</td>\
+						<td><a href="<c:url value="/users/edit/' + this.idUser +'"/>"><div class="cellSpace">' + this.nameUser +' &nbsp;</div></a></td>\
 						<td>' + this.deptUser +' &nbsp;&nbsp;</td>\
 						<td>' + this.groupUser +' &nbsp;&nbsp;</td>\
 						<td>' + this.clientName +' &nbsp;&nbsp;</td>\
@@ -103,7 +128,7 @@ $(document).ready(function (){
 						</form>
 					</div>
 					<table class="table table-hover">
-					<tr style="border-bottom: none;">
+					<tr>
 	                  <th>Avatar</th>
 	                  <th>User</th>
 	                  <th>Department</th>
@@ -113,45 +138,7 @@ $(document).ready(function (){
 					<tbody class="serviceUserList"></tbody>
 					</table>
 					
-					<table class="table table-hover">
-                <tbody><tr>
-                  <th>ID</th>
-                  <th>User</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                  <th>Reason</th>
-                </tr>
-                <tr>
-                  <td>183</td>
-                  <td>John Doe</td>
-                  <td>11-7-2014</td>
-                  <td><span class="label label-success">Approved</span></td>
-                  <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                </tr>
-                <tr>
-                  <td>219</td>
-                  <td>Alexander Pierce</td>
-                  <td>11-7-2014</td>
-                  <td><span class="label label-warning">Pending</span></td>
-                  <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                </tr>
-                <tr>
-                  <td>657</td>
-                  <td>Bob Doe</td>
-                  <td>11-7-2014</td>
-                  <td><span class="label label-primary">Approved</span></td>
-                  <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                </tr>
-                <tr>
-                  <td>175</td>
-                  <td>Mike Doe</td>
-                  <td>11-7-2014</td>
-                  <td><span class="label label-danger">Denied</span></td>
-                  <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                </tr>
-              </tbody></table>
-					
-						</div>
+				</div>
 					<!-- /.box-body -->
 					<div class="box-footer">Footer</div>
 					<!-- /.box-footer-->
