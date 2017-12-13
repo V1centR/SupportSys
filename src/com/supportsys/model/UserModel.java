@@ -1,5 +1,7 @@
 package com.supportsys.model;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
@@ -15,6 +17,7 @@ import org.json.JSONObject;
 
 import com.supportsys.entity.Client;
 import com.supportsys.entity.Department;
+import com.supportsys.entity.Image;
 import com.supportsys.entity.User;
 import com.supportsys.entity.UserGroup;
 
@@ -63,6 +66,7 @@ public class UserModel {
 		EntityManager em = emf.createEntityManager();
 
 		boolean editSecOk = false;
+		Integer setAvatarId = 0;
 		//TODO autenticar transação
 		String idItem = jsonItems.get("idItem").toString();
 		String hashItem = jsonItems.get("hashItem").toString();
@@ -118,8 +122,8 @@ public class UserModel {
 				addUser.setEmail(emailUser);
 				addUser.setDepartment(departmentObj);
 				//addUser.setDescription(null);
-				//addUser.setIdConfEmail(null);
-				//addUser.setImage(null);
+				//addUser.setIdConfEmail(sha1ToUser);
+				//addUser.setImage(defaultImage);
 				//addUser.setMobile(null);
 				//addUser.setPhone(null4);
 				addUser.setPass("123123");
@@ -139,6 +143,22 @@ public class UserModel {
 
 				if(emailOk == true)
 				{
+
+					String sha1ToUser = "";
+					MessageDigest crypt = MessageDigest.getInstance("sha1");
+					crypt.reset();
+					crypt.update(tsNow.toString().getBytes("utf8"));
+					sha1ToUser = String.format("%40x", new BigInteger(1,crypt.digest()));
+
+					if(gender.equals("F"))
+					{
+						setAvatarId = 1;
+					} else {
+						setAvatarId = 2;
+					}
+
+					Image defaultImage = em.find(Image.class, setAvatarId);
+
 					User addUser = new User();
 
 					addUser.setName(nomeUser);
@@ -147,8 +167,8 @@ public class UserModel {
 					addUser.setEmail(emailUser);
 					addUser.setDepartment(departmentObj);
 					//addUser.setDescription(null);
-					//addUser.setIdConfEmail(null);
-					//addUser.setImage(null);
+					addUser.setIdConfEmail(sha1ToUser);
+					addUser.setImage(defaultImage);
 					//addUser.setMobile(null);
 					//addUser.setPhone(null4);
 					addUser.setPass("123123");
@@ -166,9 +186,6 @@ public class UserModel {
 
 					return false;
 				}
-
-
-
 			}
 
 		} catch (Exception e) {

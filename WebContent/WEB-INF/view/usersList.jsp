@@ -26,9 +26,9 @@ $(document).ready(function (){
     
     if(clientList == "undefined" || clientList == "" || clientList == "0"){
         getList(0);
-        console.log("Todo os usuários!");
     }else{
         getList(clientList);
+        $('select#selectClient option[value=' + clientList +']').attr('selected','selected');
     }
     
     $("select#selectClient").change(function(){
