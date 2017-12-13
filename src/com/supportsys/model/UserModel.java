@@ -62,6 +62,7 @@ public class UserModel {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
 		EntityManager em = emf.createEntityManager();
 
+		boolean editSecOk = false;
 		//TODO autenticar transação
 		String idItem = jsonItems.get("idItem").toString();
 		String hashItem = jsonItems.get("hashItem").toString();
@@ -73,12 +74,22 @@ public class UserModel {
 		String selectClient = jsonItems.get("selectClient").toString();
 		Integer department = Integer.parseInt(jsonItems.get("department").toString());
 		Integer userGroup = Integer.parseInt(jsonItems.get("userGroup").toString());
+		String hashSec = jsonItems.get("hashSec").toString();
 
 		long now = Calendar.getInstance().getTimeInMillis();
 		Timestamp tsNow = new Timestamp(now);
 
 		Department departmentObj = em.find(Department.class, department);
 		UserGroup userGroupObj = em.find(UserGroup.class, userGroup);
+
+		if(!hashSec.isEmpty()) {
+
+			editSecOk = checkEmailAndHash(emailUser, hashSec);
+
+		} else {
+
+			editSecOk = false;
+		}
 
 
 		boolean emailOk = checkEmail(emailUser);
@@ -93,11 +104,13 @@ public class UserModel {
 		System.out.println("Check userGroup:: " + userGroup);
 
 
-		if(emailOk == true)
-		{
-			try {
 
-				User addUser = new User();
+		try {
+
+			if(editSecOk == true){
+
+				User addUser = em.find(User.class, Integer.parseInt(idItem));
+				em.clear();
 
 				addUser.setName(nomeUser);
 				addUser.setSname(sNameUser);
@@ -114,25 +127,80 @@ public class UserModel {
 				addUser.setDataRegister(tsNow);
 
 				em.getTransaction().begin();
-				em.persist(addUser);
+				addUser = em.merge(addUser);
 				em.getTransaction().commit();
 				emf.close();
-
-				//TODO gerar um log aqui
 
 				return true;
 
 
-			} catch (Exception e) {
+			} else {
 
-				System.out.println(e);
 
-				return false;
+				if(emailOk == true)
+				{
+					User addUser = new User();
+
+					addUser.setName(nomeUser);
+					addUser.setSname(sNameUser);
+					addUser.setGender(gender);
+					addUser.setEmail(emailUser);
+					addUser.setDepartment(departmentObj);
+					//addUser.setDescription(null);
+					//addUser.setIdConfEmail(null);
+					//addUser.setImage(null);
+					//addUser.setMobile(null);
+					//addUser.setPhone(null4);
+					addUser.setPass("123123");
+					addUser.setUserGroupBean(userGroupObj);
+					addUser.setDataRegister(tsNow);
+
+					em.getTransaction().begin();
+					em.persist(addUser);
+					em.getTransaction().commit();
+					emf.close();
+
+					return true;
+
+				} else {
+
+					return false;
+				}
+
+
+
 			}
 
-		} else {
+		} catch (Exception e) {
+
+			System.out.println(e);
 
 			return false;
+		}
+
+	}
+
+	/**
+	 * Check email and idConfEmail
+	 * @return
+	 */
+	public boolean checkEmailAndHash(String email, String hashCode)
+	{
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
+		EntityManager em = emf.createEntityManager();
+
+		String query = "SELECT u FROM User u WHERE u.email= :email AND u.idConfEmail = :hashCode";
+		List<User> itemData = em.createQuery(query, User.class).
+				setParameter("email", email).
+				setParameter("hashCode", hashCode).
+				getResultList();
+		emf.close();
+
+		if(itemData.isEmpty())
+		{
+			return false;
+		} else {
+			return true;
 		}
 	}
 

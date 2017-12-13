@@ -12,10 +12,16 @@ $(document).ready(function () {
         var clientId = '${userInfo.department.clientBean.id}';
         var departmentId = '${userInfo.department.id}';
         var groupUser = '${userInfo.userGroupBean.id}';
+        var gender = '${userInfo.gender}';
+        var genderInput = $('input:radio[name=gender]');
         
-        console.log("ClientId:: " + clientId);
-        console.log("departmentId:: " + departmentId);
-        
+        if(gender == 'M'){
+            genderInput.filter('[value=M]').attr('checked', 'checked');
+        }else {
+            
+            genderInput.filter('[value=F]').attr('checked', 'checked');
+        }
+              
         getDepartment(clientId);
         $('select#selectClient option[value=' + clientId +']').attr('selected','selected');
         $('select#selectUserGroup option[value=' + groupUser +']').attr('selected','selected');
@@ -58,12 +64,9 @@ $(document).ready(function () {
                return true;
             },
             error: function (data) {
-                console.log(data);
                 return false;
             }
-        });    
-        
-        
+        });
     }
     
     
@@ -104,6 +107,7 @@ $(document).ready(function () {
       $('span.message-danger').html("");
       var idItem = 		$("input#idItem").val();
       var hashItem = 		$("input#hashItemu").val();
+      var hashSec = 		$("input#hashSec").val();
      
       var nameUser = 		$("input#nameUser").val();
       var sNameUser = 	$("input#sNameUser").val();
@@ -124,7 +128,7 @@ $(document).ready(function () {
 	  $("form#addUser :input").attr("disabled", true);
 	  $('span#proccessloader').append(loaderSmall);
       
-      var strFormJson = "{\"idItem\":\"" + idItem + "\",\"hashItem\":\""+ hashItem + "\",\"nameUser\":\""+ nameUser + "\",\"sNameUser\":\""+ sNameUser + "\",\"gender\":\""+ gender + "\",\"emailUser\":\""+ emailUser + "\",\"selectClient\":\""+ selectClient + "\",\"userGroup\":\""+ userGroup + "\",\"department\":\""+ department + "\"}"; 
+      var strFormJson = "{\"idItem\":\"" + idItem + "\",\"hashItem\":\""+ hashItem + "\",\"nameUser\":\""+ nameUser + "\",\"sNameUser\":\""+ sNameUser + "\",\"gender\":\""+ gender + "\",\"emailUser\":\""+ emailUser + "\",\"selectClient\":\""+ selectClient + "\",\"userGroup\":\""+ userGroup + "\",\"department\":\""+ department + "\",\"hashSec\":\""+ hashSec + "\"}"; 
       var setJson = JSON.stringify(strFormJson);
       
       console.log("String Json" + setJson);
@@ -195,8 +199,9 @@ $(document).ready(function () {
 					<span class="message-danger"></span>
 					<form class="form-horizontal" id="addUser">
 						<fieldset>
-						<input type="hidden" name="idItem" id="idItem" value="0" />
+						<input type="hidden" name="idItem" id="idItem" value="${userInfo.id}" />
 						<input type="hidden" name="hashItem" id="hashItem" value="888" />
+						<input type="hidden" name="hashSec" id="hashSec" value="${userInfo.idConfEmail}" />
 						<!-- Form Name -->
 						<legend>Novo usuário</legend>
 						Formulário: ${mode} <br>
@@ -204,7 +209,6 @@ $(document).ready(function () {
 						<c:set var="mode" scope="session" value="${mode}" />
 						<c:choose>
 						<c:when test="${mode == 'edit'}">
-							<h2>Modo de edição ok!</h2>
 							<c:set var="nomeUser" scope="session" value="${userInfo.name}" />
 							<c:set var="snomeUser" scope="session" value="${userInfo.sname}" />
 							<c:set var="gender" scope="session" value="${userInfo.gender}" />
@@ -212,8 +216,6 @@ $(document).ready(function () {
 							<c:set var="client" scope="session" value="${userInfo.department.clientBean.id}" />
 							<c:set var="department" scope="session" value="${userInfo.department.id}" />
 							<c:set var="groupUser" scope="session" value="${userInfo.userGroupBean.id}" />
-							
-							
 							<option value="${listGroup.id}">${listGroup.name}</option>
 						</c:when>
 						<c:otherwise>
@@ -249,7 +251,7 @@ $(document).ready(function () {
 						  <div class="col-md-4">
 						  <div class="radio">
 						    <label for="radios-0">
-						      <input type="radio" name="gender" class="gender" id="radios-0" value="M" checked="checked">
+						      <input type="radio" name="gender" class="gender" id="radios-0" value="M">
 						      Masculino
 						    </label>
 							</div>
