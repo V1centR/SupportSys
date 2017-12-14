@@ -87,14 +87,10 @@ public class UserModel {
 		UserGroup userGroupObj = em.find(UserGroup.class, userGroup);
 
 		if(!hashSec.isEmpty()) {
-
 			editSecOk = checkEmailAndHash(emailUser, hashSec);
-
 		} else {
-
 			editSecOk = false;
 		}
-
 
 		boolean emailOk = checkEmail(emailUser);
 
@@ -128,7 +124,7 @@ public class UserModel {
 				//addUser.setPhone(null4);
 				addUser.setPass("123123");
 				addUser.setUserGroupBean(userGroupObj);
-				addUser.setDataRegister(tsNow);
+				//addUser.setDataRegister(tsNow);
 
 				em.getTransaction().begin();
 				addUser = em.merge(addUser);
