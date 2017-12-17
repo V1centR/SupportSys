@@ -69,8 +69,6 @@ $(document).ready(function () {
         });
     }
     
-    
-    
     $("select#selectClient").change(function(){
 
         $.ajax({        	
@@ -106,16 +104,17 @@ $(document).ready(function () {
 
       $('span.message-danger').html("");
       var idItem = 		$("input#idItem").val();
-      var hashItem = 		$("input#hashItemu").val();
-      var hashSec = 		$("input#hashSec").val();
+      var hashItem = 	$("input#hashItemu").val();
+      var hashSec = 	$("input#hashSec").val();
      
-      var nameUser = 		$("input#nameUser").val();
+      var nameUser = 	$("input#nameUser").val();
       var sNameUser = 	$("input#sNameUser").val();
       var gender = 		$('input[name=gender]:checked', '#addUser').val();
       var emailUser = 	$("input#emailUser").val();
       var selectClient = 	$("select#selectClient").val();
       var userGroup = 	$("select#selectUserGroup").val();
       var department = 	$("select#department").val();
+      var resetPassword = 	$("input#resetPassword").val();
       var loaderSmall = 'Processando... <img src="<c:url value="/resources/images/loader.gif"/>" style="">';
 
         
@@ -128,7 +127,7 @@ $(document).ready(function () {
 	  $("form#addUser :input").attr("disabled", true);
 	  $('span#proccessloader').append(loaderSmall);
       
-      var strFormJson = "{\"idItem\":\"" + idItem + "\",\"hashItem\":\""+ hashItem + "\",\"nameUser\":\""+ nameUser + "\",\"sNameUser\":\""+ sNameUser + "\",\"gender\":\""+ gender + "\",\"emailUser\":\""+ emailUser + "\",\"selectClient\":\""+ selectClient + "\",\"userGroup\":\""+ userGroup + "\",\"department\":\""+ department + "\",\"hashSec\":\""+ hashSec + "\"}"; 
+      var strFormJson = "{\"idItem\":\"" + idItem + "\",\"hashItem\":\""+ hashItem + "\",\"nameUser\":\""+ nameUser + "\",\"sNameUser\":\""+ sNameUser + "\",\"gender\":\""+ gender + "\",\"emailUser\":\""+ emailUser + "\",\"selectClient\":\""+ selectClient + "\",\"userGroup\":\""+ userGroup + "\",\"department\":\""+ department + "\",\"hashSec\":\""+ hashSec + "\",\"resetPassword\":\""+ resetPassword + "\"}"; 
       var setJson = JSON.stringify(strFormJson);
       
       console.log("String Json" + setJson);
@@ -306,6 +305,12 @@ $(document).ready(function () {
 						    </select>
 						  </div>
 						</div>
+						<div class="form-group">
+						<label class="col-md-4 control-label">Reset Password?</label>
+							<div class="col-md-4" style="padding-top: 10px;">
+								<input type="checkbox" id="resetPassword" value="true"> <span data-toggle="tooltip" title="" style="position:relative; top:-3px;" class="badge bg-blue" data-original-title="Marked checkbox reset password to default">?</span>
+							</div>
+						</div>
 						<!-- Button -->
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="singlebutton">Novo usuário</label>
@@ -315,7 +320,6 @@ $(document).ready(function () {
 						    <span id="proccessloader"></span>
 						  </div>
 						</div>
-						
 						</fieldset>
 					</form>
 

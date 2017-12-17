@@ -20,6 +20,7 @@ import com.supportsys.entity.Department;
 import com.supportsys.entity.Image;
 import com.supportsys.entity.User;
 import com.supportsys.entity.UserGroup;
+import com.supportsys.repo.ClientRepo;
 
 public class UserModel {
 
@@ -45,11 +46,7 @@ public class UserModel {
 	 */
 	public List<Client> getAllClients()
 	{
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
-		EntityManager em = emf.createEntityManager();
-
-		List<Client> fullList = em.createNamedQuery("Client.findAll").getResultList();
-		emf.close();
+		List<Client> fullList = new ClientRepo().getAllClients();
 
 		return fullList;
 	}
@@ -79,6 +76,8 @@ public class UserModel {
 		Integer department = Integer.parseInt(jsonItems.get("department").toString());
 		Integer userGroup = Integer.parseInt(jsonItems.get("userGroup").toString());
 		String hashSec = jsonItems.get("hashSec").toString();
+		String resetPassword = jsonItems.get("resetPassword").toString();
+		Integer setActive = Integer.parseInt(jsonItems.get("active").toString());
 
 		long now = Calendar.getInstance().getTimeInMillis();
 		Timestamp tsNow = new Timestamp(now);
@@ -112,6 +111,14 @@ public class UserModel {
 				User addUser = em.find(User.class, Integer.parseInt(idItem));
 				em.clear();
 
+				if(resetPassword.equals("true"))
+				{
+					String defaultPass = "";
+					defaultPass = makeSha1("123123");
+					addUser.setPass(defaultPass);
+					//TODO send email to user
+				}
+
 				addUser.setName(nomeUser);
 				addUser.setSname(sNameUser);
 				//addUser.setGender(gender);
@@ -122,9 +129,10 @@ public class UserModel {
 				//addUser.setImage(defaultImage);
 				//addUser.setMobile(null);
 				//addUser.setPhone(null4);
-				addUser.setPass("123123");
+				//addUser.setPass("123123");
 				addUser.setUserGroupBean(userGroupObj);
 				//addUser.setDataRegister(tsNow);
+				addUser.setActive(setActive);
 
 				em.getTransaction().begin();
 				addUser = em.merge(addUser);
@@ -133,18 +141,17 @@ public class UserModel {
 
 				return true;
 
-
 			} else {
-
 
 				if(emailOk == true)
 				{
-
 					String sha1ToUser = "";
-					MessageDigest crypt = MessageDigest.getInstance("sha1");
-					crypt.reset();
-					crypt.update(tsNow.toString().getBytes("utf8"));
-					sha1ToUser = String.format("%40x", new BigInteger(1,crypt.digest()));
+					String defaultPass = "";
+
+					sha1ToUser = makeSha1(tsNow.toString());
+					defaultPass = makeSha1("123123");
+
+					System.out.println("Password generated:: " + defaultPass);
 
 					if(gender.equals("F"))
 					{
@@ -167,9 +174,10 @@ public class UserModel {
 					addUser.setImage(defaultImage);
 					//addUser.setMobile(null);
 					//addUser.setPhone(null4);
-					addUser.setPass("123123");
+					addUser.setPass(defaultPass);
 					addUser.setUserGroupBean(userGroupObj);
 					addUser.setDataRegister(tsNow);
+					addUser.setActive(1);
 
 					em.getTransaction().begin();
 					em.persist(addUser);
@@ -191,6 +199,25 @@ public class UserModel {
 			return false;
 		}
 
+	}
+
+	private String makeSha1(String data)
+	{
+		String sha1ToUser = "";
+
+		try {
+
+			MessageDigest crypt = MessageDigest.getInstance("sha1");
+			crypt.reset();
+			crypt.update(data.getBytes("utf8"));
+			sha1ToUser = String.format("%40x", new BigInteger(1,crypt.digest()));
+
+			return sha1ToUser;
+
+		} catch (Exception e) {
+			System.out.println("Error:: " + e);
+			return null;
+		}
 	}
 
 	/**

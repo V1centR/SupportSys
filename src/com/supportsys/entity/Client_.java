@@ -5,7 +5,7 @@ import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2017-11-24T19:43:42.047-0200")
+@Generated(value="Dali", date="2017-12-17T13:27:50.697-0200")
 @StaticMetamodel(Client.class)
 public class Client_ {
 	public static volatile SingularAttribute<Client, Integer> id;
@@ -21,4 +21,5 @@ public class Client_ {
 	public static volatile SingularAttribute<Client, Image> image;
 	public static volatile SingularAttribute<Client, Uf> ufBean;
 	public static volatile ListAttribute<Client, Department> departments;
+	public static volatile SingularAttribute<Client, Integer> active;
 }
