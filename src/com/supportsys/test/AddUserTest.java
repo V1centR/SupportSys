@@ -25,24 +25,18 @@ public class AddUserTest {
 	public void addUsersTest() throws JSONException {
 
 		Integer numberOfUser = 10;
-
+		Integer confirmValue = 201;
 		String jsonItems = "";
 		String gender = "";
-		Integer confirmValue = 201;
-
-
 		String name = "";
 		String sName = "";
 		String emailReady = "";
 		String emailUserOk = "";
-
 		String nameToEmail = "";
 		String sNameToEmail = "";
 
-
 		List<Client> clientList = new UserModel().getAllClients();
 		List<UserGroup> groupList = new UserModel().getGroups();
-
 
 		for(Integer i=0; i<=numberOfUser;i++) {
 
@@ -59,27 +53,24 @@ public class AddUserTest {
 				Integer randomDepartment = new Random().nextInt(departmentList.size());
 				Department departmentItem = departmentList.get(randomDepartment);
 
-
 				String domainEmail =  clientItem.getName().toLowerCase().replaceAll("á|à|â|ã|ä|Á","a").replaceAll("é|è|ê|ë","e").replaceAll("ó|ò|ô|õ","o").replaceAll("ç","c").replaceAll("í|ì|ĩ|î","i").replaceAll("[^a-zA-Z]+","");
 
-				 name = name();
-				 sName = sobreNome();
-				 gender = name.substring(name.lastIndexOf(":")+1);
+				name = name();
+				sName = sobreNome();
+				gender = name.substring(name.lastIndexOf(":")+1);
 
-				 name = name.replaceAll(":.*","");
-				 nameToEmail = filterStr(name);
-				 sNameToEmail = filterStr(sName);
+				name = name.replaceAll(":.*","");
+				nameToEmail = filterStr(name);
+				sNameToEmail = filterStr(sName);
 
-				 emailReady = nameToEmail+"."+sNameToEmail+"@"+domainEmail+".com.br";
-				 emailUserOk = filterStr(emailReady.toLowerCase()).replaceAll(" ","");
+				emailReady = nameToEmail+"."+sNameToEmail+"@"+domainEmail+".com.br";
+				emailUserOk = filterStr(emailReady.toLowerCase()).replaceAll(" ","");
 
-				 System.out.println("Email Generated::" + emailUserOk);
-
-				 jsonItems = "{\"hashSec\":\"\",\"hashItem\":\"undefined\",\"nameUser\":\""+ name +" \",\"sNameUser\":\""+sName+"\",\"gender\":\""+gender+"\",\"emailUser\":\""+emailUserOk+"\",\"selectClient\":\""+clientItem.getId()+"\",\"department\":\""+departmentItem.getId()+"\",\"userGroup\":\""+userGroupItem.getId()+"\",\"idItem\":\"\"}";
+				jsonItems = "{\"hashSec\":\"\",\"hashItem\":\"undefined\",\"nameUser\":\""+ name +" \",\"sNameUser\":\""+sName+"\",\"gender\":\""+gender+"\",\"emailUser\":\""+emailUserOk+"\",\"selectClient\":\""+clientItem.getId()+"\",\"department\":\""+departmentItem.getId()+"\",\"userGroup\":\""+userGroupItem.getId()+"\",\"idItem\":\"\"}";
 
 			} catch (Exception e) {
 
-				System.out.println("Erro:: " + e);
+				System.out.println("Error:: " + e);
 			}
 
 			Integer newUser = new UserController().execUserAdd(jsonItems, null);
@@ -89,6 +80,11 @@ public class AddUserTest {
 	}
 
 
+	/**
+	 * Filter string to generate email
+	 * @param word
+	 * @return
+	 */
 	private String filterStr(String word)
 	{
 		String FilteredWord = word.
@@ -103,7 +99,7 @@ public class AddUserTest {
 	}
 
 	/**
-	 *
+	 * Update registered users
 	 * @throws JSONException
 	 */
 	@Test
@@ -132,18 +128,11 @@ public class AddUserTest {
 		}
 	}
 
-	private Integer selectClient()
-	{
 
-		List<Client> clientList = new UserModel().getAllClients();
-
-		System.out.println("Client List size:: " + clientList.size());
-
-
-		return null;
-	}
-
-
+	/**
+	 * Generate randomic user lastNames
+	 * @return
+	 */
 	private String sobreNome(){
 
 		String[] nomes = new String[71];
@@ -219,12 +208,16 @@ public class AddUserTest {
 		nomes[69] = "Flores";
 		nomes[70] = "Xavier";
 
-
 		int random = new Random().nextInt(nomes.length);
 
 		return nomes[random];
 	}
 
+	/**
+	 * Return randomic name
+	 * to build user names and based emails
+	 * @return
+	 */
 	private String name(){
 
 		String[] nomes = new String[131];
@@ -361,7 +354,6 @@ public class AddUserTest {
 		nomes[128] = "Alan:M";
 		nomes[129] = "Maitê:F";
 		nomes[130] = "Erika:F";
-
 
 		int random = new Random().nextInt(nomes.length);
 
