@@ -1,14 +1,23 @@
 package com.supportsys.entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 /**
  * The persistent class for the users database table.
- * 
+ *
  */
 @Entity
 @Table(name="users")
@@ -39,6 +48,8 @@ public class User implements Serializable {
 	private String phone;
 
 	private String sname;
+
+	private Integer active;
 
 	//bi-directional many-to-one association to Help
 	@OneToMany(mappedBy="supportUser")
@@ -246,6 +257,14 @@ public class User implements Serializable {
 
 	public void setUserGroupBean(UserGroup userGroupBean) {
 		this.userGroupBean = userGroupBean;
+	}
+
+	public Integer getActive() {
+		return this.active;
+	}
+
+	public void setActive(Integer active) {
+		this.active = active;
 	}
 
 }

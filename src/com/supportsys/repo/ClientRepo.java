@@ -10,8 +10,25 @@ import com.supportsys.entity.Client;
 
 public class ClientRepo {
 
+
 	/**
-	 * List al clients
+	 * List all clients
+	 * @return List<Client>
+	 */
+	public List<Client> getAllClients()
+	{
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
+		EntityManager em = emf.createEntityManager();
+
+		List<Client> fullList = em.createNamedQuery("Client.findAll").getResultList();
+		emf.close();
+
+		return fullList;
+	}
+
+
+	/**
+	 * List clients by keyword
 	 * @return List<Client>
 	 */
 	public List<Client> getClientsByKeyWord(String keyWord)
@@ -22,8 +39,8 @@ public class ClientRepo {
 		String query = "SELECT c FROM Client c WHERE c.name LIKE :keyWord";
 
 		List<Client> itemData = em.createQuery(query, Client.class).
-		setParameter("keyWord", keyWord+"%").
-		getResultList();
+				setParameter("keyWord", keyWord+"%").
+				getResultList();
 		emf.close();
 
 		return itemData;

@@ -34,8 +34,8 @@ public class UserController {
 		String jsonFormData = jsonStr.toString();
 		JSONObject jsonItems = new JSONObject(jsonFormData);
 
-		System.out.println("Json itens received:: " + jsonItems);
-
+		/*TODO field "active" added, update
+		logical code to validate user active and non active in your system */
 		boolean addUserOk = new UserModel().addUser(jsonItems);
 
 		if(addUserOk == true)

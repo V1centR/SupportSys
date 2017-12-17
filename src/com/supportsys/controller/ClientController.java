@@ -26,8 +26,6 @@ public class ClientController {
 	@RequestMapping("/clients/list")
 	public ModelAndView clients(Model model)
 	{
-		model.addAttribute("testok","Teste OK");
-
 		return new ModelAndView("clientForm","","");
 	}
 
@@ -36,8 +34,16 @@ public class ClientController {
 	{
 		JSONObject container = new JSONObject();
 		JSONObject items = new JSONObject();
+		List<Client> clientList = null;
 
-		List<Client> clientList = new ClientRepo().getClientsByKeyWord(keyWord);
+		if(keyWord.equals("null"))
+		{
+			clientList = new ClientRepo().getAllClients();
+		} else {
+			clientList = new ClientRepo().getClientsByKeyWord(keyWord);
+		}
+
+		System.out.println("Object returned:: " + clientList);
 
 		for(Client clientItem: clientList)
 		{

@@ -66,7 +66,7 @@ public class AddUserTest {
 				emailReady = nameToEmail+"."+sNameToEmail+"@"+domainEmail+".com.br";
 				emailUserOk = filterStr(emailReady.toLowerCase()).replaceAll(" ","");
 
-				jsonItems = "{\"hashSec\":\"\",\"hashItem\":\"undefined\",\"nameUser\":\""+ name +" \",\"sNameUser\":\""+sName+"\",\"gender\":\""+gender+"\",\"emailUser\":\""+emailUserOk+"\",\"selectClient\":\""+clientItem.getId()+"\",\"department\":\""+departmentItem.getId()+"\",\"userGroup\":\""+userGroupItem.getId()+"\",\"idItem\":\"\"}";
+				jsonItems = "{\"hashSec\":\"\",\"hashItem\":\"undefined\",\"nameUser\":\""+ name +" \",\"sNameUser\":\""+sName+"\",\"gender\":\""+gender+"\",\"emailUser\":\""+emailUserOk+"\",\"selectClient\":\""+clientItem.getId()+"\",\"department\":\""+departmentItem.getId()+"\",\"userGroup\":\""+userGroupItem.getId()+"\",\"idItem\":\"\",\"active\":\"1\",\"resetPassword\":\"false\"}";
 
 			} catch (Exception e) {
 
@@ -117,7 +117,7 @@ public class AddUserTest {
 
 		for(User userData: userList)
 		{
-			jsonItems = "{\"hashSec\":\""+ userData.getIdConfEmail() +"\",\"hashItem\":\"undefined\",\"nameUser\":\""+ userData.getName() +" \",\"sNameUser\":\"jUnit 4.1\",\"gender\":\""+userData.getGender()+"\",\"emailUser\":\""+userData.getEmail()+"\",\"selectClient\":\""+userData.getDepartment().getClientBean().getId()+"\",\"department\":\""+userData.getDepartment().getId()+"\",\"userGroup\":\""+userData.getUserGroupBean().getId()+"\",\"idItem\":\""+userData.getId()+"\"}";
+			jsonItems = "{\"hashSec\":\""+ userData.getIdConfEmail() +"\",\"hashItem\":\"undefined\",\"nameUser\":\""+ userData.getName() +" \",\"sNameUser\":\"jUnit 4.1\",\"gender\":\""+userData.getGender()+"\",\"emailUser\":\""+userData.getEmail()+"\",\"selectClient\":\""+userData.getDepartment().getClientBean().getId()+"\",\"department\":\""+userData.getDepartment().getId()+"\",\"userGroup\":\""+userData.getUserGroupBean().getId()+"\",\"idItem\":\""+userData.getId()+"\",\"active\":\"1\",\"resetPassword\":\"false\"}";
 
 			Integer newUser = new UserController().execUserAdd(jsonItems, null);
 

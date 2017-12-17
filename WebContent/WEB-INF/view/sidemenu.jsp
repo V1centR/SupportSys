@@ -84,7 +84,7 @@
           </a>
           <ul class="treeview-menu">
             <li class="active">
-            <a href="<c:url value="/chamados/novo-chamado"/>"><i class="fa fa-circle-o"></i> Gerenciar clientes</a>
+            <a href="<c:url value="/clients/list"/>"><i class="fa fa-circle-o"></i> Gerenciar clientes</a>
             </li>
             
             <li class="active">
