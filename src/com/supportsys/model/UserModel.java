@@ -114,8 +114,8 @@ public class UserModel {
 
 				addUser.setName(nomeUser);
 				addUser.setSname(sNameUser);
-				addUser.setGender(gender);
-				addUser.setEmail(emailUser);
+				//addUser.setGender(gender);
+				//addUser.setEmail(emailUser);
 				addUser.setDepartment(departmentObj);
 				//addUser.setDescription(null);
 				//addUser.setIdConfEmail(sha1ToUser);
