@@ -39,7 +39,7 @@ public class ClientRepo {
 		String query = "SELECT c FROM Client c WHERE c.name LIKE :keyWord";
 
 		List<Client> itemData = em.createQuery(query, Client.class).
-				setParameter("keyWord", keyWord+"%").
+				setParameter("keyWord", "%"+keyWord+"%").
 				getResultList();
 		emf.close();
 
