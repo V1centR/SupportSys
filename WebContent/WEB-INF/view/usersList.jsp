@@ -24,7 +24,9 @@ $(document).ready(function (){
     
     var clientList = localStorage.getItem("clientList");
     
-    if(clientList == "undefined" || clientList == "" || clientList == "0"){
+    console.log("Client ID:: " + clientList);
+    
+    if(clientList == null || clientList == "" || clientList == "0"){
         getList(0);
     }else{
         getList(clientList);
