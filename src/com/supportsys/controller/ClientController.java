@@ -26,6 +26,31 @@ public class ClientController {
 	@RequestMapping("/clients/list")
 	public ModelAndView clients(Model model)
 	{
+		return new ModelAndView("clientList","","");
+	}
+
+	/**
+	 * List clients by request
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/clients/add")
+	public ModelAndView clientsAdd(Model model)
+	{
+
+
+
+		return new ModelAndView("clientForm","","");
+	}
+
+	/**
+	 * List clients by request
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/clients/edit/{idClient}/{token}")
+	public ModelAndView clientsEdit(Model model)
+	{
 		return new ModelAndView("clientForm","","");
 	}
 
