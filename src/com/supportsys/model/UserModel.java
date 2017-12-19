@@ -22,8 +22,7 @@ import com.supportsys.entity.User;
 import com.supportsys.entity.UserGroup;
 import com.supportsys.repo.ClientRepo;
 
-public class UserModel {
-
+public class UserModel extends EmModel{
 
 	/**
 	 * Return full list of users
@@ -31,11 +30,10 @@ public class UserModel {
 	 */
 	public List<User> getAllUsers()
 	{
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
-		EntityManager em = emf.createEntityManager();
+		EntityManager em = super.getEm();
 
 		List<User> usersFull = em.createNamedQuery("User.findAll").getResultList();
-		emf.close();
+		em.close();
 
 		return usersFull;
 	}
@@ -59,8 +57,7 @@ public class UserModel {
 	 */
 	public boolean addUser(JSONObject jsonItems) throws JSONException
 	{
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
-		EntityManager em = emf.createEntityManager();
+		EntityManager em = super.getEm();
 
 		boolean editSecOk = false;
 		Integer setAvatarId = 0;
@@ -137,7 +134,7 @@ public class UserModel {
 				em.getTransaction().begin();
 				addUser = em.merge(addUser);
 				em.getTransaction().commit();
-				emf.close();
+				em.close();
 
 				return true;
 
@@ -182,7 +179,7 @@ public class UserModel {
 					em.getTransaction().begin();
 					em.persist(addUser);
 					em.getTransaction().commit();
-					emf.close();
+					em.close();
 
 					return true;
 

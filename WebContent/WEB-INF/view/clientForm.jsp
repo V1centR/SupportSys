@@ -2,75 +2,171 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <script>
 $(document).ready(function () {
-   
-    var token = "facbcf23daa88e0c359722b1abd3da1b5b59b6e2";
-    getClientList("",token);
+	    
     
-    $("form#searchClient").submit(function(e){
-        var searchInput = $("input#searchByKey").val();
-        getClientList(searchInput,token);
+    var mode = '${mode}';
+    console.log("Mode:: " + mode);
+    
+    if(mode == 'edit')
+    {
+        var clientId = '${userInfo.department.clientBean.id}';
+        var departmentId = '${userInfo.department.id}';
+        var groupUser = '${userInfo.userGroupBean.id}';
+        var gender = '${userInfo.gender}';
+        var genderInput = $('input:radio[name=gender]');
         
+        if(gender == 'M'){
+            genderInput.filter('[value=M]').attr('checked', 'checked');
+        }else {
+            
+            genderInput.filter('[value=F]').attr('checked', 'checked');
+        }
+              
+        getDepartment(clientId);
+        $('select#selectClient option[value=' + clientId +']').attr('selected','selected');
+        $('select#selectUserGroup option[value=' + groupUser +']').attr('selected','selected');
+    }
+    
+    $('form#addUser')[0].reset();
+    $('button#back').click(function(){        
+        window.location.href = '/supportSys';
         return false;
     });
-    
-    function getClientList(searchInput,token)
-    {
-        if(searchInput == "")
-        {
-            searchInput = "null";
-        }
-        
-        var baseUrl = '<c:url value="/"/>';
-        var loaderBig = '<div style="width:100%; text-align:center;"><img src="<c:url value="/resources/images/loaderBig.gif"/>" style="width:100px; height:100px;"></div>';
-       
-        $('tbody.serviceClientList').html('');
-        $('span#loader').append(loaderBig);
 
-        $.ajax({
+    function getDepartment(clientId){
+        
+        var mode = '${mode}';
+        
+        $.ajax({        	
             type: 'GET',
             dataType: 'json',
-            url: '<c:url value="/clients/'+ searchInput +'/'+token+'"/>',
-            //data: setJson,
+            url: '<c:url value="/getdepartmentlist/'+ clientId +'"/>',
             contentType : 'application/json; charset=utf-8',
             headers: { 
                 'Accept': 'application/json',
                 'Content-Type': 'application/json' 
             },
             success: function (data) {
-                
-               $('span#loader').html('');
-               $('tbody.serviceClientList').html('');
                
-               $.each(data, function () {
-                  
-               $('tbody.serviceClientList').append('<tr>\
-							<td>\
-							<img src="<c:url value="/resources/images/' + this.avatar +'"/>" style="width:32px; height:32px;" class="img-circle img-bordered-sm" alt="User Image">\
-						</td>\
-						<td><a href="<c:url value="/users/edit/' + this.clientId +'"/>"><div class="cellSpace">' + this.clientName +' &nbsp;</div></a></td>\
-						<td>' + this.clientCity +' - '+this.clientUf+' &nbsp;&nbsp;</td>\
-						<td>' + this.clientDescription +' &nbsp;&nbsp;</td>\
-					</tr>');
-               });
+               $('select#department').html('');
+               $.each(data, function(key, value) {   
+                   $('select#department')
+                       .append($("<option></option>")
+                                  .attr("value",key)
+                                  .text(value.name)); 
+              });
+               
+               if(mode == 'edit'){
+                   
+                   $('select#department option[value=' + departmentId +']').attr('selected','selected');
+               }
              
-               return false;
+               return true;
             },
             error: function (data) {
-                $('span#loader').html("");
-                if(data.responseText == "empty")
-                {
-                    $('tbody.serviceClientList').html('');
-                    $('tbody.serviceClientList').append('<tr><td>Não há usuários cadastrados para este cliente.</td></tr>');
-                    
-                    return false;
-                }
-                
                 return false;
             }
         });
     }
     
+    $("select#selectClient").change(function(){
+
+        $.ajax({        	
+            type: 'GET',
+            dataType: 'json',
+            url: '<c:url value="/getdepartmentlist/'+ this.value +'"/>',
+            contentType : 'application/json; charset=utf-8',
+            headers: { 
+                'Accept': 'application/json',
+                'Content-Type': 'application/json' 
+            },
+            success: function (data) {
+               
+               $('select#department').html('');
+               $.each(data, function(key, value) {   
+                   $('select#department')
+                       .append($("<option></option>")
+                                  .attr("value",key)
+                                  .text(value.name)); 
+              });
+             
+               return true;
+            },
+            error: function (data) {
+                console.log(data);
+                return false;
+            }
+        });
+    });
+    
+    
+    $('button#addUserExec').click(function () {
+
+      $('span.message-danger').html("");
+      var idItem = 		$("input#idItem").val();
+      var hashItem = 	$("input#hashItemu").val();
+      var hashSec = 	$("input#hashSec").val();
+     
+      var nameUser = 	$("input#nameUser").val();
+      var sNameUser = 	$("input#sNameUser").val();
+      var gender = 		$('input[name=gender]:checked', '#addUser').val();
+      var emailUser = 	$("input#emailUser").val();
+      var selectClient = 	$("select#selectClient").val();
+      var userGroup = 	$("select#selectUserGroup").val();
+      var department = 	$("select#department").val();
+      var resetPassword = 	$("input#resetPassword").val();
+      var loaderSmall = 'Processando... <img src="<c:url value="/resources/images/loader.gif"/>" style="">';
+
+        
+      if(emailUser == ''){                
+          $('span.message-danger').append('<div class="alert alert-danger" role="alert"><strong>ATENÇÃO!</strong> Todos os campos são obrigatórios!</div>');
+          return false;
+      }
+        
+	  $("button#addUserExec").attr("disabled","disabled");
+	  $("form#addUser :input").attr("disabled", true);
+	  $('span#proccessloader').append(loaderSmall);
+      
+      var strFormJson = "{\"idItem\":\"" + idItem + "\",\"hashItem\":\""+ hashItem + "\",\"nameUser\":\""+ nameUser + "\",\"sNameUser\":\""+ sNameUser + "\",\"gender\":\""+ gender + "\",\"emailUser\":\""+ emailUser + "\",\"selectClient\":\""+ selectClient + "\",\"userGroup\":\""+ userGroup + "\",\"department\":\""+ department + "\",\"hashSec\":\""+ hashSec + "\",\"resetPassword\":\""+ resetPassword + "\"}"; 
+      var setJson = JSON.stringify(strFormJson);
+      
+      console.log("String Json" + setJson);
+      
+        $.ajax({        	
+            type: 'POST',
+            dataType: 'json',
+            url: '<c:url value="/users/exec"/>',
+            data: setJson,
+            contentType : 'application/json; charset=utf-8',
+            headers: {  
+                'Accept': 'application/json',
+                'Content-Type': 'application/json' 
+            },
+            success: function (data) {
+               console.log(data);
+               
+               $('span#proccessloader').remove();
+               $('span.message-danger').remove();
+               $("form#addUser").fadeOut('fast');
+               
+               if(data == 201){
+            	   $('span.message').append('<div class="alert alert-success" role="alert">Usuário registrado com sucesso! <a href="/">(Clique para voltar)</a></div>');
+               }
+               
+               if(data == 500){
+            	   $('span.message').append('<div class="alert alert-danger" role="alert">Houve um erro de procesamento, usuário não foi registrado! <a href="/">(Clique para voltar)</a></div>');
+               }
+              
+               return true;
+            },
+            error: function (data) {
+                console.log(data);
+                return false;
+            }
+        });
+    });
 });
+
 </script>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
@@ -84,7 +180,7 @@ $(document).ready(function () {
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
 				<h1>
-					Blank page <small>it all starts here</small>
+					Usuários <small>novo usuário</small>
 				</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -92,37 +188,160 @@ $(document).ready(function () {
 					<li class="active">Blank page</li>
 				</ol>
 			</section>
-
 			<!-- Main content -->
 			<section class="content">
 
 				<!-- Default box -->
 				<div class="box">
-					<div class="box-header with-border">
-						<h3 class="box-title">Title</h3>						
-					</div>
-					
 					<div class="box-body">
-					
-						<form id="searchClient">
-							<label>Buscar cliente: </label> <span data-toggle="tooltip" title="" style="position:relative; top:-3px;" class="badge bg-blue" data-original-title="Blank search: Full list">?</span>
-							<input type="text" id="searchByKey" name="searchByKey" placeholder="type to search" class="form-control">
-						</form>
+					<span class="message"></span>
+					<span class="message-danger"></span>
+					<form class="form-horizontal" id="addUser">
+						<fieldset>
+						<input type="hidden" name="idItem" id="idItem" value="${userInfo.id}" />
+						<input type="hidden" name="hashItem" id="hashItem" value="888" />
+						<input type="hidden" name="hashSec" id="hashSec" value="${userInfo.idConfEmail}" />
+						<!-- Form Name -->
+						<legend>Cadastrar Clientes</legend>
+						Formulário: ${mode} <br>
 						
-						<table class="table table-hover">
-							<tr>
-			                  <th>Logo</th>
-			                  <th>Nome</th>
-			                  <th>Cidade</th>
-			                  <th>Descrição</th>
-		                	</tr>
-							<tbody class="serviceClientList"></tbody>
-						</table>
-						<span id="loader"></span>
+						<c:set var="mode" scope="session" value="${mode}" />
+						<c:choose>
+						<c:when test="${mode == 'edit'}">
+							<c:set var="nomeUser" scope="session" value="${userInfo.name}" />
+							<c:set var="snomeUser" scope="session" value="${userInfo.sname}" />
+							<c:set var="gender" scope="session" value="${userInfo.gender}" />
+							<c:set var="emailUser" scope="session" value="${userInfo.email}" />
+							<c:set var="client" scope="session" value="${userInfo.department.clientBean.id}" />
+							<c:set var="department" scope="session" value="${userInfo.department.id}" />
+							<c:set var="groupUser" scope="session" value="${userInfo.userGroupBean.id}" />
+							<option value="${listGroup.id}">${listGroup.name}</option>
+						</c:when>
+						<c:otherwise>
+							<c:set var="nomeUser" scope="session" value="" />
+							<c:set var="snomeUser" scope="session" value="" />
+							<c:set var="gender" scope="session" value="" />
+							<c:set var="emailUser" scope="session" value="" />
+							<c:set var="client" scope="session" value="" />
+							<c:set var="department" scope="session" value="" />
+							<c:set var="groupUser" scope="session" value="" />
+						</c:otherwise>
+						</c:choose>
+						
+						<!-- Text input-->
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="textinput">Nome (Razão Social)</label>  
+						  <div class="col-md-4">
+						  <input id="nameUser" name="textinput" type="text" placeholder="name" class="form-control" style="font-size:16px; font-weight: bold;" value="${nomeUser}">
+						  </div>
+						</div>
+						
+						<!-- Text input-->
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="textinput">Endereço</label>  
+						  <div class="col-md-4">
+						  <input id="sNameUser" name="textinput" type="text" placeholder="sobrenome" class="form-control" style="font-size:16px; font-weight: bold;" value="${snomeUser}">
+						  </div>
+						</div>
+						<!-- Text input-->
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="textinput">Bairro</label>  
+						  <div class="col-md-4">
+						  <input id="sNameUser" name="textinput" type="text" placeholder="sobrenome" class="form-control" style="font-size:16px; font-weight: bold;" value="${snomeUser}">
+						  </div>
+						</div>
+						<!-- Text input-->
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="textinput">Estado</label>  
+						  <div class="col-md-4">
+						  <input id="sNameUser" name="textinput" type="text" placeholder="sobrenome" class="form-control" style="font-size:16px; font-weight: bold;" value="${snomeUser}">
+						  </div>
+						</div>
+						
+						<!-- Text input-->
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="textinput">CNPJ</label>  
+						  <div class="col-md-4">
+						  <input id="sNameUser" name="textinput" type="text" placeholder="sobrenome" class="form-control" style="font-size:16px; font-weight: bold;" value="${snomeUser}">
+						  </div>
+						</div>
+						
+						<!-- Text input-->
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="textinput">Telephone</label>  
+						  <div class="col-md-4">
+						  <input id="sNameUser" name="textinput" type="text" placeholder="sobrenome" class="form-control" style="font-size:16px; font-weight: bold;" value="${snomeUser}">
+						  </div>
+						</div>
+						
+						<!-- Text input-->
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="textinput">Logotipo</label> <span data-toggle="tooltip" title="" style="position:relative; top:7px;" class="badge bg-blue" data-original-title="Images: JPG, JPEG, PNG, GIF">?</span>
+						  <div class="col-md-4">
+						  <input id="logoImage" name="fileinput" type="file" placeholder="logo" style="font-size:16px; font-weight: bold;" value="${snomeUser}">
+						  </div>
+						</div>
+						
+						<!-- Text input-->
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="textinput">E-mail responsável</label>  
+						  <div class="col-md-4">
+						  <input id="emailUser" name="emailUser" type="text" placeholder="email" class="form-control input-md" value="${emailUser}">
+						  </div>
+						</div>
+						
+						<!-- Select Basic -->
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="selectbasic">Prioridade</label>
+						  <div class="col-md-4">
+						    <select id="selectClient" name="selectClient" class="form-control">
+						      <option value="0">Selecione</option>
+	                              <c:forEach items="${clientList}" var="listClients">
+	                              	<option value="${listClients.id}">${listClients.name}</option>
+	                              </c:forEach>
+						    </select>
+						  </div>
+						</div>
+						
+						<!-- Multiple Radios -->
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="radios">Empresa Ativa?</label>
+						  <div class="col-md-4">
+						  <div class="radio">
+						    <label for="radios-0">
+						      <input type="radio" name="gender" class="gender" id="radios-0" value="1">
+						      Sim
+						    </label>
+						    
+						    <label for="radios-1">
+						      <input type="radio" name="gender" class="gender" id="radios-1" value="0">
+						      Não
+						    </label>
+						    
+							</div>
+						  
+						  </div>
+						</div>
+						
+						<div class="form-group">
+						<label class="col-md-4 control-label">Reset Password?</label>
+							<div class="col-md-4" style="padding-top: 10px;">
+								<input type="checkbox" id="resetPassword" value="true"> <span data-toggle="tooltip" title="" style="position:relative; top:-3px;" class="badge bg-blue" data-original-title="Marked checkbox reset password to default">?</span>
+							</div>
+						</div>
+						<!-- Button -->
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="singlebutton">Novo usuário</label>
+						  <div class="col-md-4">
+						  	<button id="back" name="singlebutton" class="btn btn-primary"><i class="fa fa-close"></i> Cancelar</button>
+						    <button id="addUserExec" name="singlebutton" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add new client</button>
+						    <span id="proccessloader"></span>
+						  </div>
+						</div>
+						</fieldset>
+					</form>
 
 					</div>
-					
-					
 					<!-- /.box-body -->
 					<div class="box-footer">Footer</div>
 					<!-- /.box-footer-->
