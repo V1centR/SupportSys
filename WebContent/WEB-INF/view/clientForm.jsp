@@ -9,22 +9,21 @@ $(document).ready(function () {
     
     if(mode == 'edit')
     {
-        var clientId = '${userInfo.department.clientBean.id}';
-        var departmentId = '${userInfo.department.id}';
-        var groupUser = '${userInfo.userGroupBean.id}';
-        var gender = '${userInfo.gender}';
-        var genderInput = $('input:radio[name=gender]');
         
-        if(gender == 'M'){
-            genderInput.filter('[value=M]').attr('checked', 'checked');
+        var stateSelected = '${clientInfo.ufBean.id}';
+        var levelSelect = '${clientInfo.level}';
+        var activeClient = '${clientInfo.active}';
+        var activeInput = $('input:radio[name=active]');
+        
+        if(activeClient == '1'){
+            activeInput.filter('[value=1]').attr('checked', 'checked');
         }else {
             
-            genderInput.filter('[value=F]').attr('checked', 'checked');
+            activeInput.filter('[value=0]').attr('checked', 'checked');
         }
-              
-        getDepartment(clientId);
-        $('select#selectClient option[value=' + clientId +']').attr('selected','selected');
-        $('select#selectUserGroup option[value=' + groupUser +']').attr('selected','selected');
+        
+        $('select#selectState option[value=' + stateSelected +']').attr('selected','selected');
+        $('select#levelSelect option[value=' + levelSelect +']').attr('selected','selected');
     }
     
     $('form#addUser')[0].reset();
@@ -33,101 +32,49 @@ $(document).ready(function () {
         return false;
     });
 
-    function getDepartment(clientId){
-        
-        var mode = '${mode}';
-        
-        $.ajax({        	
-            type: 'GET',
-            dataType: 'json',
-            url: '<c:url value="/getdepartmentlist/'+ clientId +'"/>',
-            contentType : 'application/json; charset=utf-8',
-            headers: { 
-                'Accept': 'application/json',
-                'Content-Type': 'application/json' 
-            },
-            success: function (data) {
-               
-               $('select#department').html('');
-               $.each(data, function(key, value) {   
-                   $('select#department')
-                       .append($("<option></option>")
-                                  .attr("value",key)
-                                  .text(value.name)); 
-              });
-               
-               if(mode == 'edit'){
-                   
-                   $('select#department option[value=' + departmentId +']').attr('selected','selected');
-               }
-             
-               return true;
-            },
-            error: function (data) {
-                return false;
-            }
-        });
-    }
     
-    $("select#selectClient").change(function(){
-
-        $.ajax({        	
-            type: 'GET',
-            dataType: 'json',
-            url: '<c:url value="/getdepartmentlist/'+ this.value +'"/>',
-            contentType : 'application/json; charset=utf-8',
-            headers: { 
-                'Accept': 'application/json',
-                'Content-Type': 'application/json' 
-            },
-            success: function (data) {
-               
-               $('select#department').html('');
-               $.each(data, function(key, value) {   
-                   $('select#department')
-                       .append($("<option></option>")
-                                  .attr("value",key)
-                                  .text(value.name)); 
-              });
-             
-               return true;
-            },
-            error: function (data) {
-                console.log(data);
-                return false;
-            }
-        });
-    });
-    
-    
-    $('button#addUserExec').click(function () {
+    $('button#addClientExec').click(function () {
 
       $('span.message-danger').html("");
+      
+      /*
+      	nameClient
+		addressClient
+		districtClient
+		selectState
+		cnpjClient
+		phoneClient
+		logoImage
+		emailClient
+		levelSelect
+		active
+		resetPassword
+		description
+	*/
+      
       var idItem = 		$("input#idItem").val();
-      var hashItem = 	$("input#hashItemu").val();
-      var hashSec = 	$("input#hashSec").val();
-     
-      var nameUser = 	$("input#nameUser").val();
-      var sNameUser = 	$("input#sNameUser").val();
-      var gender = 		$('input[name=gender]:checked', '#addUser').val();
-      var emailUser = 	$("input#emailUser").val();
-      var selectClient = 	$("select#selectClient").val();
-      var userGroup = 	$("select#selectUserGroup").val();
-      var department = 	$("select#department").val();
-      var resetPassword = 	$("input#resetPassword").val();
+      var clientName = 		$("input#nameClient").val();
+      var hashSec = 	$("input#hashSec").val();     
+      var addressClient = 	$("input#addressClient").val();
+      var districtClient = 	$("input#districtClient").val();
+      var selectState = 	$("select#selectState").val();
+      var cnpjClient = 	$("input#cnpjClient").val();
+      var phoneClient = 	$("input#phoneClient").val();
+      var logoImage = 	$("input#logoImage").val();
+      var emailClient = 	$("input#emailClient").val();
+      var levelSelect = 	$("input#levelSelect").val();
+      var active = 	$('input[name=active]:checked', '#active').val();
+      var resetPassword = 	$('input[name=resetPassword]:checked', '#resetPassword').val();
+      var description = 	$("textarea#description").val();
+
       var loaderSmall = 'Processando... <img src="<c:url value="/resources/images/loader.gif"/>" style="">';
 
-        
-      if(emailUser == ''){                
-          $('span.message-danger').append('<div class="alert alert-danger" role="alert"><strong>ATENÇÃO!</strong> Todos os campos são obrigatórios!</div>');
-          return false;
-      }
-        
-	  $("button#addUserExec").attr("disabled","disabled");
-	  $("form#addUser :input").attr("disabled", true);
+
+	  $("button#addClientExec").attr("disabled","disabled");
+	  $("form#addClient :input").attr("disabled", true);
 	  $('span#proccessloader').append(loaderSmall);
       
-      var strFormJson = "{\"idItem\":\"" + idItem + "\",\"hashItem\":\""+ hashItem + "\",\"nameUser\":\""+ nameUser + "\",\"sNameUser\":\""+ sNameUser + "\",\"gender\":\""+ gender + "\",\"emailUser\":\""+ emailUser + "\",\"selectClient\":\""+ selectClient + "\",\"userGroup\":\""+ userGroup + "\",\"department\":\""+ department + "\",\"hashSec\":\""+ hashSec + "\",\"resetPassword\":\""+ resetPassword + "\"}"; 
+      var strFormJson = "{\"idItem\":\"" + idItem + "\",\"clientName\":\""+ clientName + "\",\"addressClient\":\""+ addressClient + "\",\"districtClient\":\""+ districtClient + "\",\"selectState\":\""+ selectState + "\",\"cnpjClient\":\""+ cnpjClient + "\",\"selectClient\":\""+ selectClient + "\",\"phoneClient\":\""+ phoneClient + "\",\"emailClient\":\""+ emailClient + "\",\"logoImage\":\""+ logoImage + "\",\"levelSelect\":\""+ levelSelect + "\",\"resetPassword\":\""+ resetPassword + "\",\"active\":\""+ active + "\",\"description\":\""+ description + "\",\"resetPassword\":\""+ resetPassword + "\"}"; 
       var setJson = JSON.stringify(strFormJson);
       
       console.log("String Json" + setJson);
@@ -180,7 +127,7 @@ $(document).ready(function () {
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
 				<h1>
-					Usuários <small>novo usuário</small>
+					Clientes <small>novo cliente</small>
 				</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -196,11 +143,11 @@ $(document).ready(function () {
 					<div class="box-body">
 					<span class="message"></span>
 					<span class="message-danger"></span>
-					<form class="form-horizontal" id="addUser">
+					<form class="form-horizontal" id="addClient">
 						<fieldset>
-						<input type="hidden" name="idItem" id="idItem" value="${userInfo.id}" />
+						<input type="hidden" name="idItem" id="idItem" value="${clientInfo.id}" />
 						<input type="hidden" name="hashItem" id="hashItem" value="888" />
-						<input type="hidden" name="hashSec" id="hashSec" value="${userInfo.idConfEmail}" />
+						<input type="hidden" name="hashSec" id="hashSec" value="" />
 						<!-- Form Name -->
 						<legend>Cadastrar Clientes</legend>
 						Formulário: ${mode} <br>
@@ -208,23 +155,34 @@ $(document).ready(function () {
 						<c:set var="mode" scope="session" value="${mode}" />
 						<c:choose>
 						<c:when test="${mode == 'edit'}">
-							<c:set var="nomeUser" scope="session" value="${userInfo.name}" />
-							<c:set var="snomeUser" scope="session" value="${userInfo.sname}" />
-							<c:set var="gender" scope="session" value="${userInfo.gender}" />
-							<c:set var="emailUser" scope="session" value="${userInfo.email}" />
-							<c:set var="client" scope="session" value="${userInfo.department.clientBean.id}" />
-							<c:set var="department" scope="session" value="${userInfo.department.id}" />
-							<c:set var="groupUser" scope="session" value="${userInfo.userGroupBean.id}" />
-							<option value="${listGroup.id}">${listGroup.name}</option>
+							<c:set var="clientName" scope="session" value="${clientInfo.name}" />
+							<c:set var="clientPhone" scope="session" value="${clientInfo.phone}" />
+							<c:set var="clientPhoneB" scope="session" value="${userInfo.phoneB}" />
+							<c:set var="clientEmail" scope="session" value="${clientInfo.email}" />
+							<c:set var="clientAddress" scope="session" value="${clientInfo.address}" />
+							<c:set var="clientDistrict" scope="session" value="${clientInfo.bairro}" />
+							<c:set var="clientCity" scope="session" value="${clientInfo.city}" />
+							<c:set var="clientStateId" scope="session" value="${clientInfo.ufBean.id}" />
+							<c:set var="clientState" scope="session" value="${clientInfo.ufBean.sign}" />
+							<c:set var="clientLevel" scope="session" value="${clientInfo.level}" />
+							<c:set var="clientDescription" scope="session" value="${clientInfo.desc}" />
+							<c:set var="clientLogo" scope="session" value="${clientInfo.image.id}'.'${clientInfo.image.ext}" />
+							<c:set var="clientActive" scope="session" value="${clientInfo.active}" />
 						</c:when>
 						<c:otherwise>
-							<c:set var="nomeUser" scope="session" value="" />
-							<c:set var="snomeUser" scope="session" value="" />
-							<c:set var="gender" scope="session" value="" />
-							<c:set var="emailUser" scope="session" value="" />
-							<c:set var="client" scope="session" value="" />
-							<c:set var="department" scope="session" value="" />
-							<c:set var="groupUser" scope="session" value="" />
+							<c:set var="clientName" scope="session" value="" />
+							<c:set var="clientPhone" scope="session" value="" />
+							<c:set var="clientPhoneB" scope="session" value="" />
+							<c:set var="clientEmail" scope="session" value="" />
+							<c:set var="clientAddress" scope="session" value="" />
+							<c:set var="clientDistrict" scope="session" value="" />
+							<c:set var="clientCity" scope="session" value="" />
+							<c:set var="clientStateId" scope="session" value="" />
+							<c:set var="clientState" scope="session" value="" />
+							<c:set var="clientLevel" scope="session" value="" />
+							<c:set var="clientDescription" scope="session" value="" />
+							<c:set var="clientLogo" scope="session" value="" />
+							<c:set var="clientActive" scope="session" value="" />
 						</c:otherwise>
 						</c:choose>
 						
@@ -232,7 +190,7 @@ $(document).ready(function () {
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="textinput">Nome (Razão Social)</label>  
 						  <div class="col-md-4">
-						  <input id="nameUser" name="textinput" type="text" placeholder="name" class="form-control" style="font-size:16px; font-weight: bold;" value="${nomeUser}">
+						  <input id="nameClient" name="textinput" type="text" placeholder="name" class="form-control" style="font-size:16px; font-weight: bold;" value="${clientName}">
 						  </div>
 						</div>
 						
@@ -240,29 +198,36 @@ $(document).ready(function () {
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="textinput">Endereço</label>  
 						  <div class="col-md-4">
-						  <input id="sNameUser" name="textinput" type="text" placeholder="sobrenome" class="form-control" style="font-size:16px; font-weight: bold;" value="${snomeUser}">
+						  <input id="addressClient" name="textinput" type="text" placeholder="sobrenome" class="form-control" value="${clientAddress}">
 						  </div>
 						</div>
 						<!-- Text input-->
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="textinput">Bairro</label>  
 						  <div class="col-md-4">
-						  <input id="sNameUser" name="textinput" type="text" placeholder="sobrenome" class="form-control" style="font-size:16px; font-weight: bold;" value="${snomeUser}">
+						  <input id="districtClient" name="textinput" type="text" placeholder="Bairro" class="form-control" value="${clientDistrict}">
 						  </div>
 						</div>
-						<!-- Text input-->
+						
+						<!-- Select Basic -->
 						<div class="form-group">
-						  <label class="col-md-4 control-label" for="textinput">Estado</label>  
+						  <label class="col-md-4 control-label" for="selectbasic">Estado</label>
 						  <div class="col-md-4">
-						  <input id="sNameUser" name="textinput" type="text" placeholder="sobrenome" class="form-control" style="font-size:16px; font-weight: bold;" value="${snomeUser}">
+						    <select id="selectState" name="selectState" class="form-control">
+						      <option value="0">Selecione</option>
+	                              <c:forEach items="${statesList}" var="stList">
+	                              	<option value="${stList.id}">${stList.sign}</option>
+	                              </c:forEach>
+						    </select>
 						  </div>
 						</div>
+						
 						
 						<!-- Text input-->
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="textinput">CNPJ</label>  
 						  <div class="col-md-4">
-						  <input id="sNameUser" name="textinput" type="text" placeholder="sobrenome" class="form-control" style="font-size:16px; font-weight: bold;" value="${snomeUser}">
+						  <input id="cnpjClient" name="textinput" type="text" placeholder="sobrenome" class="form-control" style="font-size:16px;" value="${snomeUser}">
 						  </div>
 						</div>
 						
@@ -270,7 +235,7 @@ $(document).ready(function () {
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="textinput">Telephone</label>  
 						  <div class="col-md-4">
-						  <input id="sNameUser" name="textinput" type="text" placeholder="sobrenome" class="form-control" style="font-size:16px; font-weight: bold;" value="${snomeUser}">
+						  <input id="phoneClient" name="textinput" type="text" placeholder="sobrenome" class="form-control" value="${clientPhone}">
 						  </div>
 						</div>
 						
@@ -286,20 +251,28 @@ $(document).ready(function () {
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="textinput">E-mail responsável</label>  
 						  <div class="col-md-4">
-						  <input id="emailUser" name="emailUser" type="text" placeholder="email" class="form-control input-md" value="${emailUser}">
+						  <input id="emailClient" name="emailUser" type="text" placeholder="email" class="form-control input-md" value="${clientEmail}">
 						  </div>
 						</div>
 						
 						<!-- Select Basic -->
 						<div class="form-group">
-						  <label class="col-md-4 control-label" for="selectbasic">Prioridade</label>
+						  <label class="col-md-4 control-label" for="selectbasic">Prioridade</label><span data-toggle="tooltip" title="" style="position:relative; top:7px;" class="badge bg-blue" data-original-title="Priority of client by level 1 - 10">?</span>
 						  <div class="col-md-4">
-						    <select id="selectClient" name="selectClient" class="form-control">
+						    <select id="levelSelect" name="levelSelect" class="form-control">
 						      <option value="0">Selecione</option>
-	                              <c:forEach items="${clientList}" var="listClients">
-	                              	<option value="${listClients.id}">${listClients.name}</option>
-	                              </c:forEach>
+	                          <option value="1">1</option>
+	                          <option value="2">2</option>
+	                          <option value="3">3</option>
+	                          <option value="4">4</option>
+	                          <option value="5">5</option>
+	                          <option value="6">6</option>
+	                          <option value="7">7</option>
+	                          <option value="8">8</option>
+	                          <option value="9">9</option>
+	                          <option value="10">10</option>
 						    </select>
+						    
 						  </div>
 						</div>
 						
@@ -309,32 +282,36 @@ $(document).ready(function () {
 						  <div class="col-md-4">
 						  <div class="radio">
 						    <label for="radios-0">
-						      <input type="radio" name="gender" class="gender" id="radios-0" value="1">
+						      <input type="radio" name="active" class="gender" id="radios-0" value="1">
 						      Sim
 						    </label>
-						    
 						    <label for="radios-1">
-						      <input type="radio" name="gender" class="gender" id="radios-1" value="0">
+						      <input type="radio" name="active" class="gender" id="radios-1" value="0">
 						      Não
 						    </label>
-						    
 							</div>
-						  
 						  </div>
 						</div>
-						
 						<div class="form-group">
 						<label class="col-md-4 control-label">Reset Password?</label>
 							<div class="col-md-4" style="padding-top: 10px;">
 								<input type="checkbox" id="resetPassword" value="true"> <span data-toggle="tooltip" title="" style="position:relative; top:-3px;" class="badge bg-blue" data-original-title="Marked checkbox reset password to default">?</span>
 							</div>
 						</div>
+						<!-- Text input-->
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="textinput">Descrição</label>  
+						  <div class="col-md-4">
+						  <textarea id="description" name="textinput" type="text" placeholder="sobrenome" class="form-control">${clientDescription}</textarea>
+						  </div>
+						</div>
+						
 						<!-- Button -->
 						<div class="form-group">
-						  <label class="col-md-4 control-label" for="singlebutton">Novo usuário</label>
+						  <label class="col-md-4 control-label" for="singlebutton">Novo Cliente</label>
 						  <div class="col-md-4">
 						  	<button id="back" name="singlebutton" class="btn btn-primary"><i class="fa fa-close"></i> Cancelar</button>
-						    <button id="addUserExec" name="singlebutton" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add new client</button>
+						    <button id="addClientExec" name="singlebutton" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add new client</button>
 						    <span id="proccessloader"></span>
 						  </div>
 						</div>

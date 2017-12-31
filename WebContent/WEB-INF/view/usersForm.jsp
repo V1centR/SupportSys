@@ -13,13 +13,21 @@ $(document).ready(function () {
         var departmentId = '${userInfo.department.id}';
         var groupUser = '${userInfo.userGroupBean.id}';
         var gender = '${userInfo.gender}';
+        var active = '${userInfo.active}';
+        
         var genderInput = $('input:radio[name=gender]');
+        var activeInput = $('input:radio[name=active]');
         
         if(gender == 'M'){
             genderInput.filter('[value=M]').attr('checked', 'checked');
         }else {
-            
             genderInput.filter('[value=F]').attr('checked', 'checked');
+        }
+        
+        if(active == 1){
+            activeInput.filter('[value=1]').attr('checked', 'checked');
+        }else {
+            activeInput.filter('[value=0]').attr('checked', 'checked');
         }
               
         getDepartment(clientId);
@@ -103,6 +111,8 @@ $(document).ready(function () {
     $('button#addUserExec').click(function () {
 
       $('span.message-danger').html("");
+      var mode = '${mode}';
+      var urlExec = "";
       var idItem = 		$("input#idItem").val();
       var hashItem = 	$("input#hashItemu").val();
       var hashSec = 	$("input#hashSec").val();
@@ -110,6 +120,7 @@ $(document).ready(function () {
       var nameUser = 	$("input#nameUser").val();
       var sNameUser = 	$("input#sNameUser").val();
       var gender = 		$('input[name=gender]:checked', '#addUser').val();
+      var active = 		$('input[name=active]:checked', '#addUser').val();
       var emailUser = 	$("input#emailUser").val();
       var selectClient = 	$("select#selectClient").val();
       var userGroup = 	$("select#selectUserGroup").val();
@@ -117,7 +128,15 @@ $(document).ready(function () {
       var resetPassword = 	$("input#resetPassword").val();
       var loaderSmall = 'Processando... <img src="<c:url value="/resources/images/loader.gif"/>" style="">';
 
-        
+      
+		if(mode == "edit")
+		{
+			urlExec = '<c:url value="/users/edit"/>';
+		}else{
+		    
+		    urlExec = '<c:url value="/users/add"/>';
+		}
+      
       if(emailUser == ''){                
           $('span.message-danger').append('<div class="alert alert-danger" role="alert"><strong>ATENÇÃO!</strong> Todos os campos são obrigatórios!</div>');
           return false;
@@ -127,7 +146,7 @@ $(document).ready(function () {
 	  $("form#addUser :input").attr("disabled", true);
 	  $('span#proccessloader').append(loaderSmall);
       
-      var strFormJson = "{\"idItem\":\"" + idItem + "\",\"hashItem\":\""+ hashItem + "\",\"nameUser\":\""+ nameUser + "\",\"sNameUser\":\""+ sNameUser + "\",\"gender\":\""+ gender + "\",\"emailUser\":\""+ emailUser + "\",\"selectClient\":\""+ selectClient + "\",\"userGroup\":\""+ userGroup + "\",\"department\":\""+ department + "\",\"hashSec\":\""+ hashSec + "\",\"resetPassword\":\""+ resetPassword + "\"}"; 
+      var strFormJson = "{\"idItem\":\"" + idItem + "\",\"hashItem\":\""+ hashItem + "\",\"nameUser\":\""+ nameUser + "\",\"sNameUser\":\""+ sNameUser + "\",\"gender\":\""+ gender + "\",\"emailUser\":\""+ emailUser + "\",\"selectClient\":\""+ selectClient + "\",\"userGroup\":\""+ userGroup + "\",\"department\":\""+ department + "\",\"hashSec\":\""+ hashSec + "\",\"resetPassword\":\""+ resetPassword + "\",\"active\":\""+ active + "\"}"; 
       var setJson = JSON.stringify(strFormJson);
       
       console.log("String Json" + setJson);
@@ -135,7 +154,7 @@ $(document).ready(function () {
         $.ajax({        	
             type: 'POST',
             dataType: 'json',
-            url: '<c:url value="/users/exec"/>',
+            url: urlExec,
             data: setJson,
             contentType : 'application/json; charset=utf-8',
             headers: {  
@@ -310,6 +329,24 @@ $(document).ready(function () {
 							<div class="col-md-4" style="padding-top: 10px;">
 								<input type="checkbox" id="resetPassword" value="true"> <span data-toggle="tooltip" title="" style="position:relative; top:-3px;" class="badge bg-blue" data-original-title="Marked checkbox reset password to default">?</span>
 							</div>
+						</div>
+						<!-- Multiple Radios -->
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="radios">Status</label>
+						  <div class="col-md-4">
+						  <div class="radio">
+						    <label for="radios-3">
+						      <input type="radio" name="active" class="active" id="radios-3" value="1">
+						      Ativo
+						    </label>
+							</div>
+						  <div class="radio">
+						    <label for="radios-4">
+						      <input type="radio" name="active" class="active" id="radios-4" value="0">
+						      Inativo
+						    </label>
+							</div>
+						  </div>
 						</div>
 						<!-- Button -->
 						<div class="form-group">

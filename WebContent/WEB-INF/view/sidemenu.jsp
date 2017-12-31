@@ -69,7 +69,7 @@
             <a href="<c:url value="/users/all"/>"><i class="fa fa-circle-o"></i> Gerenciar</a>
             </li>
             
-            <li class="active">
+            <li>
             <a href="<c:url value="/users/new"/>"><i class="fa fa-circle-o"></i> Novo</a>
             </li>
           </ul>
@@ -87,8 +87,8 @@
             <a href="<c:url value="/clients/list"/>"><i class="fa fa-circle-o"></i> Gerenciar clientes</a>
             </li>
             
-            <li class="active">
-            <a href="<c:url value="/chamados/novo-chamado"/>"><i class="fa fa-circle-o"></i>Cadastrar setores</a>
+            <li>
+            <a href="<c:url value="/clients/add"/>"><i class="fa fa-circle-o"></i>Cadastrar</a>
             </li>
           </ul>
         </li>

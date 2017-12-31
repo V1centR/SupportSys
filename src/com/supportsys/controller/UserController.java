@@ -21,15 +21,20 @@ import com.supportsys.entity.Client;
 import com.supportsys.entity.Department;
 import com.supportsys.entity.User;
 import com.supportsys.entity.UserGroup;
+import com.supportsys.interfaces.Operactions;
 import com.supportsys.model.UserModel;
 import com.supportsys.repo.UserRepo;
 
 @Controller
-public class UserController {
+public class UserController implements Operactions {
 
 
-	@RequestMapping(value="/users/exec", method=RequestMethod.POST)
-	public @ResponseBody int execUserAdd(@RequestBody Object jsonStr, HttpServletRequest resquest) throws JSONException
+	/**
+	 *
+	 */
+	@RequestMapping(value="/users/add", method=RequestMethod.POST)
+	@Override
+	public @ResponseBody Integer insertItem(@RequestBody Object jsonStr) throws JSONException
 	{
 		String jsonFormData = jsonStr.toString();
 		JSONObject jsonItems = new JSONObject(jsonFormData);
@@ -49,11 +54,34 @@ public class UserController {
 
 	/**
 	 *
+	 */
+	@RequestMapping(value="/users/edit", method=RequestMethod.POST)
+	@Override
+	public @ResponseBody Integer updateItem(@RequestBody Object jsonStr) throws JSONException
+	{
+		String jsonFormData = jsonStr.toString();
+		JSONObject jsonItems = new JSONObject(jsonFormData);
+
+		/*TODO field "active" added, update
+		logical code to validate user active and non active in your system */
+		boolean addUserOk = new UserModel().editUser(jsonItems);
+
+		if(addUserOk == true)
+		{
+			return Response.SC_CREATED;
+		} else {
+			return Response.SC_INTERNAL_SERVER_ERROR;
+		}
+	}
+
+	/**
+	 *
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping("/users/all")
-	public ModelAndView listUsersAction(Model model)
+	@Override
+	public ModelAndView listItemsView(Model model)
 	{
 		List<User> allUsers = new UserModel().getAllUsers();
 		List<Client> allClients = new UserModel().getClients();
@@ -64,8 +92,14 @@ public class UserController {
 		return new ModelAndView("usersList","", "");
 	}
 
+	@Override
+	public Integer deleteItem(Object jsonStr) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@RequestMapping(value="/users/byClient/{clientId}", method=RequestMethod.POST)
-	public @ResponseBody String userByClient(@RequestBody Object jsonStr, HttpServletRequest request) throws JSONException, SQLException
+	public @ResponseBody String listUserByClient(@RequestBody Object jsonStr, HttpServletRequest request) throws JSONException, SQLException
 	{
 		String jsonStrConvert = jsonStr.toString();
 		JSONObject jsonItem = new JSONObject(jsonStrConvert);
@@ -95,14 +129,12 @@ public class UserController {
 				jsonUserData = new JSONObject();
 			}
 
-			System.out.println("Data User:: " + jsonContainer.toString());
 			return jsonContainer.toString();
 
 		} else {
 
 			return "empty";
 		}
-
 	}
 
 	/**
@@ -111,7 +143,8 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping("/users/edit/{idUser}")
-	public ModelAndView editUserAction(Model model, @PathVariable Integer idUser )
+	@Override
+	public ModelAndView updateItemView(Model model, @PathVariable Integer idUser)
 	{
 		List<Client> fullClients = new UserModel().getClients();
 		List<UserGroup> groupList = new UserModel().getGroups();
@@ -130,8 +163,9 @@ public class UserController {
 	 * @param model
 	 * @return
 	 */
+	@Override
 	@RequestMapping("/users/new")
-	public ModelAndView addUserAction(Model model)
+	public ModelAndView insertItemView(Model model)
 	{
 		List<Client> fullClients = new UserModel().getClients();
 		List<UserGroup> groupList = new UserModel().getGroups();
@@ -169,4 +203,5 @@ public class UserController {
 
 		return jsonContainer.toString();
 	}
+
 }
