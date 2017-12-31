@@ -34,6 +34,7 @@ public class AddUserTest {
 		String emailUserOk = "";
 		String nameToEmail = "";
 		String sNameToEmail = "";
+		Integer active = 1;
 
 		List<Client> clientList = new UserModel().getAllClients();
 		List<UserGroup> groupList = new UserModel().getGroups();
@@ -73,7 +74,7 @@ public class AddUserTest {
 				System.out.println("Error:: " + e);
 			}
 
-			Integer newUser = new UserController().execUserAdd(jsonItems, null);
+			Integer newUser = new UserController().insertItem(jsonItems);
 
 			assertEquals(confirmValue, newUser);
 		}
@@ -117,9 +118,9 @@ public class AddUserTest {
 
 		for(User userData: userList)
 		{
-			jsonItems = "{\"hashSec\":\""+ userData.getIdConfEmail() +"\",\"hashItem\":\"undefined\",\"nameUser\":\""+ userData.getName() +" \",\"sNameUser\":\"jUnit 4.1\",\"gender\":\""+userData.getGender()+"\",\"emailUser\":\""+userData.getEmail()+"\",\"selectClient\":\""+userData.getDepartment().getClientBean().getId()+"\",\"department\":\""+userData.getDepartment().getId()+"\",\"userGroup\":\""+userData.getUserGroupBean().getId()+"\",\"idItem\":\""+userData.getId()+"\",\"active\":\"1\",\"resetPassword\":\"false\"}";
+			jsonItems = "{\"hashSec\":\""+ userData.getIdConfEmail() +"\",\"hashItem\":\"undefined\",\"nameUser\":\""+ userData.getName() +" \",\"sNameUser\":\""+ userData.getSname() +" \",\"gender\":\""+userData.getGender()+"\",\"emailUser\":\""+userData.getEmail()+"\",\"selectClient\":\""+userData.getDepartment().getClientBean().getId()+"\",\"department\":\""+userData.getDepartment().getId()+"\",\"userGroup\":\""+userData.getUserGroupBean().getId()+"\",\"idItem\":\""+userData.getId()+"\",\"active\":\"1\",\"resetPassword\":\"false\"}";
 
-			Integer newUser = new UserController().execUserAdd(jsonItems, null);
+			Integer newUser = new UserController().updateItem(jsonItems);
 
 			assertEquals(confirmValue, newUser);
 

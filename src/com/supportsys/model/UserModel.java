@@ -1,12 +1,8 @@
 package com.supportsys.model;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -21,6 +17,8 @@ import com.supportsys.entity.Image;
 import com.supportsys.entity.User;
 import com.supportsys.entity.UserGroup;
 import com.supportsys.repo.ClientRepo;
+import com.supportsys.utilities.EmailUtilities;
+import com.supportsys.utilities.SecurityUtilities;
 
 public class UserModel extends EmModel{
 
@@ -99,7 +97,103 @@ public class UserModel extends EmModel{
 		System.out.println("Check department:: " + department);
 		System.out.println("Check userGroup:: " + userGroup);
 
+		try {
 
+			if(emailOk == true)
+			{
+				String sha1ToUser = "";
+				String defaultPass = "";
+
+				sha1ToUser = new SecurityUtilities().makeSha1(tsNow.toString());
+				defaultPass = new SecurityUtilities().makeSha1("123123");
+
+				System.out.println("Password generated:: " + defaultPass);
+
+				if(gender.equals("F"))
+				{
+					setAvatarId = 1;
+				} else {
+					setAvatarId = 2;
+				}
+
+				Image defaultImage = em.find(Image.class, setAvatarId);
+
+				User addUser = new User();
+
+				addUser.setName(nomeUser);
+				addUser.setSname(sNameUser);
+				addUser.setGender(gender);
+				addUser.setEmail(emailUser);
+				addUser.setDepartment(departmentObj);
+				//addUser.setDescription(null);
+				addUser.setIdConfEmail(sha1ToUser);
+				addUser.setImage(defaultImage);
+				//addUser.setMobile(null);
+				//addUser.setPhone(null4);
+				addUser.setPass(defaultPass);
+				addUser.setUserGroupBean(userGroupObj);
+				addUser.setDataRegister(tsNow);
+				addUser.setActive(1);
+
+				em.getTransaction().begin();
+				em.persist(addUser);
+				em.getTransaction().commit();
+				em.close();
+
+				return true;
+
+			} else {
+
+				return false;
+			}
+
+		} catch (Exception e) {
+
+			System.out.println(e);
+
+			return false;
+		}
+
+	}
+
+	/**
+	 * Add user method
+	 * @param jsonItems
+	 * @return boolean
+	 * @throws JSONException
+	 */
+	public boolean editUser(JSONObject jsonItems) throws JSONException
+	{
+		EntityManager em = super.getEm();
+
+		boolean editSecOk = false;
+		Integer setAvatarId = 0;
+		//TODO autenticar transação
+		String idItem = jsonItems.get("idItem").toString();
+		String hashItem = jsonItems.get("hashItem").toString();
+
+		String nomeUser = jsonItems.get("nameUser").toString();
+		String sNameUser = jsonItems.get("sNameUser").toString();
+		String emailUser = jsonItems.get("emailUser").toString();
+		String gender = jsonItems.get("gender").toString();
+		String selectClient = jsonItems.get("selectClient").toString();
+		Integer department = Integer.parseInt(jsonItems.get("department").toString());
+		Integer userGroup = Integer.parseInt(jsonItems.get("userGroup").toString());
+		String hashSec = jsonItems.get("hashSec").toString();
+		String resetPassword = jsonItems.get("resetPassword").toString();
+		Integer setActive = Integer.parseInt(jsonItems.get("active").toString());
+
+		long now = Calendar.getInstance().getTimeInMillis();
+		Timestamp tsNow = new Timestamp(now);
+
+		Department departmentObj = 	em.find(Department.class, department);
+		UserGroup userGroupObj = 	em.find(UserGroup.class, userGroup);
+
+		if(!hashSec.isEmpty()) {
+			editSecOk = checkEmailAndHash(emailUser, hashSec);
+		} else {
+			editSecOk = false;
+		}
 
 		try {
 
@@ -111,7 +205,7 @@ public class UserModel extends EmModel{
 				if(resetPassword.equals("true"))
 				{
 					String defaultPass = "";
-					defaultPass = makeSha1("123123");
+					defaultPass = new SecurityUtilities().makeSha1("123123");
 					addUser.setPass(defaultPass);
 					//TODO send email to user
 				}
@@ -140,53 +234,7 @@ public class UserModel extends EmModel{
 
 			} else {
 
-				if(emailOk == true)
-				{
-					String sha1ToUser = "";
-					String defaultPass = "";
-
-					sha1ToUser = makeSha1(tsNow.toString());
-					defaultPass = makeSha1("123123");
-
-					System.out.println("Password generated:: " + defaultPass);
-
-					if(gender.equals("F"))
-					{
-						setAvatarId = 1;
-					} else {
-						setAvatarId = 2;
-					}
-
-					Image defaultImage = em.find(Image.class, setAvatarId);
-
-					User addUser = new User();
-
-					addUser.setName(nomeUser);
-					addUser.setSname(sNameUser);
-					addUser.setGender(gender);
-					addUser.setEmail(emailUser);
-					addUser.setDepartment(departmentObj);
-					//addUser.setDescription(null);
-					addUser.setIdConfEmail(sha1ToUser);
-					addUser.setImage(defaultImage);
-					//addUser.setMobile(null);
-					//addUser.setPhone(null4);
-					addUser.setPass(defaultPass);
-					addUser.setUserGroupBean(userGroupObj);
-					addUser.setDataRegister(tsNow);
-					addUser.setActive(1);
-
-					em.getTransaction().begin();
-					em.persist(addUser);
-					em.getTransaction().commit();
-					em.close();
-
-					return true;
-
-				} else {
-
-					return false;
-				}
+				return false;
 			}
 
 		} catch (Exception e) {
@@ -194,26 +242,6 @@ public class UserModel extends EmModel{
 			System.out.println(e);
 
 			return false;
-		}
-
-	}
-
-	private String makeSha1(String data)
-	{
-		String sha1ToUser = "";
-
-		try {
-
-			MessageDigest crypt = MessageDigest.getInstance("sha1");
-			crypt.reset();
-			crypt.update(data.getBytes("utf8"));
-			sha1ToUser = String.format("%40x", new BigInteger(1,crypt.digest()));
-
-			return sha1ToUser;
-
-		} catch (Exception e) {
-			System.out.println("Error:: " + e);
-			return null;
 		}
 	}
 
@@ -250,13 +278,10 @@ public class UserModel extends EmModel{
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("support");
 		EntityManager em = emf.createEntityManager();
 
-
 		//validate email
-		String regex = "^([_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*(\\.[a-zA-Z]{1,6}))?$";
-		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(email);
+		boolean emailCheck = new EmailUtilities().checkEmail(email);
 
-		if(matcher.matches())
+		if(emailCheck)
 		{
 			String query = "SELECT u FROM User u WHERE u.email= :email";
 			List<User> itemData = em.createQuery(query, User.class).

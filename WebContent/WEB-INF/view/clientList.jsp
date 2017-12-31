@@ -47,7 +47,7 @@ $(document).ready(function () {
 							<td>\
 							<img src="<c:url value="/resources/images/' + this.avatar +'"/>" style="width:32px; height:32px;" class="img-circle img-bordered-sm" alt="User Image">\
 						</td>\
-						<td><a href="<c:url value="/users/edit/' + this.clientId +'"/>"><div class="cellSpace">' + this.clientName +' &nbsp;</div></a></td>\
+						<td><a href="<c:url value="/clients/edit/' + this.clientId +'/5e07ae1bff8f5bba6a5b6e40bfbaff956b2fb7bb"/>"><div class="cellSpace">' + this.clientName +' &nbsp;</div></a></td>\
 						<td>' + this.clientCity +' - '+this.clientUf+' &nbsp;&nbsp;</td>\
 						<td>' + this.clientDescription +' &nbsp;&nbsp;</td>\
 					</tr>');
