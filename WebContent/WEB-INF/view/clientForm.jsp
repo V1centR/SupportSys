@@ -5,6 +5,7 @@ $(document).ready(function () {
 	    
     
     var mode = '${mode}';
+    var urlExec = '';
     console.log("Mode:: " + mode);
     
     if(mode == 'edit')
@@ -26,7 +27,7 @@ $(document).ready(function () {
         $('select#levelSelect option[value=' + levelSelect +']').attr('selected','selected');
     }
     
-    $('form#addUser')[0].reset();
+   // $('form#addUser')[0].reset();
     $('button#back').click(function(){        
         window.location.href = '/supportSys';
         return false;
@@ -57,8 +58,9 @@ $(document).ready(function () {
       var hashSec = 	$("input#hashSec").val();     
       var addressClient = 	$("input#addressClient").val();
       var districtClient = 	$("input#districtClient").val();
+      var clientCity = 	$("input#clientCity").val();
       var selectState = 	$("select#selectState").val();
-      var cnpjClient = 	$("input#cnpjClient").val();
+      var cnpjClient = 	$("input#clientCnpj").val();
       var phoneClient = 	$("input#phoneClient").val();
       var logoImage = 	$("input#logoImage").val();
       var emailClient = 	$("input#emailClient").val();
@@ -74,15 +76,23 @@ $(document).ready(function () {
 	  $("form#addClient :input").attr("disabled", true);
 	  $('span#proccessloader').append(loaderSmall);
       
-      var strFormJson = "{\"idItem\":\"" + idItem + "\",\"clientName\":\""+ clientName + "\",\"addressClient\":\""+ addressClient + "\",\"districtClient\":\""+ districtClient + "\",\"selectState\":\""+ selectState + "\",\"cnpjClient\":\""+ cnpjClient + "\",\"selectClient\":\""+ selectClient + "\",\"phoneClient\":\""+ phoneClient + "\",\"emailClient\":\""+ emailClient + "\",\"logoImage\":\""+ logoImage + "\",\"levelSelect\":\""+ levelSelect + "\",\"resetPassword\":\""+ resetPassword + "\",\"active\":\""+ active + "\",\"description\":\""+ description + "\",\"resetPassword\":\""+ resetPassword + "\"}"; 
+      var strFormJson = "{\"idItem\":\"" + idItem + "\",\"clientName\":\""+ clientName + "\",\"addressClient\":\""+ addressClient + "\",\"districtClient\":\""+ districtClient + "\",\"clientCity\":\""+ clientCity + "\",\"selectState\":\""+ selectState + "\",\"cnpjClient\":\""+ cnpjClient + "\",\"phoneClient\":\""+ phoneClient + "\",\"emailClient\":\""+ emailClient + "\",\"logoImage\":\""+ logoImage + "\",\"levelSelect\":\""+ levelSelect + "\",\"resetPassword\":\""+ resetPassword + "\",\"active\":\""+ active + "\",\"description\":\""+ description + "\",\"resetPassword\":\""+ resetPassword + "\"}"; 
       var setJson = JSON.stringify(strFormJson);
       
       console.log("String Json" + setJson);
       
+		if(mode == "edit")
+		{
+			urlExec = '<c:url value="/client/edit"/>';
+		}else{
+		    
+		    urlExec = '<c:url value="/client/add"/>';
+		}
+      
         $.ajax({        	
             type: 'POST',
             dataType: 'json',
-            url: '<c:url value="/users/exec"/>',
+            url: urlExec,
             data: setJson,
             contentType : 'application/json; charset=utf-8',
             headers: {  
@@ -104,7 +114,7 @@ $(document).ready(function () {
             	   $('span.message').append('<div class="alert alert-danger" role="alert">Houve um erro de procesamento, usuário não foi registrado! <a href="/">(Clique para voltar)</a></div>');
                }
               
-               return true;
+               return false;
             },
             error: function (data) {
                 console.log(data);
@@ -158,6 +168,7 @@ $(document).ready(function () {
 							<c:set var="clientName" scope="session" value="${clientInfo.name}" />
 							<c:set var="clientPhone" scope="session" value="${clientInfo.phone}" />
 							<c:set var="clientPhoneB" scope="session" value="${userInfo.phoneB}" />
+							<c:set var="clientCnpj" scope="session" value="${clientInfo.cnpj}" />
 							<c:set var="clientEmail" scope="session" value="${clientInfo.email}" />
 							<c:set var="clientAddress" scope="session" value="${clientInfo.address}" />
 							<c:set var="clientDistrict" scope="session" value="${clientInfo.bairro}" />
@@ -165,7 +176,7 @@ $(document).ready(function () {
 							<c:set var="clientStateId" scope="session" value="${clientInfo.ufBean.id}" />
 							<c:set var="clientState" scope="session" value="${clientInfo.ufBean.sign}" />
 							<c:set var="clientLevel" scope="session" value="${clientInfo.level}" />
-							<c:set var="clientDescription" scope="session" value="${clientInfo.desc}" />
+							<c:set var="clientDescription" scope="session" value="${clientInfo.description}" />
 							<c:set var="clientLogo" scope="session" value="${clientInfo.image.id}'.'${clientInfo.image.ext}" />
 							<c:set var="clientActive" scope="session" value="${clientInfo.active}" />
 						</c:when>
@@ -208,6 +219,13 @@ $(document).ready(function () {
 						  <input id="districtClient" name="textinput" type="text" placeholder="Bairro" class="form-control" value="${clientDistrict}">
 						  </div>
 						</div>
+						<!-- Text input-->
+						<div class="form-group">
+						  <label class="col-md-4 control-label" for="textinput">Cidade</label>  
+						  <div class="col-md-4">
+						  <input id="clientCity" name="textinput" type="text" placeholder="Bairro" class="form-control" value="${clientCity}">
+						  </div>
+						</div>
 						
 						<!-- Select Basic -->
 						<div class="form-group">
@@ -227,7 +245,7 @@ $(document).ready(function () {
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="textinput">CNPJ</label>  
 						  <div class="col-md-4">
-						  <input id="cnpjClient" name="textinput" type="text" placeholder="sobrenome" class="form-control" style="font-size:16px;" value="${snomeUser}">
+						  <input id="clientCnpj" name="textinput" type="text" placeholder="sobrenome" class="form-control" style="font-size:16px;" value="${clientCnpj}">
 						  </div>
 						</div>
 						

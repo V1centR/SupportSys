@@ -33,10 +33,11 @@ public class ClientModel extends EmModel {
 		SecurityUtilities secUtils = null;
 
 		boolean editSecOk = false;
-		Integer setAvatarId = 0;
+		Integer setAvatarId = 1;
+
 		//TODO autenticar transação
 		String idItem = jsonItems.get("idItem").toString();
-		String hashItem = jsonItems.get("hashItem").toString();
+		//String hashItem = jsonItems.get("hashItem").toString();
 		/*
       	nameClient
 		addressClient
@@ -51,9 +52,10 @@ public class ClientModel extends EmModel {
 		resetPassword
 		description
 	*/
-		String nameClient 		= jsonItems.get("nameClient").toString();
+		String nameClient 		= jsonItems.get("clientName").toString();
 		String addressClient 	= jsonItems.get("addressClient").toString();
 		String districtClient 	= jsonItems.get("districtClient").toString();
+		String clientCity 		= jsonItems.get("clientCity").toString();
 		Integer selectState 	= Integer.parseInt(jsonItems.get("selectState").toString());
 		String cnpjClient 		= jsonItems.get("cnpjClient").toString();
 		String phoneClient 		= jsonItems.get("phoneClient").toString();
@@ -71,55 +73,48 @@ public class ClientModel extends EmModel {
 		long now = Calendar.getInstance().getTimeInMillis();
 		Timestamp tsNow = new Timestamp(now);
 
-		Uf stateClientObj = em.find(Uf.class, districtClient);
+		Uf stateClientObj = em.find(Uf.class, selectState);
+
+		System.out.println("UF object:: " + stateClientObj);
 
 		boolean emailOk = new EmailUtilities().checkEmail(emailClient);
 
 		System.out.println("Check checkEmailExists:: " + emailOk);
 
-
 		try {
 
-			if(emailOk == true)
-			{
-				String sha1ToUser = "";
-				String defaultPass = "";
+			String sha1ToUser = "";
+			String defaultPass = "";
 
-				sha1ToUser = secUtils.makeSha1(tsNow.toString());
-				defaultPass = secUtils.makeSha1("123123");
+//			sha1ToUser = secUtils.makeSha1(tsNow.toString());
+//			defaultPass = secUtils.makeSha1("123123");
+//
+//			System.out.println("Password generated:: " + defaultPass);
 
-				System.out.println("Password generated:: " + defaultPass);
+			Image defaultImage = em.find(Image.class, setAvatarId);
 
-				Image defaultImage = em.find(Image.class, setAvatarId);
+			Client addClient = new Client();
 
-				Client addClient = new Client();
+			addClient.setName(nameClient);
+			addClient.setAddress(addressClient);
+			addClient.setBairro(districtClient);
+			addClient.setCity(clientCity);
+			addClient.setUfBean(stateClientObj);
+			addClient.setCnpj(cnpjClient);
+			addClient.setPhone(phoneClient);
+			addClient.setImage(defaultImage);
+			addClient.setEmail(emailClient);
+			addClient.setLevel(levelSelect);
+			addClient.setActive(setActive);
+			addClient.setDescription(description);
+			//addClient.setDataRegister(tsNow);
 
-				addClient.setName(nameClient);
-				addClient.setAddress(addressClient);
-				addClient.setBairro(districtClient);
-				addClient.setUfBean(stateClientObj);
-				//addClient.setName(cnpjClient);
-				addClient.setPhone(phoneClient);
-//				addClient.setName(logoImage);
-				addClient.setEmail(emailClient);
-				addClient.setImage(defaultImage);
-				addClient.setLevel(levelSelect);
-				addClient.setActive(setActive);
-				addClient.setDesc(description);
-				//addClient.setDataRegister(tsNow);
-				addClient.setActive(1);
+			em.getTransaction().begin();
+			em.persist(addClient);
+			em.getTransaction().commit();
+			em.close();
 
-				em.getTransaction().begin();
-				em.persist(addClient);
-				em.getTransaction().commit();
-				em.close();
-
-				return true;
-
-			} else {
-
-				return false;
-			}
+			return true;
 
 		} catch (Exception e) {
 

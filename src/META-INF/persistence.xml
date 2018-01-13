@@ -5,7 +5,6 @@ http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
   <persistence-unit name="support">
   <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
   <class>com.supportsys.entity.ChatHelp</class>
-  <class>com.supportsys.entity.Client</class>
   <class>com.supportsys.entity.Department</class>
   <class>com.supportsys.entity.Help</class>
   <class>com.supportsys.entity.HelpTag</class>
@@ -17,6 +16,7 @@ http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
   <class>com.supportsys.entity.Uf</class>
   <class>com.supportsys.entity.UserGroup</class>
   <class>com.supportsys.entity.User</class>
+  <class>com.supportsys.entity.Client</class>
   
   <properties>
     <property name="javax.persistence.jdbc.url" value="jdbc:mariadb://localhost/spsys" />
