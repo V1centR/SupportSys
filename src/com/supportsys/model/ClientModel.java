@@ -10,11 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.supportsys.entity.Client;
-import com.supportsys.entity.Department;
 import com.supportsys.entity.Image;
 import com.supportsys.entity.Uf;
-import com.supportsys.entity.User;
-import com.supportsys.entity.UserGroup;
 import com.supportsys.utilities.EmailUtilities;
 import com.supportsys.utilities.SecurityUtilities;
 
@@ -22,7 +19,7 @@ public class ClientModel extends EmModel {
 
 
 	/**
-	 * Add user method
+	 * Add Client method
 	 * @param jsonItems
 	 * @return boolean
 	 * @throws JSONException
@@ -51,7 +48,7 @@ public class ClientModel extends EmModel {
 		active
 		resetPassword
 		description
-	*/
+		 */
 		String nameClient 		= jsonItems.get("clientName").toString();
 		String addressClient 	= jsonItems.get("addressClient").toString();
 		String districtClient 	= jsonItems.get("districtClient").toString();
@@ -124,8 +121,9 @@ public class ClientModel extends EmModel {
 		}
 	}
 
+
 	/**
-	 * Add user method
+	 * Add Client method
 	 * @param jsonItems
 	 * @return boolean
 	 * @throws JSONException
@@ -133,77 +131,93 @@ public class ClientModel extends EmModel {
 	public boolean updateClient(JSONObject jsonItems) throws JSONException
 	{
 		EntityManager em = super.getEm();
+		SecurityUtilities secUtils = null;
 
 		boolean editSecOk = false;
-		Integer setAvatarId = 0;
+		Integer setAvatarId = 1;
+
 		//TODO autenticar transação
 		String idItem = jsonItems.get("idItem").toString();
-		String hashItem = jsonItems.get("hashItem").toString();
 
-		String nomeUser = jsonItems.get("nameUser").toString();
-		String sNameUser = jsonItems.get("sNameUser").toString();
-		String emailUser = jsonItems.get("emailUser").toString();
-		String gender = jsonItems.get("gender").toString();
-		String selectClient = jsonItems.get("selectClient").toString();
-		Integer department = Integer.parseInt(jsonItems.get("department").toString());
-		Integer userGroup = Integer.parseInt(jsonItems.get("userGroup").toString());
-		String hashSec = jsonItems.get("hashSec").toString();
-		String resetPassword = jsonItems.get("resetPassword").toString();
-		Integer setActive = Integer.parseInt(jsonItems.get("active").toString());
+		Client addClient = em.find(Client.class, Integer.parseInt(idItem));
+		em.clear();
+
+		//String hashItem = jsonItems.get("hashItem").toString();
+		/*
+      	nameClient
+		addressClient
+		districtClient
+		selectState
+		cnpjClient
+		phoneClient
+		logoImage
+		emailClient
+		levelSelect
+		active
+		resetPassword
+		description
+	*/
+		String nameClient 		= jsonItems.get("clientName").toString();
+		String addressClient 	= jsonItems.get("addressClient").toString();
+		String districtClient 	= jsonItems.get("districtClient").toString();
+		String clientCity 		= jsonItems.get("clientCity").toString();
+		Integer selectState 	= Integer.parseInt(jsonItems.get("selectState").toString());
+		String cnpjClient 		= jsonItems.get("cnpjClient").toString();
+		String phoneClient 		= jsonItems.get("phoneClient").toString();
+
+		//make function upload validate and record image
+		String logoImage 		= jsonItems.get("logoImage").toString();
+		String emailClient 		= jsonItems.get("emailClient").toString();
+
+		Integer levelSelect 	= Integer.parseInt(jsonItems.get("levelSelect").toString());
+		Integer setActive 		= Integer.parseInt(jsonItems.get("active").toString());
+		Integer resetPassword 	= Integer.parseInt(jsonItems.get("resetPassword").toString());
+		String description 		= jsonItems.get("description").toString();
+
 
 		long now = Calendar.getInstance().getTimeInMillis();
 		Timestamp tsNow = new Timestamp(now);
 
-		Department departmentObj = em.find(Department.class, department);
-		UserGroup userGroupObj = em.find(UserGroup.class, userGroup);
+		Uf stateClientObj = em.find(Uf.class, selectState);
 
-		if(!hashSec.isEmpty()) {
-			editSecOk = new EmailUtilities().checkEmail(emailUser);
-		} else {
-			editSecOk = false;
-		}
+		System.out.println("UF object:: " + stateClientObj);
+
+		boolean emailOk = new EmailUtilities().checkEmail(emailClient);
+
+		System.out.println("Check checkEmailExists:: " + emailOk);
 
 		try {
 
-			if(editSecOk == true){
+			String sha1ToUser = "";
+			String defaultPass = "";
 
-				User addUser = em.find(User.class, Integer.parseInt(idItem));
-				em.clear();
+//			sha1ToUser = secUtils.makeSha1(tsNow.toString());
+//			defaultPass = secUtils.makeSha1("123123");
+//
+//			System.out.println("Password generated:: " + defaultPass);
 
-				if(resetPassword.equals("true"))
-				{
-					String defaultPass = "";
-					defaultPass = new SecurityUtilities().makeSha1("123123");
-					addUser.setPass(defaultPass);
-					//TODO send email to user
-				}
+			Image defaultImage = em.find(Image.class, setAvatarId);
 
-				addUser.setName(nomeUser);
-				addUser.setSname(sNameUser);
-				//addUser.setGender(gender);
-				//addUser.setEmail(emailUser);
-				addUser.setDepartment(departmentObj);
-				//addUser.setDescription(null);
-				//addUser.setIdConfEmail(sha1ToUser);
-				//addUser.setImage(defaultImage);
-				//addUser.setMobile(null);
-				//addUser.setPhone(null4);
-				//addUser.setPass("123123");
-				addUser.setUserGroupBean(userGroupObj);
-				//addUser.setDataRegister(tsNow);
-				addUser.setActive(setActive);
+			addClient.setName(nameClient);
+			addClient.setAddress(addressClient);
+			addClient.setBairro(districtClient);
+			addClient.setCity(clientCity);
+			addClient.setUfBean(stateClientObj);
+			addClient.setCnpj(cnpjClient);
+			addClient.setPhone(phoneClient);
+			addClient.setImage(defaultImage);
+			addClient.setEmail(emailClient);
+			addClient.setLevel(levelSelect);
+			addClient.setActive(setActive);
+			addClient.setDescription(description);
+			//addClient.setDataRegister(tsNow);
 
-				em.getTransaction().begin();
-				addUser = em.merge(addUser);
-				em.getTransaction().commit();
-				em.close();
+			em.getTransaction().begin();
+			em.merge(addClient);
+			em.getTransaction().commit();
+			em.close();
 
-				return true;
-
-			} else {
-
-				return false;
-			}
+			return true;
 
 		} catch (Exception e) {
 
