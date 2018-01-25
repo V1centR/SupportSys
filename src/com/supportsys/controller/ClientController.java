@@ -104,7 +104,6 @@ public class ClientController implements Operactions {
 	{
 
 		model.addAttribute("mode", "add");
-
 		return new ModelAndView("clientForm","","");
 	}
 
@@ -151,7 +150,7 @@ public class ClientController implements Operactions {
 			items.put("clientCity", clientItem.getCity());
 			items.put("clientUf", clientItem.getUfBean().getSign());
 			items.put("clientLevel", clientItem.getLevel());
-			items.put("clientDescription", clientItem.getDesc());
+			items.put("clientDescription", clientItem.getDescription());
 
 			container.put(""+clientItem.getId()+"", items);
 			items = new JSONObject();

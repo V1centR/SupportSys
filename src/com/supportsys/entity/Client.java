@@ -1,20 +1,12 @@
 package com.supportsys.entity;
 
 import java.io.Serializable;
-import java.util.List;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 /**
  * The persistent class for the clients database table.
- *
+ * 
  */
 @Entity
 @Table(name="clients")
@@ -25,13 +17,17 @@ public class Client implements Serializable {
 	@Id
 	private int id;
 
+	private int active;
+
 	private String address;
 
 	private String bairro;
 
 	private String city;
 
-	private String desc;
+	private String cnpj;
+
+	private String description;
 
 	private String email;
 
@@ -43,8 +39,6 @@ public class Client implements Serializable {
 
 	private String phoneB;
 
-	private Integer active;
-
 	//bi-directional many-to-one association to Image
 	@ManyToOne
 	@JoinColumn(name="logoImg")
@@ -55,10 +49,6 @@ public class Client implements Serializable {
 	@JoinColumn(name="uf")
 	private Uf ufBean;
 
-	//bi-directional many-to-one association to Department
-	@OneToMany(mappedBy="clientBean")
-	private List<Department> departments;
-
 	public Client() {
 	}
 
@@ -68,6 +58,14 @@ public class Client implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public int getActive() {
+		return this.active;
+	}
+
+	public void setActive(int active) {
+		this.active = active;
 	}
 
 	public String getAddress() {
@@ -94,12 +92,20 @@ public class Client implements Serializable {
 		this.city = city;
 	}
 
-	public String getDesc() {
-		return this.desc;
+	public String getCnpj() {
+		return this.cnpj;
 	}
 
-	public void setDesc(String desc) {
-		this.desc = desc;
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
+	}
+
+	public String getDescription() {
+		return this.description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getEmail() {
@@ -156,36 +162,6 @@ public class Client implements Serializable {
 
 	public void setUfBean(Uf ufBean) {
 		this.ufBean = ufBean;
-	}
-
-	public List<Department> getDepartments() {
-		return this.departments;
-	}
-
-	public void setDepartments(List<Department> departments) {
-		this.departments = departments;
-	}
-
-	public Department addDepartment(Department department) {
-		getDepartments().add(department);
-		department.setClientBean(this);
-
-		return department;
-	}
-
-	public Department removeDepartment(Department department) {
-		getDepartments().remove(department);
-		department.setClientBean(null);
-
-		return department;
-	}
-
-	public Integer getActive() {
-		return this.active;
-	}
-
-	public void setActive(Integer active) {
-		this.active = active;
 	}
 
 }
